@@ -1,0 +1,3 @@
+/* "motion" track (harmony in motion) */
+.board svg.motion-line{min-width:0}
+.board svg.motion-circle{max-width:340px}
