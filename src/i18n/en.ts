@@ -62,6 +62,10 @@ export const en: Dict = {
     gloss: { nav: 'Glossary', title: 'Glossary', sub: 'the terms from this lesson', teaser: 'Every term, in English and Portuguese.' },
   },
 
+  tracks: {
+    circle: 'The circle of fifths', physics: 'The physics underneath', scales: 'Scales and modes', chords: 'Chords',
+    motion: 'Harmony in motion', melody: 'Melody and form', piano: 'Piano in practice', rhythm: 'Rhythm', ref: 'Reference',
+  },
   jumpDesc: 'Half steps counted from the previous key to the current one: 7 clockwise (perfect fifth), 5 counter-clockwise (perfect fourth).',
   playJump: 'Play the jump', lgStart: 'start', lgPath: 'half steps counted', lgDest: 'new tonic', lgChg: 'the note that changes',
   scaleDesc: 'The major scale of the current key, with scale degrees on the keys and W (whole) and H (half) steps below. Compare with the previous key: only one note changes per step.',

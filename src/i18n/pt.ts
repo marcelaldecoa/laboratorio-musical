@@ -64,6 +64,10 @@ export const pt = {
     gloss: { nav: 'Glossário', title: 'Glossário', sub: 'os termos da aula', teaser: 'Todos os termos, em pt e en.' },
   },
 
+  tracks: {
+    circle: 'O círculo das quintas', physics: 'A física por baixo', scales: 'Escalas e modos', chords: 'Acordes',
+    motion: 'Harmonia em movimento', melody: 'Melodia e forma', piano: 'Piano na prática', rhythm: 'Ritmo', ref: 'Referência',
+  } as Record<string, S>,
   /* jump */
   jumpDesc: 'Os semitons contados da tonalidade anterior até a atual: 7 no sentido horário (quinta justa), 5 no anti-horário (quarta justa).',
   playJump: 'Ouvir o salto', lgStart: 'partida', lgPath: 'semitons contados', lgDest: 'nova tônica', lgChg: 'a nota que muda',

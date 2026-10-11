@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { GLOSSARY } from '../i18n/glossary';
+import { GLOSSARY as BASE } from '../i18n/glossary';
+import { EXTRA } from './extra';
+
+const GLOSSARY = [...BASE, ...EXTRA.flatMap((L) => L.text?.glossary ?? [])];
 import { useLab } from '../state/useLab';
 
 export function Glossary() {

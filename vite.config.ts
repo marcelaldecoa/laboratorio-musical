@@ -50,5 +50,5 @@ export default defineConfig({
     ? { outDir: 'dist-artifact', assetsInlineLimit: 1e7, rollupOptions: { output: { inlineDynamicImports: true } } }
     : { rollupOptions: { output: { manualChunks: { tone: ['tone'], react: ['react', 'react-dom'] } } } },
   resolve: artifact ? { alias: { 'virtual:pwa-register': '/src/pwa-stub.ts' } } : undefined,
-  test: { environment: 'node', include: ['src/**/*.test.ts'] },
+  test: { environment: 'node', include: ['src/**/*.test.{ts,tsx}'] },
 });

@@ -6,7 +6,8 @@ import { KeyControls } from './components/KeyControls';
 import { Sheet } from './components/Sheet';
 import { Seg } from './components/ui';
 import { DICTS } from './i18n';
-import { LESSONS } from './lessons';
+import { LESSONS, TRACKS } from './lessons';
+import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
 import { Practice } from './pages/Practice';
 import { href, useRoute, type Route } from './router';
@@ -75,9 +76,9 @@ function KeyPanel({ onPick }: { onPick?: () => void }) {
 }
 
 function LessonCard({ i, active }: { i: number; active?: boolean }) {
-  const { t } = useLab();
+  const { s, t } = useLab();
   const L = LESSONS[i];
-  const m = t.lessons[L.id];
+  const m = lessonMeta(L, t, s.lang);
   return (
     <a className={'lcard tone-' + L.tone + (active ? ' active' : '')} href={href({ page: 'lesson', id: L.id })}>
       <span className="lnum">{i + 1}</span>
@@ -85,6 +86,24 @@ function LessonCard({ i, active }: { i: number; active?: boolean }) {
       <span className="ltitle">{m.title}</span>
       <span className="lteaser">{m.teaser}</span>
     </a>
+  );
+}
+
+function LessonGrid({ activeId }: { activeId?: string }) {
+  const { t } = useLab();
+  return (
+    <div className="tracks">
+      {TRACKS.map((tr) => {
+        const items = LESSONS.map((L, i) => ({ L, i })).filter(({ L }) => L.track === tr);
+        if (!items.length) return null;
+        return (
+          <section key={tr} className="track">
+            <h3 className="track-title">{t.tracks[tr]} <span className="track-n">{items.length}</span></h3>
+            <div className="lgrid">{items.map(({ L, i }) => <LessonCard key={L.id} i={i} active={L.id === activeId} />)}</div>
+          </section>
+        );
+      })}
+    </div>
   );
 }
 
@@ -104,7 +123,7 @@ function Home() {
       </section>
       <div className="cta">
         <a className="btn primary" href={href({ page: 'lesson', id: LESSONS[s.last ? lastIdx : 0].id })}>
-          {s.last ? `${t.nav.continue}: ${t.lessons[LESSONS[lastIdx].id].title}` : t.nav.start} →
+          {s.last ? `${t.nav.continue}: ${lessonMeta(LESSONS[lastIdx], t, s.lang).title}` : t.nav.start} →
         </a>
         <a className="btn" href={href({ page: 'piano' })}>🎹 {t.nav.piano}</a>
         <a className="btn" href={href({ page: 'practice' })}>✓ {t.nav.practice}</a>
@@ -112,7 +131,7 @@ function Home() {
       <section>
         <h2 className="sec-title">{t.nav.allLessons}</h2>
         <p className="desc">{t.nav.chain}</p>
-        <div className="lgrid">{LESSONS.map((_, i) => <LessonCard key={i} i={i} />)}</div>
+        <LessonGrid />
       </section>
     </div>
   );
@@ -124,16 +143,16 @@ function LessonsPage() {
     <div className="page">
       <h1 className="page-title">{t.nav.lessons}</h1>
       <p className="desc">{t.nav.chain}</p>
-      <div className="lgrid">{LESSONS.map((L, i) => <LessonCard key={i} i={i} active={L.id === s.last} />)}</div>
+      <LessonGrid activeId={s.last} />
     </div>
   );
 }
 
 function LessonPage({ id }: { id: string }) {
-  const { t } = useLab();
+  const { s, t } = useLab();
   const i = Math.max(0, LESSONS.findIndex((l) => l.id === id));
   const L = LESSONS[i];
-  const m = t.lessons[L.id];
+  const m = lessonMeta(L, t, s.lang);
   useEffect(() => {
     setState({ last: L.id });
     window.scrollTo({ top: 0 });
@@ -144,16 +163,16 @@ function LessonPage({ id }: { id: string }) {
   return (
     <article className={'page lesson tone-' + L.tone} key={L.id}>
       <header className="sec-head">
-        <p className="eyebrow">{t.nav.lessonN(i + 1)} · {LESSONS.length}</p>
+        <p className="eyebrow">{t.nav.lessonN(i + 1)} · {t.tracks[L.track]}</p>
         <h1>{m.title} <span className="sub">· {m.sub}</span></h1>
       </header>
       <div className="lesson-body"><L.Comp /></div>
       <nav className="pager" aria-label={t.nav.lessons}>
         {prev ? (
-          <a className="pg prev" href={href({ page: 'lesson', id: prev.id })}><small>← {t.nav.prev}</small><span>{t.lessons[prev.id].title}</span></a>
+          <a className="pg prev" href={href({ page: 'lesson', id: prev.id })}><small>← {t.nav.prev}</small><span>{lessonMeta(prev, t, s.lang).title}</span></a>
         ) : <span />}
         {next ? (
-          <a className="pg next" href={href({ page: 'lesson', id: next.id })}><small>{t.nav.next} →</small><span>{t.lessons[next.id].title}</span></a>
+          <a className="pg next" href={href({ page: 'lesson', id: next.id })}><small>{t.nav.next} →</small><span>{lessonMeta(next, t, s.lang).title}</span></a>
         ) : <span />}
       </nav>
     </article>
@@ -201,9 +220,10 @@ export function App() {
   }, [s.lang, s.theme]);
 
   useEffect(() => {
-    const title = route.page === 'lesson' ? t.lessons[route.id as keyof typeof t.lessons]?.title : null;
+    const L = route.page === 'lesson' ? LESSONS.find((l) => l.id === route.id) : undefined;
+    const title = L ? lessonMeta(L, t, s.lang).title : null;
     document.title = title ? `${title} · ${t.appName}` : t.appName;
-  }, [route, t]);
+  }, [route, t, s.lang]);
 
   let content;
   if (route.page === 'lesson') content = <LessonPage id={route.id} />;
@@ -222,16 +242,21 @@ export function App() {
           <a href="#/" aria-current={route.page === 'home' ? 'page' : undefined}>◉ {t.nav.home}</a>
           <a href="#/piano" aria-current={route.page === 'piano' ? 'page' : undefined}>🎹 {t.nav.piano}</a>
           <a href="#/praticar" aria-current={route.page === 'practice' ? 'page' : undefined}>✓ {t.nav.practice}</a>
-          <p className="rowlab">{t.nav.lessons}</p>
-          <ol>
-            {LESSONS.map((L) => (
-              <li key={L.id}>
-                <a href={href({ page: 'lesson', id: L.id })} aria-current={curLesson === L.id ? 'page' : undefined}>
-                  <span className={'dotl tone-' + L.tone} />{t.lessons[L.id].nav}
-                </a>
-              </li>
-            ))}
-          </ol>
+          {TRACKS.map((tr) => (
+            <div key={tr} className="side-track">
+              <p className="rowlab">{t.tracks[tr]}</p>
+              <ol>
+                {LESSONS.map((L, i) => ({ L, i })).filter(({ L }) => L.track === tr).map(({ L, i }) => (
+                  <li key={L.id}>
+                    <a href={href({ page: 'lesson', id: L.id })} aria-current={curLesson === L.id ? 'page' : undefined}>
+                      <span className="side-n">{i + 1}</span>
+                      <span className={'dotl tone-' + L.tone} />{lessonMeta(L, t, s.lang).nav}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
         </nav>
       </aside>
 

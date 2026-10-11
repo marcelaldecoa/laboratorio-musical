@@ -135,8 +135,8 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible,input:focus-visibl
   .side-nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;text-decoration:none;min-height:42px;font-size:.95rem}
   .side-nav a:hover{background:var(--surface-2)}
   .side-nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
-  .side-nav ol{list-style:none;margin:0;padding:0;counter-reset:l}
-  .side-nav li a::before{counter-increment:l;content:counter(l);font-family:var(--f-mono);font-size:.75rem;color:var(--muted);width:18px;text-align:right}
+  .side-nav ol{list-style:none;margin:0;padding:0}
+  .side-n{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);width:20px;text-align:right;flex:none}
 }
 .dotl{width:10px;height:10px;border-radius:50%;flex:none;background:var(--line)}
 
@@ -392,3 +392,8 @@ dialog.sheet::backdrop{background:rgba(10,14,12,.45);backdrop-filter:blur(3px);-
   .sheet-inner{border-radius:22px;padding:10px 22px 24px}
   .sheet-grip{display:none}
 }
+
+/* tracks */
+.tracks{display:flex;flex-direction:column;gap:22px;margin-top:6px}
+.track-title{font-size:1.15rem;display:flex;align-items:baseline;gap:8px}
+.track-n{font:400 .78rem var(--f-mono);color:var(--muted)}
