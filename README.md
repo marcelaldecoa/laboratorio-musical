@@ -14,6 +14,9 @@ App web (PWA) interativo e bilíngue (pt-BR / en) para estudar teoria musical pa
 
 ## Instalar no iPhone / iPad
 
+O app está publicado em **https://marcelaldecoa.github.io/laboratorio-musical/** (branch `gh-pages`).
+
+
 Abra o site no Safari → Compartilhar → **Adicionar à Tela de Início**.
 
 ## Desenvolvimento
