@@ -1,0 +1,29 @@
+/* melody track */
+.board svg.mel-roll{min-width:0;max-width:760px;margin:0 auto}
+.mel-roll .mel-chord{font:500 11px var(--f-mono)}
+.mel-roll .mel-lab{font:600 11px var(--f-mono);pointer-events:none}
+.mel-roll .mel-beat{font:600 10px var(--f-mono);fill:var(--fg)}
+.mel-roll .mel-beat.weak{font-weight:400;fill:var(--muted)}
+.mel-roll .mel-ann{font:500 11px var(--f-mono);fill:var(--fg)}
+.mel-roll .mel-mark{font:700 20px var(--f-display);fill:var(--fg)}
+.mel-steps{margin:8px 0 0;padding-left:1.4em;display:flex;flex-direction:column;gap:6px;max-width:68ch}
+.mel-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.mel-tools .seg{flex:1 1 240px}
+.mel-form{display:flex;gap:6px;margin:6px 0 8px}
+.mel-block{flex:1 1 0;min-width:0;min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  border:2px solid transparent;border-radius:12px;padding:6px 4px}
+.mel-block b{font:600 1.25rem var(--f-mono)}
+.mel-block small{font-size:.74rem;line-height:1.15;text-align:center;overflow-wrap:anywhere}
+.mel-block.on{border-color:var(--fg);animation:beat .9s ease}
+.mel-cells{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 8px}
+@media (min-width:680px){.mel-cells{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.mel-cell{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 2px;min-width:0;border:2px solid var(--line);border-radius:12px;background:var(--surface);font-family:var(--f-mono)}
+.mel-cell[aria-pressed="true"]{border-color:var(--fg)}
+.mel-cell.fT,.mel-cell.fSD,.mel-cell.fD{border-color:transparent}
+.mel-cell.fT[aria-pressed="true"],.mel-cell.fSD[aria-pressed="true"],.mel-cell.fD[aria-pressed="true"]{border-color:var(--fg)}
+.mel-cell.beat{animation:beat .9s ease}
+.mel-cell-n{font-size:.7rem;opacity:.85}
+.mel-cell-m{font-size:.8rem}
+.mel-cell b{font-size:1.05rem;font-weight:600}
+.mel-cell small{font-size:.72rem;font-family:var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tests .mel-info{color:var(--muted);font-weight:600}
