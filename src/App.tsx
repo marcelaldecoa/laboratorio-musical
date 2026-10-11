@@ -11,7 +11,7 @@ import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
 import { Practice } from './pages/Practice';
 import { href, useRoute, type Route } from './router';
-import { setLang, setState } from './state/store';
+import { dueReviews, markStudied, setLang, setState, streak, today, toggleDone } from './state/store';
 import { useLab } from './state/useLab';
 import { sigShort } from './theory';
 
@@ -55,6 +55,11 @@ function Settings() {
       <Seg value={s.nt} onChange={(nt) => setState({ nt })} options={[{ v: 'en', label: 'C D E' }, { v: 'pt', label: 'Dó Ré Mi' }]} />
       <p className="rowlab">{k.theme}</p>
       <Seg value={s.theme} onChange={(theme) => setState({ theme })} options={[{ v: 'auto', label: k.themeAuto }, { v: 'light', label: k.themeLight }, { v: 'dark', label: k.themeDark }]} />
+      <p className="rowlab">{t.stepper.mode}</p>
+      <label className="toggle">
+        <input type="checkbox" checked={s.stepMode} onChange={(e) => setState({ stepMode: e.target.checked })} />
+        <span>{t.stepper.modeHint}</span>
+      </label>
       <p className="rowlab">{k.sound}</p>
       <p className="sound-status">
         <span className={'dot ' + snd} />
@@ -80,8 +85,8 @@ function LessonCard({ i, active }: { i: number; active?: boolean }) {
   const L = LESSONS[i];
   const m = lessonMeta(L, t, s.lang);
   return (
-    <a className={'lcard tone-' + L.tone + (active ? ' active' : '')} href={href({ page: 'lesson', id: L.id })}>
-      <span className="lnum">{i + 1}</span>
+    <a className={'lcard tone-' + L.tone + (active ? ' active' : '') + (s.done.includes(L.id) ? ' done' : '')} href={href({ page: 'lesson', id: L.id })}>
+      <span className="lnum">{i + 1}{s.done.includes(L.id) && <span className="ldone"> ✓</span>}</span>
       <span className="licon" aria-hidden="true">{L.icon}</span>
       <span className="ltitle">{m.title}</span>
       <span className="lteaser">{m.teaser}</span>
@@ -107,6 +112,52 @@ function LessonGrid({ activeId }: { activeId?: string }) {
   );
 }
 
+function ProgressCard() {
+  const { s, t } = useLab();
+  const P = t.progress;
+  const n = streak(s.days);
+  const due = dueReviews(s.review).length;
+  const counted = LESSONS.filter((L) => L.track !== 'ref');
+  const done = counted.filter((L) => s.done.includes(L.id)).length;
+  const week = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return s.days.includes(today(d));
+  });
+  return (
+    <section className="card progress" aria-label={P.title}>
+      <div className="prog-row">
+        <div className="prog-streak">
+          <span className="prog-big">{n}</span>
+          <span>{n ? P.streak(n) : P.noStreak}</span>
+        </div>
+        <div className="prog-week" aria-label={P.week}>
+          {week.map((on, i) => <i key={i} className={on ? 'on' : ''} />)}
+        </div>
+      </div>
+      <div className="prog-bar" aria-hidden="true"><i style={{ width: `${(100 * done) / counted.length}%` }} /></div>
+      <div className="prog-row small">
+        <span>{P.lessons(done, counted.length)}</span>
+        <a href={href({ page: 'practice' })} className={due ? 'due' : ''}>{P.review(due)}</a>
+      </div>
+      <div className="prog-tracks">
+        {TRACKS.filter((tr) => tr !== 'ref').map((tr) => {
+          const items = LESSONS.filter((L) => L.track === tr);
+          if (!items.length) return null;
+          const d = items.filter((L) => s.done.includes(L.id)).length;
+          return (
+            <span key={tr} className="prog-track" title={t.tracks[tr]}>
+              <span className="pt-name">{t.tracks[tr]}</span>
+              <span className="pt-dots">{items.map((L) => <i key={L.id} className={s.done.includes(L.id) ? 'on tone-' + L.tone : ''} />)}</span>
+              <span className="pt-n">{d}/{items.length}</span>
+            </span>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function Home() {
   const { s, t } = useLab();
   const lastIdx = Math.max(0, LESSONS.findIndex((l) => l.id === s.last));
@@ -117,6 +168,7 @@ function Home() {
         <h1>{t.title}</h1>
         <p className="lede">{t.lede}</p>
       </header>
+      <ProgressCard />
       <section className="top" aria-label={t.secAria}>
         <div className="circle-wrap"><KeyPanel /></div>
         <KeyCard />
@@ -155,6 +207,7 @@ function LessonPage({ id }: { id: string }) {
   const m = lessonMeta(L, t, s.lang);
   useEffect(() => {
     setState({ last: L.id });
+    markStudied();
     window.scrollTo({ top: 0 });
     return () => stopAll();
   }, [L.id]);
@@ -167,6 +220,11 @@ function LessonPage({ id }: { id: string }) {
         <h1>{m.title} <span className="sub">· {m.sub}</span></h1>
       </header>
       <div className="lesson-body"><L.Comp /></div>
+      {L.track !== 'ref' && (
+        <button type="button" className={'done-btn' + (s.done.includes(L.id) ? ' on' : '')} aria-pressed={s.done.includes(L.id)} onClick={() => toggleDone(L.id)}>
+          {s.done.includes(L.id) ? t.progress.isDone : t.progress.markDone}
+        </button>
+      )}
       <nav className="pager" aria-label={t.nav.lessons}>
         {prev ? (
           <a className="pg prev" href={href({ page: 'lesson', id: prev.id })}><small>← {t.nav.prev}</small><span>{lessonMeta(prev, t, s.lang).title}</span></a>
