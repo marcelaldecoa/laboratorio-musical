@@ -1,0 +1,1397 @@
+<title>Circle of Fifths Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Music&family=Young+Serif&display=swap">
+<style>
+/* Layout: one reading column; language bar on top; circle + key card side by side on wide screens, stacked on phones; two keyboards below, glossary last */
+:root{
+  --bg:#F4F5F2; --surface:#FFFFFF; --fg:#17201B; --muted:#56615A; --line:#D7DCD6;
+  --accent:#1C6A50; --accent-soft:#D3EBDF; --accent-ink:#0E3B2C; --on-accent:#FFFFFF;
+  --flat:#5B4BC4; --flat-soft:#E2DEFA; --flat-ink:#2C2270;
+  --change:#B84A17; --change-soft:#FADCC8; --change-ink:#5E2309;
+  --dom-soft:#D6E6F7; --dom-ink:#123B66;
+  --k-ivory:#FBFAF6; --k-ebony:#1D1F1E; --k-edge:#9CA39E;
+  --k-tonic:#1C6A50; --k-tonic-ink:#FFFFFF;
+  --k-scale:#CFE9DD; --k-scale-ink:#0E3B2C; --k-scaleb:#2E7D61; --k-scaleb-ink:#FFFFFF;
+  --k-acc:#DDD8FA; --k-acc-ink:#2C2270; --k-accb:#5B4BC4; --k-accb-ink:#FFFFFF;
+  --k-chg:#F7CDB2; --k-chg-ink:#5E2309; --k-chgb:#E58A52; --k-chgb-ink:#2A0E02;
+  --k-start:#DADFDB; --k-start-ink:#17201B; --k-startb:#59645D; --k-startb-ink:#FFFFFF;
+  --k-path:#E3F1EA; --k-path-ink:#0E3B2C;
+  --k-sub:#5B4BC4; --k-sub-ink:#FFFFFF; --k-sub-line:#7D6EE8;
+  --k-lt:#E58A52; --k-lt-ink:#2A0E02; --k-lt-line:#E58A52;
+  --k-dom:#2F6FB0; --k-dom-ink:#FFFFFF;
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --f-music:"Noto Music", "Noto Sans Symbols 2", "Segoe UI Symbol", serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111513; --surface:#1A201C; --fg:#E5EAE6; --muted:#9AA59E; --line:#2E3832;
+  --accent:#63C9A1; --accent-soft:#1D3A2F; --accent-ink:#CFF0E2; --on-accent:#08251A;
+  --flat:#A99DF2; --flat-soft:#2A2550; --flat-ink:#E1DCFF;
+  --change:#F08A50; --change-soft:#4A2614; --change-ink:#FFE1CF; --dom-soft:#1B2E45; --dom-ink:#CFE2FA; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111513; --surface:#1A201C; --fg:#E5EAE6; --muted:#9AA59E; --line:#2E3832;
+  --accent:#63C9A1; --accent-soft:#1D3A2F; --accent-ink:#CFF0E2; --on-accent:#08251A;
+  --flat:#A99DF2; --flat-soft:#2A2550; --flat-ink:#E1DCFF;
+  --change:#F08A50; --change-soft:#4A2614; --change-ink:#FFE1CF; --dom-soft:#1B2E45; --dom-ink:#CFE2FA; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,6vw,2.9rem);line-height:1.05}
+h2{font-size:1.55rem;line-height:1.2}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
+.lede{color:var(--muted);max-width:60ch;margin:10px 0 0}
+p{margin:0}
+.head{display:flex;flex-direction:column;gap:6px}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.lang{display:flex;gap:6px}
+.lang button{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;min-height:38px;border-radius:999px;font-size:.85rem}
+.lang button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+.flag{width:24px;height:17px;border-radius:3px;display:block;box-shadow:0 0 0 1px var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.sec-head .sub{font-family:var(--f-body);font-size:1rem;color:var(--muted);font-weight:400}
+.desc{color:var(--muted);max-width:62ch}
+.top{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+@media (min-width:760px){.top{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}}
+.circle-wrap{display:flex;flex-direction:column;gap:14px;min-width:0}
+#circle{width:100%;max-width:400px;margin:0 auto;display:block}
+.controls{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface);flex:1 1 auto}
+.seg button{flex:1;border:0;border-radius:0;background:transparent}
+.seg button+button{border-left:1px solid var(--line)}
+button{font:500 .9rem/1.2 var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;min-height:42px}
+button:hover{border-color:var(--muted)}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.nav{display:flex;gap:8px}
+.nav button{flex:1}
+.play{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+#keyname{font-size:2.3rem;line-height:1.05}
+#keyname small{font-family:var(--f-body);font-size:1rem;color:var(--muted);display:block;margin-top:4px}
+#staff{width:100%;max-width:260px;height:auto;display:block}
+.sig{font-family:var(--f-mono);font-size:.95rem}
+.sig .new{color:var(--change);font-weight:500}
+.change{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.change .move{font-family:var(--f-display);font-size:1.2rem}
+.change .move .arrow{color:var(--muted);padding:0 6px}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:.8rem;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)}
+.pill.chg{background:var(--change-soft);color:var(--change-ink)}
+.rule{font-size:.92rem;color:var(--muted)}
+.check{font-family:var(--f-mono);font-size:.85rem;background:var(--bg);color:var(--fg);border-radius:8px;padding:10px 12px}
+.board{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 12px 8px}
+.board svg{display:block;width:100%;min-width:340px;height:auto}
+.kname{font-family:var(--f-mono);font-size:12px;fill:var(--fg)}
+.klab{font-family:var(--f-mono);font-size:12px;font-weight:500}
+.kstep{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+.kstep.h{fill:var(--change);font-weight:500}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:3px;border:1px solid var(--k-edge);display:inline-block}
+.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.bar .now{font-family:var(--f-mono);font-size:.88rem;color:var(--muted);min-width:0}
+.node{cursor:pointer}
+.node:focus{outline:none}
+.node:focus-visible circle{stroke:var(--accent);stroke-width:3}
+.gloss-tools{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+#gq{font:400 1rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;flex:1 1 220px;min-width:0}
+#gcount{font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.gloss{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:0;border-top:1px solid var(--line)}
+@media (min-width:700px){.gloss{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}}
+.gi{padding:12px 0;border-bottom:1px solid var(--line);min-width:0}
+.gi dt{font-weight:600;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.gi dt .alt{font-weight:400;font-size:.88rem;color:var(--muted)}
+.gi dd{margin:4px 0 0;font-size:.94rem;color:var(--fg)}
+.empty{color:var(--muted);padding:14px 0}
+.mus{font-family:var(--f-music)}
+.ann{font-family:var(--f-mono);font-size:12px;fill:var(--fg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.chips .chip{min-height:44px;padding:5px 10px;border-radius:8px;font:500 .88rem/1.2 var(--f-mono);border:2px solid transparent;display:inline-flex;flex-direction:column;align-items:center;min-width:52px}
+.chip small{font-size:.74rem;font-weight:400;font-family:var(--f-body)}
+.chip.maj{background:var(--accent-soft);color:var(--accent-ink)}
+.chip.min{background:var(--flat-soft);color:var(--flat-ink)}
+.chip.dim{background:var(--change-soft);color:var(--change-ink)}
+.chips .chip[aria-pressed="true"]{border-color:var(--fg)}
+.rowlab{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tests{list-style:none;padding:0;margin:12px 0 16px;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
+.tests li{display:flex;gap:10px;align-items:baseline;min-width:0}
+.tests .ok{color:var(--accent);font-weight:600}
+.tests .no{color:var(--change);font-weight:600}
+.readout{font-family:var(--f-mono);font-size:.88rem;color:var(--fg);margin-top:10px}
+.board svg.sq{max-width:440px;margin:0 auto}
+.board svg.sm{max-width:380px;margin:0 auto}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.toc a{font-size:.84rem;color:var(--accent-ink);background:var(--accent-soft);padding:5px 11px;border-radius:999px;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+.fT{background:var(--accent-soft);color:var(--accent-ink)}
+.fSD{background:var(--flat-soft);color:var(--flat-ink)}
+.fD{background:var(--dom-soft);color:var(--dom-ink)}
+.chip.static{cursor:default}
+.chips .chip.neutral{background:var(--surface);border:1px solid var(--line);color:var(--fg);cursor:pointer}
+.chips .chip.neutral[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+#pats .chip{flex-direction:row}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:10px}
+@media (min-width:680px){.fgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fcard h3{font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.fcard .chips{margin:2px 0}
+.fcard p{font-size:.9rem;color:var(--muted)}
+.harm{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:4px}
+@media (min-width:680px){.harm{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hcard{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:1px solid transparent;border-radius:12px;padding:14px;font:400 .92rem/1.4 var(--f-body)}
+.hcard .hrom{font:500 1.05rem var(--f-mono)}
+.hcard .hfn,.hcard .hplay{font-size:.82rem;font-weight:500}
+.recipe{margin:12px 0 0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px;max-width:68ch}
+.sub-h{margin-top:28px}
+.census{display:flex;flex-direction:column;gap:6px;margin:6px 0 16px}
+.crow{display:grid;grid-template-columns:minmax(78px,auto) minmax(0,1fr) auto;align-items:center;gap:10px;min-height:42px;padding:6px 10px;text-align:left;border-radius:8px;font:500 .88rem var(--f-mono);background:var(--surface);border:1px solid var(--line)}
+.crow[aria-pressed="true"]{border-color:var(--fg);border-width:2px}
+.cbar{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:2px;height:14px}
+.cbar i{background:var(--line);border-radius:2px}
+.cbar i.q-a{background:var(--accent)}.cbar i.q-b{background:var(--flat)}.cbar i.q-c{background:var(--change)}
+.cq{font-size:.82rem;white-space:nowrap}
+.q-at{color:var(--accent-ink)}.q-bt{color:var(--flat-ink)}.q-ct{color:var(--change-ink)}
+.notes{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:10px}
+.notes li{display:flex;gap:10px;align-items:flex-start;font-size:.95rem;max-width:68ch;min-width:0}
+.notes li b{font-weight:600}
+.notes .sw{margin-top:5px;flex:none}
+.sw.dash{background:transparent;border:2px dashed var(--k-lt-line)}
+.sw.dash2{background:transparent;border:2px dashed var(--k-sub-line)}
+footer{color:var(--muted);font-size:.88rem;border-top:1px solid var(--line);padding-top:16px}
+@media (prefers-reduced-motion:no-preference){.node circle,.kk{transition:fill .25s ease}}
+</style>
+
+<main class="wrap">
+  <header class="head">
+    <div class="topbar">
+      <p class="eyebrow" data-i="eyebrow"></p>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button id="lang-pt" aria-pressed="true" lang="pt-BR">
+          <svg class="flag" viewBox="0 0 20 14" aria-hidden="true"><rect width="20" height="14" fill="#009C3B"/><path d="M10 1.5 18.4 7 10 12.5 1.6 7z" fill="#FFDF00"/><circle cx="10" cy="7" r="3.2" fill="#002776"/><path d="M6.9 6.4q3-1 6.2.8" stroke="#FFFFFF" stroke-width=".6" fill="none"/></svg>
+          <span>PT</span>
+        </button>
+        <button id="lang-en" aria-pressed="false" lang="en">
+          <svg class="flag" viewBox="0 0 20 14" aria-hidden="true"><rect width="20" height="14" fill="#FFFFFF"/><g fill="#B22234"><rect y="0" width="20" height="1.08"/><rect y="2.15" width="20" height="1.08"/><rect y="4.31" width="20" height="1.08"/><rect y="6.46" width="20" height="1.08"/><rect y="8.62" width="20" height="1.08"/><rect y="10.77" width="20" height="1.08"/><rect y="12.92" width="20" height="1.08"/></g><rect width="8.6" height="7.54" fill="#3C3B6E"/><g fill="#FFFFFF"><circle cx="1.6" cy="1.4" r=".45"/><circle cx="4.3" cy="1.4" r=".45"/><circle cx="7" cy="1.4" r=".45"/><circle cx="2.95" cy="3.1" r=".45"/><circle cx="5.65" cy="3.1" r=".45"/><circle cx="1.6" cy="4.8" r=".45"/><circle cx="4.3" cy="4.8" r=".45"/><circle cx="7" cy="4.8" r=".45"/><circle cx="2.95" cy="6.4" r=".45"/><circle cx="5.65" cy="6.4" r=".45"/></g></svg>
+          <span>EN</span>
+        </button>
+      </div>
+    </div>
+    <h1 data-i="title">Circle of Fifths Lab</h1>
+    <p class="lede" data-i="lede"></p>
+    <nav class="toc" id="toc">
+      <a href="#h-jump" data-i="navJump"></a>
+      <a href="#h-scale" data-i="navScale"></a>
+      <a href="#h-tetra" data-i="navTetra"></a>
+      <a href="#h-func" data-i="navFunc"></a>
+      <a href="#h-names" data-i="navNames"></a>
+      <a href="#h-int" data-i="navInt"></a>
+      <a href="#h-hinge" data-i="navHinge"></a>
+      <a href="#h-tri" data-i="navTri"></a>
+      <a href="#h-origin" data-i="navOrigin"></a>
+      <a href="#h-win" data-i="navWin"></a>
+      <a href="#h-field" data-i="navField"></a>
+      <a href="#h-prog" data-i="navProg"></a>
+      <a href="#h-comp" data-i="navComp"></a>
+      <a href="#h-gloss" data-i="navGloss"></a>
+    </nav>
+  </header>
+
+  <section class="top" aria-label="Circle of fifths">
+    <div class="circle-wrap">
+      <svg id="circle" viewBox="0 0 360 360" role="group"></svg>
+      <div class="controls">
+        <div class="seg" role="group">
+          <button id="dir-cw" aria-pressed="true" data-i="cw"></button>
+          <button id="dir-ccw" aria-pressed="false" data-i="ccw"></button>
+        </div>
+        <div class="row">
+          <div class="nav" style="flex:1 1 200px">
+            <button id="prev" data-i="prev"></button>
+            <button id="next" data-i="next"></button>
+          </div>
+          <div class="seg" role="group" style="flex:1 1 160px">
+            <button id="nt-en" aria-pressed="true">C D E</button>
+            <button id="nt-pt" aria-pressed="false">Dó Ré Mi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <article class="card" aria-live="polite">
+      <p class="eyebrow" data-i="current"></p>
+      <h2 id="keyname"></h2>
+      <svg id="staff" viewBox="0 0 240 92" role="img" aria-label="Key signature"></svg>
+      <p class="sig" id="sigtext"></p>
+      <div class="change" id="change"></div>
+      <p class="check" id="check"></p>
+    </article>
+  </section>
+
+  <section aria-labelledby="h-jump">
+    <div class="sec-head">
+      <h2 id="h-jump" data-i="jumpTitle"></h2>
+      <p class="desc" data-i="jumpDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="jumpnow"></span>
+      <button class="play" id="play-jump"><span aria-hidden="true">▶</span> <span data-i="playJump"></span></button>
+    </div>
+    <div class="board"><svg id="jump" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-start)"></i><span data-i="lgStart"></span></span>
+      <span><i class="sw" style="background:var(--k-path)"></i><span data-i="lgPath"></span></span>
+      <span><i class="sw" style="background:var(--k-tonic)"></i><span data-i="lgDest"></span></span>
+      <span><i class="sw" style="background:var(--k-chg)"></i><span data-i="lgChg"></span></span>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-scale">
+    <div class="sec-head">
+      <h2 id="h-scale" data-i="scaleTitle"></h2>
+      <p class="desc" data-i="scaleDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="scalenow"></span>
+      <button class="play" id="play-scale"><span aria-hidden="true">▶</span> <span data-i="playScale"></span></button>
+    </div>
+    <div class="board"><svg id="scale" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-tonic)"></i><span data-i="lgTonic"></span></span>
+      <span><i class="sw" style="background:var(--k-scale)"></i><span data-i="lgScale"></span></span>
+      <span><i class="sw" style="background:var(--k-acc)"></i><span data-i="lgAcc"></span></span>
+      <span><i class="sw" style="background:var(--k-chg)"></i><span data-i="lgNow"></span></span>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-tetra">
+    <div class="sec-head">
+      <h2 id="h-tetra" data-i="tetraTitle"></h2>
+      <p class="desc" data-i="tetraDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="tetranow"></span>
+      <button class="play" id="play-tetra"><span aria-hidden="true">▶</span> <span data-i="playTetra"></span></button>
+    </div>
+    <div class="board"><svg id="tetra" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-scale)"></i><span data-i="lgT1"></span></span>
+      <span><i class="sw" style="background:var(--k-dom)"></i><span data-i="lgT2"></span></span>
+      <span><i class="sw" style="background:var(--k-acc)"></i><span data-i="lgT3"></span></span>
+      <span><i class="sw" style="background:var(--k-lt)"></i><span data-i="lgTch"></span></span>
+    </div>
+    <ul class="notes" id="tetranotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-func">
+    <div class="sec-head">
+      <h2 id="h-func" data-i="funcTitle"></h2>
+      <p class="desc" data-i="funcDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="funcnow"></span>
+      <button class="play" id="play-func"><span aria-hidden="true">▶</span> <span data-i="playFunc"></span></button>
+    </div>
+    <div class="board"><svg id="func" role="img"></svg></div>
+    <ul class="notes" id="funcnotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-names">
+    <div class="sec-head">
+      <h2 id="h-names" data-i="namesTitle"></h2>
+      <p class="desc" data-i="namesDesc"></p>
+    </div>
+    <div class="board"><svg id="mirror" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-tonic)"></i><span data-i="lgTonic"></span></span>
+      <span><i class="sw" style="background:var(--k-sub)"></i><i class="sw" style="background:var(--k-dom)"></i><span data-i="lgFifths"></span></span>
+      <span><i class="sw" style="background:var(--k-acc)"></i><span data-i="lgMed"></span></span>
+      <span><i class="sw" style="background:var(--k-lt)"></i><i class="sw" style="background:var(--k-chg)"></i><span data-i="lgNb"></span></span>
+    </div>
+    <div class="board" style="margin-top:14px"><svg id="staffint" class="sm" viewBox="0 0 300 132" role="img"></svg></div>
+    <p class="readout" id="staffcap"></p>
+    <ul class="notes" id="namenotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-int">
+    <div class="sec-head">
+      <h2 id="h-int" data-i="intTitle"></h2>
+      <p class="desc" data-i="intDesc"></p>
+    </div>
+    <p class="rowlab" data-i="intPick"></p>
+    <div class="chips" id="ivchips" role="group"></div>
+    <div class="census" id="census"></div>
+    <div class="bar">
+      <span class="now" id="intnow"></span>
+      <button class="play" id="play-int"><span aria-hidden="true">▶</span> <span data-i="playInt"></span></button>
+    </div>
+    <div class="board"><svg id="intkeys" role="img"></svg></div>
+    <p class="readout" id="intinv"></p>
+    <h3 class="sub-h" data-i="intWhyTitle"></h3>
+    <ul class="notes" id="intnotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-hinge">
+    <div class="sec-head">
+      <h2 id="h-hinge" data-i="hingeTitle"></h2>
+      <p class="desc" data-i="hingeDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="hingenow"></span>
+      <button class="play" id="play-hinge"><span aria-hidden="true">▶</span> <span data-i="playHinge"></span></button>
+    </div>
+    <div class="board"><svg id="hinge" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-tonic)"></i><span data-i="lgTonic"></span></span>
+      <span><i class="sw" style="background:var(--k-sub)"></i><span data-i="lgSub"></span></span>
+      <span><i class="sw" style="background:var(--k-lt)"></i><span data-i="lgLt"></span></span>
+      <span><i class="sw dash"></i><i class="sw dash2"></i><span data-i="lgGhost"></span></span>
+    </div>
+    <ul class="notes" id="hingenotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-tri">
+    <div class="sec-head">
+      <h2 id="h-tri" data-i="triTitle"></h2>
+      <p class="desc" data-i="triDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="trinow"></span>
+      <button class="play" id="play-tri"><span aria-hidden="true">▶</span> <span data-i="playTri"></span></button>
+    </div>
+    <div class="board"><svg id="tri" role="img"></svg></div>
+    <ul class="notes" id="trinotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-origin">
+    <div class="sec-head">
+      <h2 id="h-origin" data-i="originTitle"></h2>
+      <p class="desc" data-i="originDesc"></p>
+    </div>
+    <div class="bar">
+      <div class="seg" role="group" style="flex:0 1 auto">
+        <button id="tune-pure" aria-pressed="true" data-i="tunePure"></button>
+        <button id="tune-eq" aria-pressed="false" data-i="tuneEq"></button>
+      </div>
+      <div class="row">
+        <button class="play" id="play-fifth"><span aria-hidden="true">▶</span> <span data-i="playFifth"></span></button>
+        <button class="play" id="play-comma"><span aria-hidden="true">▶</span> <span data-i="playComma"></span></button>
+      </div>
+    </div>
+    <div class="board"><svg id="origin" class="sq" viewBox="0 0 360 360" role="img"></svg></div>
+    <p class="readout" id="originread"></p>
+  </section>
+
+  <section aria-labelledby="h-win">
+    <div class="sec-head">
+      <h2 id="h-win" data-i="winTitle"></h2>
+      <p class="desc" data-i="winDesc"></p>
+    </div>
+    <div class="bar">
+      <span class="now" id="winnow"></span>
+      <div class="nav">
+        <button id="slide-l" data-i="slideL"></button>
+        <button id="slide-r" data-i="slideR"></button>
+      </div>
+    </div>
+    <div class="board"><svg id="win" role="img"></svg></div>
+    <ul class="notes" id="winnotes"></ul>
+  </section>
+
+  <section aria-labelledby="h-field">
+    <div class="sec-head">
+      <h2 id="h-field" data-i="fieldTitle"></h2>
+      <p class="desc" data-i="fieldDesc"></p>
+    </div>
+    <p class="rowlab" data-i="orderScale"></p>
+    <div class="chips" id="chips-scale" role="group"></div>
+    <p class="rowlab" data-i="orderWin"></p>
+    <div class="chips" id="chips-win" role="group"></div>
+    <div class="board"><svg id="fieldwin" role="img"></svg></div>
+    <ul class="tests" id="tests"></ul>
+    <div class="bar">
+      <span class="now" id="fieldnow"></span>
+      <button class="play" id="play-chord"><span aria-hidden="true">▶</span> <span data-i="playChord"></span></button>
+    </div>
+    <div class="board"><svg id="fieldkeys" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-tonic)"></i><span data-i="lgMaj"></span></span>
+      <span><i class="sw" style="background:var(--k-sub)"></i><span data-i="lgMin"></span></span>
+      <span><i class="sw" style="background:var(--k-lt)"></i><span data-i="lgDim"></span></span>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-prog">
+    <div class="sec-head">
+      <h2 id="h-prog" data-i="progTitle"></h2>
+      <p class="desc" data-i="progDesc"></p>
+    </div>
+    <div class="fgrid" id="fmap"></div>
+    <p class="rule" data-i="flow"></p>
+    <h3 class="sub-h" data-i="patTitle"></h3>
+    <div class="chips" id="pats" role="group"></div>
+    <p class="desc" id="patdesc"></p>
+    <p class="rowlab" style="margin-top:14px" data-i="chordsLabel"></p>
+    <div class="chips" id="progchips" role="group"></div>
+    <div class="bar">
+      <span class="now" id="prognow"></span>
+      <div class="row">
+        <div class="nav">
+          <button id="pc-prev" data-i="prevC"></button>
+          <button id="pc-next" data-i="nextC"></button>
+        </div>
+        <button class="play" id="play-prog"><span aria-hidden="true">▶</span> <span data-i="playProg"></span></button>
+      </div>
+    </div>
+    <div class="board"><svg id="progkeys" role="img"></svg></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--k-tonic)"></i><span data-i="lgFT"></span></span>
+      <span><i class="sw" style="background:var(--k-sub)"></i><span data-i="lgFSD"></span></span>
+      <span><i class="sw" style="background:var(--k-dom)"></i><span data-i="lgFD"></span></span>
+      <span><i class="sw" style="background:transparent;border:2px dashed var(--muted)"></i><span data-i="lgWas"></span></span>
+    </div>
+    <p class="readout" id="progread"></p>
+    <h3 class="sub-h" data-i="logicTitle"></h3>
+    <ul class="notes" id="proglogic"></ul>
+  </section>
+
+  <section aria-labelledby="h-comp">
+    <div class="sec-head">
+      <h2 id="h-comp" data-i="composeTitle"></h2>
+      <p class="desc" data-i="composeDesc"></p>
+    </div>
+    <p class="rowlab" data-i="melLabel"></p>
+    <div class="chips" id="melchips" role="group"></div>
+    <div class="harm" id="harm"></div>
+    <h3 class="sub-h" data-i="recipeTitle"></h3>
+    <ol class="recipe" id="recipe"></ol>
+  </section>
+
+  <section aria-labelledby="h-gloss">
+    <div class="sec-head">
+      <h2 id="h-gloss" data-i="glossTitle"></h2>
+    </div>
+    <div class="gloss-tools">
+      <input id="gq" type="search">
+      <span id="gcount"></span>
+    </div>
+    <dl class="gloss" id="gloss"></dl>
+  </section>
+
+  <footer data-i="footer"></footer>
+</main>
+
+<script>
+/* ---------- i18n ---------- */
+const T={
+ pt:{
+  title:'Laboratório do Círculo das Quintas',staffAria:'Armadura de clave',secAria:'Círculo das quintas',
+  eyebrow:'Teoria para piano · aula 2',
+  lede:'Gire o círculo e veja no teclado de onde vem cada sustenido e cada bemol. Uma fórmula, T T S T T T S, e nada mais para decorar.',
+  cw:'Horário · sobe uma 5ª',ccw:'Anti-horário · sobe uma 4ª',prev:'← Anterior',next:'Próxima →',
+  current:'Tonalidade atual',
+  jumpTitle:'O salto <span class="sub">· entre vizinhos do círculo</span>',
+  jumpDesc:'Os semitons contados da tonalidade anterior até a atual: 7 no sentido horário (quinta justa), 5 no anti-horário (quarta justa).',
+  playJump:'Ouvir o salto',lgStart:'partida',lgPath:'semitons contados',lgDest:'nova tônica',lgChg:'a nota que muda',
+  scaleTitle:'A escala <span class="sub">· a escala maior resultante</span>',
+  scaleDesc:'A escala maior da tonalidade atual, com os graus nas teclas e os passos T (tom) e S (semitom) embaixo. Compare com a anterior: só uma nota muda a cada passo.',
+  playScale:'Ouvir a escala',lgTonic:'tônica (1)',lgScale:'notas da escala',lgAcc:'acidentes já existentes',lgNow:'acidente que mudou agora',
+  funcTitle:'As funções <span class="sub">· tônica, subdominante, dominante e sensível</span>',
+  funcDesc:'Os nomes dos graus descrevem a relação de cada nota com a tônica. Subdominante e dominante são espelhos, uma quinta abaixo e uma quinta acima, e por isso são os dois vizinhos da tônica no círculo.',
+  playFunc:'Ouvir sensível → tônica',fifthBelow:'quinta abaixo',fifthAbove:'quinta acima',
+  fTonic:n=>`<b>Tônica · ${n}</b>: a casa, o centro da tonalidade.`,
+  fSub:(n,k)=>`<b>Subdominante · ${n}</b>: uma quinta abaixo da tônica. O nome quer dizer “dominante de baixo”. No círculo, é o vizinho anti-horário: ${k}.`,
+  fDom:(n,k)=>`<b>Dominante · ${n}</b>: uma quinta acima da tônica, a nota mais forte depois dela. No círculo, é o vizinho horário: ${k}.`,
+  fLt:(n,t)=>`<b>Sensível · ${n}</b>: um semitom abaixo de ${t}. A seta mostra para onde ela puxa. Ouça e repare que o ouvido pede a tônica.`,
+  hingeTitle:'As dobradiças <span class="sub">· o 4º e o 7º graus</span>',
+  hingeDesc:'Cada uma participa de um dos dois semitons da escala (3–4 e 7–8), e juntas formam o único trítono dela. Andar uma casa no círculo é mover uma dessas dobradiças meio tom. As teclas tracejadas mostram para onde cada uma vai.',
+  playHinge:'Ouvir o trítono resolvendo',tritone:'trítono · 6 semitons',
+  hUp:(a,b,k)=>`<b>↑ ${a} → ${b}</b>: no sentido horário você vai para ${k}, e a subdominante sobe meio tom para virar a sensível.`,
+  hDown:(a,b,k)=>`<b>↓ ${a} → ${b}</b>: no sentido anti-horário você vai para ${k}, e a sensível desce meio tom para virar a subdominante.`,
+  hRes:(a,b,c,d)=>`<b>Resolução</b>: o trítono ${a}–${b} é instável. Cada nota anda meio tom: ${a} desce para ${c} e ${b} sobe para ${d}, a tônica.`,
+  lgSub:'subdominante (4)',lgLt:'sensível (7)',lgGhost:'tracejado: para onde a nota vai, na cor da nova função',
+  originTitle:'A origem <span class="sub">· por que a quinta</span>',
+  originDesc:'Pitágoras mediu cordas: metade da corda soa uma oitava acima (2:1), dois terços soam uma quinta acima (3:2). Cada linha do desenho liga uma nota à quinta seguinte. Na afinação pura, 12 quintas não voltam exatamente ao Dó: o desenho vira uma espiral e sobra a coma pitagórica. O piano usa o temperamento igual, que encolhe cada quinta um pouquinho para o círculo fechar.',
+  tunePure:'Quintas puras (3:2)',tuneEq:'Temperamento igual',playFifth:'Ouvir a quinta',playComma:'Ouvir a coma',
+  readPure:'12 quintas puras = 8423,46 cents · 7 oitavas = 8400 cents · sobram 23,46 cents: a coma pitagórica. Ouça: Dó e Si♯ juntos “batem”, um tremor de cerca de 3,6 vezes por segundo.',
+  readEq:'12 quintas de 700 cents = 8400 cents = exatamente 7 oitavas. O círculo fecha e Si♯ vira a mesma tecla que Dó.',
+  comma:'coma: 23,46 cents',
+  winTitle:'A janela <span class="sub">· uma tonalidade são 7 quintas seguidas</span>',
+  winDesc:'Estique o círculo numa linha de quintas. A tonalidade atual ocupa 7 casas vizinhas. Deslizar a janela uma casa é andar um passo no círculo: uma nota sai por uma ponta e outra entra pela outra. As pontas são sempre a subdominante (esquerda) e a sensível (direita).',
+  slideL:'← Anti-horário',slideR:'Horário →',
+  winRead:(k,l)=>`<b>${k}</b> = ${l}, sete quintas seguidas.`,
+  winR:(o,i,k)=>`<b>→ horário</b>: sai ${o}, entra ${i}. A janela vira ${k}.`,
+  winL:(o,i,k)=>`<b>← anti-horário</b>: sai ${o}, entra ${i}. A janela vira ${k}.`,
+  fieldTitle:'Campo harmônico <span class="sub">· tríades por terças empilhadas</span>',
+  fieldDesc:'Escolha um grau. A tríade nasce pulando uma nota da escala de cada vez: a fundamental, a terça e a quinta a partir dele. Na linha de quintas cada intervalo vira um passo fixo: 5ª justa = 1 casa à direita, 3ª maior = 4 casas à direita, 3ª menor = 3 casas à esquerda. Cada tipo de acorde é uma forma fixa, e ela só serve se couber inteira dentro da janela.',
+  orderScale:'Na ordem da escala',orderWin:'Na ordem da janela',playChord:'Ouvir o acorde',
+  tMaj:'Maior: 3ª maior (+4) e 5ª justa (+1)',tMin:'Menor: 3ª menor (−3) e 5ª justa (+1)',tDim:'Diminuto: 3ª menor (−3) e 5ª diminuta (−6)',
+  fits:n=>`cabe: ${n}`,outside:n=>`${n} fica fora da janela`,and:' e ',
+  chordRead:(l,ns,a,b)=>`${l} = ${ns.join(' ')} · ${a} + ${b} semitons`,
+  lgMaj:'maior (4 + 3)',lgMin:'menor (3 + 4)',lgDim:'diminuto (3 + 3)',window:'janela',
+  navInt:'Intervalos',
+  intTitle:'Intervalos <span class="sub">· número e qualidade</span>',
+  intDesc:'Escolha um número. A lista mostra os 7 intervalos desse número dentro da escala atual, um a partir de cada grau, com o tamanho em semitons. Repare que cada número aparece em exatamente dois tamanhos (a 8ª é a exceção, com um só). Toque numa linha para ver no teclado: os números dentro das teclas contam os nomes de nota, e o colchete conta os semitons.',
+  intPick:'Número do intervalo',playInt:'Ouvir o intervalo',intWhyTitle:'Por que esses nomes',
+  ord:n=>n+'ª',q:{P:'justa',M:'maior',m:'menor',A:'aumentada',d:'diminuta'},
+  ivName:(g,q)=>g===1?'uníssono':`${g}ª ${q}`,
+  intNow:(a,b,g,s,n)=>`${a}–${b} · ${g} nomes · ${s} semitons · ${n}`,
+  intInv:(b,a,n,is,g,ig,s)=>`<b>Invertido</b>: ${b}–${a} = ${n} (${is} semitons). Números: ${g} + ${ig} = 9 · Semitons: ${s} + ${is} = 12.`,
+  intWhy:[
+   '<b>Duas réguas</b>: todo intervalo tem duas medidas. O número (2ª, 3ª, 5ª…) conta nomes de nota, ou seja, posições na pauta, que só tem 7 letras. A qualidade (justa, maior, menor…) conta semitons no teclado, que tem 12 teclas. A pauta diz quantas letras; o teclado diz a distância exata.',
+   '<b>Contagem inclusiva</b>: os latinos contavam incluindo o ponto de partida, e não começavam do zero (os algarismos romanos não têm zero). Por isso a mesma nota é o uníssono, a “1ª”, e não a “0ª”. O português guarda esse hábito: “daqui a oito dias” é uma semana, e “quinze dias” são duas semanas. A oitava é a mesma ideia: oito nomes, de Dó a Dó.',
+   '<b>A aritmética</b>: se o número conta as duas pontas, então número = passos de letra + 1. Somar intervalos é somar passos: 4ª (3 passos) + 5ª (4 passos) = 7 passos = 8ª. Em fórmula, a + b − 1. Pelo mesmo motivo a 9ª é uma 2ª uma oitava acima (2 + 8 − 1), e os acordes com 9, 11 e 13 são a 2ª, a 4ª e a 6ª empilhadas acima da oitava.',
+   '<b>A escala maior é a régua</b>: meça cada nota da escala maior a partir da tônica. Você obtém 2ª maior, 3ª maior, 4ª justa, 5ª justa, 6ª maior, 7ª maior e 8ª justa. Por definição, maior e justa são os tamanhos que a escala maior dá a partir da tônica. Um semitom a menos transforma maior em menor e justa em diminuta; um a mais faz aumentada.',
+   '<b>Os dois trechos curtos</b>: entre duas teclas brancas vizinhas quase sempre há uma preta no meio, então a distância é um tom (2 semitons). Só em dois lugares não há preta: Mi–Fá e Si–Dó, a um semitom. O tamanho de qualquer intervalo da escala depende de quantos desses trechos curtos ele atravessa. No teclado acima, eles aparecem como S em laranja.',
+   '<b>Terças: dois tamanhos comuns</b>: a terça anda 2 passos e atravessa 0 ou 1 trecho curto. Sem trecho curto, 2 + 2 = 4 semitons (Dó–Mi). Com um, 2 + 1 = 3 (Ré–Fá). Na escala, 3 terças têm 4 semitons e 4 têm 3. Como nenhum tamanho é “o normal”, os dois ganharam nome: maior e menor. O mesmo vale para 2ªs, 6ªs e 7ªs.',
+   '<b>Quintas: um tamanho só, mais uma exceção</b>: a quinta anda 4 passos e quase sempre atravessa exatamente 1 trecho curto: 2 + 2 + 2 + 1 = 7 semitons. Só Si–Fá atravessa os dois e fica com 6. Com 6 de 7 iguais, existe “a” quinta, chamada justa, e a que foge ganha nome de exceção: diminuta. O mesmo vale para as 4ªs, onde a exceção é Fá–Si, a 4ª aumentada.',
+   '<b>Por que nenhuma quinta escapa</b>: o maior trecho seguido sem semitom é Fá–Sol–Lá–Si, três tons, o trítono. A quinta precisa de quatro passos, então sempre esbarra em pelo menos um trecho curto. (Na teoria, o fato de cada número ter sempre dois tamanhos na escala tem nome: propriedade de Myhill.)',
+   '<b>Consonâncias perfeitas e imperfeitas</b>: a teoria medieval chamava de perfeitas o uníssono, a 8ª, a 5ª e a 4ª, razões feitas só com 1, 2, 3 e 4 (1:1, 2:1, 3:2, 4:3), os números da tétrade pitagórica. Os primeiros cantos a várias vozes, o organum, por volta do século IX, andavam em 4ªs, 5ªs e 8ªs paralelas. As 3ªs e 6ªs eram consonâncias imperfeitas: na afinação pitagórica a 3ª maior fica 81:64, áspera. Elas só ganharam o centro da harmonia no fim da Idade Média e no Renascimento, com afinações que adoçavam as terças.',
+   '<b>Inversão</b>: virar o intervalo troca o número por 9 − n e os semitons por 12 − s. Maior vira menor (3ª maior de 4 ↔ 6ª menor de 8), aumentada vira diminuta, e justa continua justa (5ª de 7 ↔ 4ª de 5). As justas são as únicas que mantêm a qualidade, mais um motivo para o nome.',
+   '<b>Em outras línguas</b>: justa em português e espanhol, juste em francês, rein (“pura”) em alemão, perfect em inglês. Todas dizem a mesma coisa: exata, sem variação.'],
+  navLabel:'Nesta página',navJump:'O salto',navScale:'A escala',navTetra:'Tetracordes',navFunc:'Funções',navNames:'Nomes',navHinge:'Dobradiças',navTri:'Trítono',navOrigin:'Origem',navWin:'Janela',navField:'Campo harmônico',navProg:'Progressões',navComp:'Compor',navGloss:'Glossário',
+  tetraTitle:'Tetracordes <span class="sub">· a escala em dois blocos iguais</span>',
+  tetraDesc:'Tetracorde vem do grego: tetra (quatro) + chordé (corda). A lira grega era afinada em blocos de quatro cordas, com as duas das pontas a uma quarta justa. A escala maior são dois blocos com o mesmo formato, T T S, ligados por um tom. O bloco de cima de uma tonalidade é o bloco de baixo da próxima no círculo.',
+  playTetra:'Ouvir os três blocos',lgT1:'tetracorde inferior',lgT2:'tetracorde superior',lgT3:'próximo tetracorde',lgTch:'acidente novo',
+  tetN1:(k,lo,up)=>`<b>${k}</b> = ${lo} + tom + ${up}. Os dois blocos têm o mesmo formato: T T S.`,
+  tetN2:(up,k2,nw,ch)=>`<b>A corrente</b>: o bloco ${up} vira o de baixo de ${k2}. O bloco seguinte, ${nw}, só fica com o formato T T S se usar ${ch}. É daí que vem o acidente novo.`,
+  tetN3:'<b>Por que uma quarta</b>: T + T + S = 5 semitons, uma quarta justa. Dois blocos (5 + 5) mais o tom de ligação (2) dão 12, a oitava inteira.',
+  tetN4:'<b>Onde a quinta aparece</b>: cada bloco começa 7 semitons acima do anterior (5 do bloco + 2 da ligação). Andar pela corrente de tetracordes é andar pelo círculo das quintas.',
+  namesTitle:'De onde vêm os nomes <span class="sub">· graus e intervalos</span>',
+  namesDesc:'Os nomes dos graus medem a distância até a tônica e formam um espelho em volta dela: a dominante fica uma quinta acima e a subdominante uma quinta abaixo; a mediante uma terça acima e a submediante uma terça abaixo; a supertônica e a sensível são as vizinhas.',
+  mFifth:'5ª ↔ 5ª',mThird:'3ª ↔ 3ª',mStep:'vizinhas',
+  lgFifths:'dominante e subdominante (5ª)',lgMed:'mediante e submediante (3ª)',lgNb:'sensível e supertônica (vizinhas)',
+  staffCap:(a,b)=>`${a} → ${b}: cinco posições na pauta, contando as duas pontas. Por isso é uma quinta.`,
+  nI:[
+   '<b>2ª, 3ª, 4ª, 5ª…</b>: os intervalos contam nomes de nota, incluindo as duas pontas, como as posições na pauta. Os nomes vêm dos ordinais latinos: secunda, tertia, quarta, quinta. Por isso uma 4ª mais uma 5ª dão uma 8ª, e não uma 9ª: a nota do meio é contada duas vezes.',
+   '<b>Justa</b>: uníssono, 4ª, 5ª e 8ª eram as consonâncias perfeitas da teoria medieval, as razões mais simples entre cordas (1:1, 4:3, 3:2, 2:1). Na escala eles têm um só tamanho natural (a exceção é Fá–Si) e, invertidos, continuam justos. Os outros intervalos (2ª, 3ª, 6ª, 7ª) aparecem em dois tamanhos, e por isso são maiores ou menores. Justa quer dizer exata; em inglês, perfect.',
+   '<b>Tônica</b>: do grego tónos, “tensão” ou “tom”. É a nota que dá o tom à música e onde a tensão se desfaz.',
+   '<b>Dominante</b>: no canto gregoriano, a dominante era a nota de recitação, a mais repetida, muitas vezes uma quinta acima da nota final. Rameau, nos anos 1720, fixou o nome para o 5º grau: a nota que domina a tonalidade depois da tônica.',
+   '<b>Subdominante</b>: termo de Rameau (sous-dominante), “a dominante de baixo”, uma quinta abaixo da tônica. Não quer dizer “logo abaixo da dominante”, embora na escala ela fique ali.',
+   '<b>Mediante e submediante</b>: a mediante (3º grau) fica no meio do caminho entre a tônica e a dominante. A submediante (6º grau) fica no meio do caminho entre a tônica e a subdominante de baixo. Uma é o espelho da outra.',
+   '<b>Supertônica</b>: o 2º grau, logo acima da tônica.',
+   '<b>Sensível</b>: do francês note sensible, a nota sensível à atração da tônica. Em inglês, leading tone, a nota que conduz.'],
+  triTitle:'O trítono <span class="sub">· três tons, meia oitava</span>',
+  triDesc:'O trítono é a distância entre as duas dobradiças. Ele tem propriedades que nenhum outro intervalo tem, e cada uma explica um pedaço da harmonia.',
+  playTri:'Ouvir trítono, depois quinta',triB1:'T+T+T = 6',triB2:'S+T+T+S = 6',
+  trName:(a,b,c,d)=>`<b>O nome</b>: do latim tri + tonus, três tons inteiros: ${a}–${b}, ${b}–${c}, ${c}–${d}.`,
+  trMirror:'<b>Espelho perfeito</b>: o trítono divide a oitava exatamente ao meio, 6 + 6. Invertido, continua trítono. É o único intervalo que é o seu próprio espelho, e por isso soa ambíguo: sozinho, não aponta para um lado.',
+  trUnique:(a,b,k)=>`<b>Impressão digital</b>: a escala maior tem um único trítono, ${a}–${b}, e entre as tonalidades maiores só ${k} tem esse par. Ouvir ${a}–${b} é saber a tonalidade (ou a sua relativa menor).`,
+  trDevil:'<b>Diabolus in musica</b>: apelido tradicional ligado à teoria medieval, que evitava esse intervalo. O registro escrito da expressão é posterior à própria Idade Média.',
+  trRes:(a,b,c,d)=>`<b>Para onde vai</b>: cada nota anda meio tom, ${a} → ${c} e ${b} → ${d}. O acorde de dominante contém as duas notas, e é daí que vem a sua força.`,
+  progTitle:'Progressões <span class="sub">· funções, movimento e condução de vozes</span>',
+  progDesc:'Uma progressão é uma história de tensão e repouso. Os 7 acordes se agrupam em três funções pelo que têm em comum: acordes que compartilham duas notas soam parecidos e podem se substituir.',
+  fT:'Tônica · repouso',fSD:'Subdominante · afastamento',fD:'Dominante · tensão',
+  fTd:(vi,iii,I,c1,c2)=>`A casa. ${vi} tem ${c1} em comum com ${I}, e ${iii} tem ${c2}. Por isso podem substituí-lo.`,
+  fSDd:(ii,IV,c)=>`Sai de casa sem pressa. ${ii} tem ${c} em comum com ${IV}.`,
+  fDd:(vii,V,c,lt)=>`Contém a sensível (${lt}) e pede a volta. ${vii} tem ${c} em comum com ${V}.`,
+  flow:'A frase típica: T → SD → D → T. Casa, afastamento, tensão, volta.',
+  patTitle:'Progressões famosas',chordsLabel:'Acordes · toque para ouvir',prevC:'◀',nextC:'▶',playProg:'Tocar progressão',
+  lgFT:'tônica (T)',lgFSD:'subdominante (SD)',lgFD:'dominante (D)',lgWas:'onde a voz estava',
+  progStart:(a,f)=>`${a} · função ${f} · ponto de partida.`,
+  progMove:(a,b,m,n,list,feel)=>`${a} → ${b} · ${m} · ${n} ${n===1?'nota em comum':'notas em comum'}${list?` (${list})`:''} · ${feel}`,
+  mv:['mesmo acorde','fundamental sobe um grau','fundamental sobe uma terça','fundamental sobe uma quarta (= desce uma quinta)','fundamental sobe uma quinta','fundamental desce uma terça','fundamental desce um grau'],
+  feel:['repetição','contraste: empurra','suave: troca de cor','forte: movimento de cadência','forte, mas se afastando de casa','suave: troca de cor','contraste'],
+  logicTitle:'A lógica por baixo',
+  pLogic:[
+   '<b>Quinta descendente é o movimento mais forte</b>: a fundamental cai uma quinta (V → I, ii → V). Só uma nota fica e as outras andam por tom ou semitom. No círculo, é andar no sentido anti-horário, em direção à tônica.',
+   '<b>Terça é o movimento mais suave</b>: duas notas ficam e só uma anda. Por isso I → vi ou IV → ii soam como troca de cor, não de lugar.',
+   '<b>Grau é o movimento de contraste</b>: nenhuma nota em comum (IV → V). O ouvido sente um empurrão.',
+   '<b>Condução de vozes</b>: no teclado, cada acorde aparece na posição mais próxima do anterior. As notas em comum ficam paradas, e as tracejadas mostram de onde as outras vozes saíram. É assim que o pianista encadeia acordes sem saltar pelo teclado.'],
+  composeTitle:'Compor na prática <span class="sub">· da melodia ao acorde</span>',
+  composeDesc:'Cada nota da escala aparece em exatamente três acordes do campo harmônico: como fundamental, como terça e como quinta. Escolha uma nota da melodia e ouça as três opções. A nota de cima é a mesma; o que muda é a função, e com ela o sentimento.',
+  melLabel:'Nota da melodia',roleRoot:'fundamental',roleThird:'terça',roleFifth:'quinta',
+  harmRole:(n,r)=>`${n} é a ${r} do acorde`,playHarm:'Ouvir com a melodia no topo',fnName:{T:'tônica',SD:'subdominante',D:'dominante'},
+  recipeTitle:'Receita para uma frase',
+  recipe:[
+   'Escolha a tonalidade e liste os seus 7 acordes. Esse é o seu vocabulário.',
+   'Pense em pergunta e resposta: 4 compassos que terminam no V, como uma vírgula, e 4 que terminam em V → I, o ponto final. Ouça a “Frase de 8 compassos” no player acima.',
+   'Preencha o caminho com funções: T → SD → D → T. Para variar, troque um acorde por outro da mesma função: vi no lugar do I, ii no lugar do IV.',
+   'Na melodia, use notas do acorde nos tempos fortes e notas da escala entre elas, como passagem. Se a melodia vier primeiro, use a ferramenta acima para achar os acordes possíveis.',
+   'Ritmo harmônico: um acorde por compasso é o padrão. Trocar mais rápido perto da cadência cria impulso.',
+   'No baixo, fundamentais que caem por quinta soam decididas, por terça soam suaves e por grau dão um empurrão.',
+   'Teste o final: troque o último I por vi. Se soar inacabado, a sua cadência está funcionando.'],
+  glossTitle:'Glossário <span class="sub">· os termos da aula</span>',
+  search:'sensível, enarmônico, quinta…',
+  footer:'Próxima aula: escalas menores e tonalidades relativas, o anel interno do círculo.',
+  major:'maior',none:'nenhum acidente',inSig:n=>`${n} na armadura de clave`,
+  sig:'Armadura de clave: ',sigEmpty:'Armadura de clave vazia: só teclas brancas',staffNone:'sem acidentes',
+  up5:'sobe uma quinta justa · 7 semitons',up4:'sobe uma quarta justa · 5 semitons',
+  change:(a,b,d,role,key)=>`Muda uma única nota: <span class="pill chg">${a} → ${b}</span>, que vira o ${d}º grau (${role}) de ${key}.`,
+  role7:'sensível',role4:'subdominante',
+  ruleCw:'Sentido horário: o 4º grau da escala anterior sobe um semitom e vira a nova sensível.',
+  ruleCcw:'Sentido anti-horário: a sensível da escala anterior desce um semitom e vira o novo 4º grau (subdominante).',
+  enh:(a,b,c)=>`Você está vendo a grafia ${a}, enarmônica de ${b}: mesmas teclas, outros nomes. Vindo por este lado do círculo, a grafia lógica é ${c}.`,
+  chkSharp:(a,b)=>`Conferência · último sustenido + semitom = tônica: ${a} + S = ${b} ✓`,
+  chkFlats:(a,b)=>`Conferência · penúltimo bemol = tônica: ${a} = ${b} ✓`,
+  chkFlat1:(a,b)=>`Conferência · um bemol só: ${a} é o 4º grau, então a tônica fica uma quarta abaixo: ${b} ✓`,
+  chkNone:a=>`Conferência · nenhum acidente: ${a} é o ponto de partida do círculo.`,
+  steps:'semitons',tapAgain:'toque de novo',W:'T',H:'S',
+  count:(a,b)=>`${a} de ${b} termos`,empty:'Nenhum termo encontrado. Tente “quinta” ou “sustenido”.',
+  circleAria:'Círculo das quintas: toque numa tonalidade'
+ },
+ en:{
+  title:'Circle of Fifths Lab',staffAria:'Key signature',secAria:'Circle of fifths',
+  eyebrow:'Piano theory · lesson 2',
+  lede:'Turn the circle and watch on the keyboard where every sharp and flat comes from. One formula, W W H W W W H, and nothing else to memorize.',
+  cw:'Clockwise · up a P5',ccw:'Counter-clockwise · up a P4',prev:'← Prev',next:'Next →',
+  current:'Current key',
+  jumpTitle:'The jump <span class="sub">· between neighbors on the circle</span>',
+  jumpDesc:'Half steps counted from the previous key to the current one: 7 clockwise (perfect fifth), 5 counter-clockwise (perfect fourth).',
+  playJump:'Play the jump',lgStart:'start',lgPath:'half steps counted',lgDest:'new tonic',lgChg:'the note that changes',
+  scaleTitle:'The scale <span class="sub">· the resulting major scale</span>',
+  scaleDesc:'The major scale of the current key, with scale degrees on the keys and W (whole) and H (half) steps below. Compare with the previous key: only one note changes per step.',
+  playScale:'Play the scale',lgTonic:'tonic (1)',lgScale:'scale tones',lgAcc:'existing accidentals',lgNow:'accidental that just changed',
+  funcTitle:'The functions <span class="sub">· tonic, subdominant, dominant, leading tone</span>',
+  funcDesc:'Degree names describe each note’s relationship to the tonic. The subdominant and dominant are mirror images, a fifth below and a fifth above, which is why they are the tonic’s two neighbors on the circle.',
+  playFunc:'Play leading tone → tonic',fifthBelow:'fifth below',fifthAbove:'fifth above',
+  fTonic:n=>`<b>Tonic · ${n}</b>: home, the center of the key.`,
+  fSub:(n,k)=>`<b>Subdominant · ${n}</b>: a fifth below the tonic. The name means “the lower dominant”. On the circle it is the counter-clockwise neighbor: ${k}.`,
+  fDom:(n,k)=>`<b>Dominant · ${n}</b>: a fifth above the tonic, the strongest note after it. On the circle it is the clockwise neighbor: ${k}.`,
+  fLt:(n,t)=>`<b>Leading tone · ${n}</b>: a half step below ${t}. The arrow shows where it pulls. Listen and notice your ear asking for the tonic.`,
+  hingeTitle:'The hinges <span class="sub">· degrees 4 and 7</span>',
+  hingeDesc:'Each one belongs to one of the scale’s two half steps (3–4 and 7–8), and together they form its only tritone. Moving one step on the circle moves one of these hinges by a half step. The dashed keys show where each one goes.',
+  playHinge:'Play the tritone resolving',tritone:'tritone · 6 half steps',
+  hUp:(a,b,k)=>`<b>↑ ${a} → ${b}</b>: clockwise you go to ${k}, and the subdominant rises a half step to become the leading tone.`,
+  hDown:(a,b,k)=>`<b>↓ ${a} → ${b}</b>: counter-clockwise you go to ${k}, and the leading tone drops a half step to become the subdominant.`,
+  hRes:(a,b,c,d)=>`<b>Resolution</b>: the tritone ${a}–${b} is unstable. Each note moves a half step: ${a} falls to ${c} and ${b} rises to ${d}, the tonic.`,
+  lgSub:'subdominant (4)',lgLt:'leading tone (7)',lgGhost:'dashed: where the note goes, in its new role’s color',
+  originTitle:'The origin <span class="sub">· why the fifth</span>',
+  originDesc:'Pythagoras measured strings: half a string sounds an octave higher (2:1), two thirds sound a fifth higher (3:2). Each line in the drawing joins a note to the next fifth. In pure tuning, 12 fifths never land exactly back on C: the drawing becomes a spiral and the Pythagorean comma is left over. The piano uses equal temperament, shrinking every fifth slightly so the circle closes.',
+  tunePure:'Pure fifths (3:2)',tuneEq:'Equal temperament',playFifth:'Hear the fifth',playComma:'Hear the comma',
+  readPure:'12 pure fifths = 8423.46 cents · 7 octaves = 8400 cents · 23.46 cents left over: the Pythagorean comma. Listen: C and B♯ together “beat”, a wobble of about 3.6 times per second.',
+  readEq:'12 fifths of 700 cents = 8400 cents = exactly 7 octaves. The circle closes and B♯ becomes the same key as C.',
+  comma:'comma: 23.46 cents',
+  winTitle:'The window <span class="sub">· a key is 7 consecutive fifths</span>',
+  winDesc:'Stretch the circle into a line of fifths. The current key fills 7 neighboring slots. Sliding the window one slot is one step on the circle: one note leaves at one end and another enters at the other. The ends are always the subdominant (left) and the leading tone (right).',
+  slideL:'← Counter-clockwise',slideR:'Clockwise →',
+  winRead:(k,l)=>`<b>${k}</b> = ${l}, seven consecutive fifths.`,
+  winR:(o,i,k)=>`<b>→ clockwise</b>: ${o} leaves, ${i} enters. The window becomes ${k}.`,
+  winL:(o,i,k)=>`<b>← counter-clockwise</b>: ${o} leaves, ${i} enters. The window becomes ${k}.`,
+  fieldTitle:'Diatonic chords <span class="sub">· triads from stacked thirds</span>',
+  fieldDesc:'Pick a degree. The triad comes from skipping one scale note at a time: the root, the third and the fifth counted from it. On the line of fifths every interval becomes a fixed step: perfect fifth = 1 slot right, major third = 4 slots right, minor third = 3 slots left. Each chord type is a fixed shape, and it only works if it fits entirely inside the window.',
+  orderScale:'In scale order',orderWin:'In window order',playChord:'Play the chord',
+  tMaj:'Major: major third (+4) and perfect fifth (+1)',tMin:'Minor: minor third (−3) and perfect fifth (+1)',tDim:'Diminished: minor third (−3) and diminished fifth (−6)',
+  fits:n=>`fits: ${n}`,outside:n=>`${n} is outside the window`,and:' and ',
+  chordRead:(l,ns,a,b)=>`${l} = ${ns.join(' ')} · ${a} + ${b} half steps`,
+  lgMaj:'major (4 + 3)',lgMin:'minor (3 + 4)',lgDim:'diminished (3 + 3)',window:'window',
+  navInt:'Intervals',
+  intTitle:'Intervals <span class="sub">· number and quality</span>',
+  intDesc:'Pick a number. The list shows the 7 intervals of that number inside the current scale, one from each degree, with its size in half steps. Notice that every number comes in exactly two sizes (the octave is the exception, with one). Tap a row to see it on the keyboard: the numbers inside the keys count letter names, and the bracket counts half steps.',
+  intPick:'Interval number',playInt:'Play the interval',intWhyTitle:'Why these names',
+  ord:n=>['','1st','2nd','3rd','4th','5th','6th','7th','8ve'][n],q:{P:'perfect',M:'major',m:'minor',A:'augmented',d:'diminished'},
+  ivName:(g,q)=>g===1?'perfect unison':`${q} ${['','unison','2nd','3rd','4th','5th','6th','7th','octave'][g]}`,
+  intNow:(a,b,g,s,n)=>`${a}–${b} · ${g} letter names · ${s} half steps · ${n}`,
+  intInv:(b,a,n,is,g,ig,s)=>`<b>Inverted</b>: ${b}–${a} = ${n} (${is} half steps). Numbers: ${g} + ${ig} = 9 · Half steps: ${s} + ${is} = 12.`,
+  intWhy:[
+   '<b>Two rulers</b>: every interval has two measurements. The number (2nd, 3rd, 5th…) counts letter names, that is, staff positions, and the staff has only 7 letters. The quality (perfect, major, minor…) counts half steps on the keyboard, which has 12 keys. The staff says how many letters; the keyboard says the exact distance.',
+   '<b>Inclusive counting</b>: Latin speakers counted including the starting point, and never from zero (Roman numerals have no zero). That is why the same note is the unison, the “1st”, not the “0th”. Romance languages keep the habit: Portuguese “oito dias” (eight days) means a week and “quinze dias” (fifteen days) two weeks; French says “quinze jours”. The octave is the same idea: eight names, C to C.',
+   '<b>The arithmetic</b>: if the number counts both ends, then number = letter steps + 1. Adding intervals means adding steps: a 4th (3 steps) + a 5th (4 steps) = 7 steps = an octave. As a formula, a + b − 1. For the same reason a 9th is a 2nd an octave up (2 + 8 − 1), and chords with 9, 11 and 13 are the 2nd, 4th and 6th stacked above the octave.',
+   '<b>The major scale is the ruler</b>: measure each note of the major scale from the tonic. You get major 2nd, major 3rd, perfect 4th, perfect 5th, major 6th, major 7th and perfect octave. By definition, major and perfect are the sizes the major scale gives from the tonic. One half step less turns major into minor and perfect into diminished; one more makes it augmented.',
+   '<b>The two short gaps</b>: between two neighboring white keys there is almost always a black key, so the distance is a whole step (2 half steps). Only in two places is there no black key: E–F and B–C, a half step apart. The size of any interval in the scale depends on how many of these short gaps it crosses. On the keyboard above they show up as an orange H.',
+   '<b>Thirds: two common sizes</b>: a third moves 2 steps and crosses 0 or 1 short gap. With none, 2 + 2 = 4 half steps (C–E). With one, 2 + 1 = 3 (D–F). In the scale, 3 thirds have 4 half steps and 4 have 3. Since neither size is “the normal one”, both got names: major and minor. The same holds for 2nds, 6ths and 7ths.',
+   '<b>Fifths: one size, plus one exception</b>: a fifth moves 4 steps and almost always crosses exactly 1 short gap: 2 + 2 + 2 + 1 = 7 half steps. Only B–F crosses both and gets 6. With 6 of 7 alike, there is “the” fifth, called perfect, and the odd one out gets an exception’s name: diminished. The same holds for 4ths, where the exception is F–B, the augmented 4th.',
+   '<b>Why no fifth escapes</b>: the longest run without a half step is F–G–A–B, three whole steps, the tritone. A fifth needs four steps, so it always runs into at least one short gap. (In theory, the fact that every number always has two sizes in the scale has a name: Myhill’s property.)',
+   '<b>Perfect and imperfect consonances</b>: medieval theory called unison, octave, 5th and 4th perfect, ratios built only from 1, 2, 3 and 4 (1:1, 2:1, 3:2, 4:3), the numbers of the Pythagorean tetractys. The first multi-voice chant, organum, around the 9th century, moved in parallel 4ths, 5ths and octaves. 3rds and 6ths were imperfect consonances: in Pythagorean tuning the major 3rd is 81:64, rough. They only took center stage in the late Middle Ages and Renaissance, with tunings that sweetened the thirds.',
+   '<b>Inversion</b>: flipping an interval turns the number into 9 − n and the half steps into 12 − s. Major becomes minor (major 3rd of 4 ↔ minor 6th of 8), augmented becomes diminished, and perfect stays perfect (5th of 7 ↔ 4th of 5). Perfect intervals are the only ones that keep their quality, one more reason for the name.',
+   '<b>In other languages</b>: justa in Portuguese and Spanish, juste in French, rein (“pure”) in German, perfect in English. They all say the same thing: exact, without variation.'],
+  navLabel:'On this page',navJump:'The jump',navScale:'The scale',navTetra:'Tetrachords',navFunc:'Functions',navNames:'Names',navHinge:'Hinges',navTri:'Tritone',navOrigin:'Origin',navWin:'Window',navField:'Diatonic chords',navProg:'Progressions',navComp:'Composing',navGloss:'Glossary',
+  tetraTitle:'Tetrachords <span class="sub">· the scale as two equal blocks</span>',
+  tetraDesc:'Tetrachord comes from Greek: tetra (four) + chordé (string). The Greek lyre was tuned in blocks of four strings, with the two outer strings a perfect fourth apart. A major scale is two blocks with the same shape, W W H, joined by a whole step. The upper block of one key is the lower block of the next key on the circle.',
+  playTetra:'Play the three blocks',lgT1:'lower tetrachord',lgT2:'upper tetrachord',lgT3:'next tetrachord',lgTch:'new accidental',
+  tetN1:(k,lo,up)=>`<b>${k}</b> = ${lo} + whole step + ${up}. Both blocks have the same shape: W W H.`,
+  tetN2:(up,k2,nw,ch)=>`<b>The chain</b>: the block ${up} becomes the lower block of ${k2}. The next block, ${nw}, only gets the W W H shape by using ${ch}. That is where the new accidental comes from.`,
+  tetN3:'<b>Why a fourth</b>: W + W + H = 5 half steps, a perfect fourth. Two blocks (5 + 5) plus the connecting whole step (2) make 12, the whole octave.',
+  tetN4:'<b>Where the fifth shows up</b>: each block starts 7 half steps above the previous one (5 for the block + 2 for the link). Walking the chain of tetrachords is walking the circle of fifths.',
+  namesTitle:'Where the names come from <span class="sub">· degrees and intervals</span>',
+  namesDesc:'Degree names measure the distance to the tonic and form a mirror around it: the dominant is a fifth above and the subdominant a fifth below; the mediant a third above and the submediant a third below; the supertonic and the leading tone are the neighbors.',
+  mFifth:'5th ↔ 5th',mThird:'3rd ↔ 3rd',mStep:'neighbors',
+  lgFifths:'dominant and subdominant (5th)',lgMed:'mediant and submediant (3rd)',lgNb:'leading tone and supertonic (neighbors)',
+  staffCap:(a,b)=>`${a} → ${b}: five staff positions, counting both ends. That is why it is a fifth.`,
+  nI:[
+   '<b>2nd, 3rd, 4th, 5th…</b>: intervals count note names, including both ends, like positions on the staff. The names come from Latin ordinals: secunda, tertia, quarta, quinta. That is why a 4th plus a 5th makes an octave (8th), not a 9th: the middle note is counted twice.',
+   '<b>Perfect</b>: unison, 4th, 5th and octave were the perfect consonances of medieval theory, the simplest string ratios (1:1, 4:3, 3:2, 2:1). In the scale they come in one natural size (the exception is F–B) and stay perfect when inverted. The other intervals (2nd, 3rd, 6th, 7th) come in two sizes, which is why they are major or minor. Portuguese calls it justa, meaning exact.',
+   '<b>Tonic</b>: from Greek tónos, “tension” or “tone”. The note that sets the tone of the music and where tension dissolves.',
+   '<b>Dominant</b>: in Gregorian chant, the dominant was the reciting tone, the most repeated note, often a fifth above the final. Rameau, in the 1720s, fixed the name to degree 5: the note that dominates the key after the tonic.',
+   '<b>Subdominant</b>: Rameau’s term (sous-dominante), “the lower dominant”, a fifth below the tonic. It does not mean “just below the dominant”, even though that is where it sits in the scale.',
+   '<b>Mediant and submediant</b>: the mediant (degree 3) is halfway between the tonic and the dominant. The submediant (degree 6) is halfway between the tonic and the lower dominant. Each is the other’s mirror.',
+   '<b>Supertonic</b>: degree 2, just above the tonic.',
+   '<b>Leading tone</b>: it leads to the tonic, a half step above. French calls it note sensible, the note sensitive to the tonic’s pull.'],
+  triTitle:'The tritone <span class="sub">· three whole steps, half an octave</span>',
+  triDesc:'The tritone is the distance between the two hinges. It has properties no other interval has, and each one explains a piece of harmony.',
+  playTri:'Play tritone, then fifth',triB1:'W+W+W = 6',triB2:'H+W+W+H = 6',
+  trName:(a,b,c,d)=>`<b>The name</b>: from Latin tri + tonus, three whole steps: ${a}–${b}, ${b}–${c}, ${c}–${d}.`,
+  trMirror:'<b>A perfect mirror</b>: the tritone splits the octave exactly in half, 6 + 6. Inverted, it is still a tritone. It is the only interval that is its own mirror, which is why it sounds ambiguous: on its own it does not point either way.',
+  trUnique:(a,b,k)=>`<b>A fingerprint</b>: the major scale has a single tritone, ${a}–${b}, and among major keys only ${k} has that pair. Hearing ${a}–${b} tells you the key (or its relative minor).`,
+  trDevil:'<b>Diabolus in musica</b>: a traditional nickname linked to medieval theory, which avoided this interval. The phrase itself is documented later than the Middle Ages.',
+  trRes:(a,b,c,d)=>`<b>Where it goes</b>: each note moves a half step, ${a} → ${c} and ${b} → ${d}. The dominant chord contains both notes, and that is where its pull comes from.`,
+  progTitle:'Progressions <span class="sub">· functions, motion and voice leading</span>',
+  progDesc:'A progression is a story of tension and rest. The 7 chords group into three functions by what they share: chords with two notes in common sound alike and can stand in for each other.',
+  fT:'Tonic · rest',fSD:'Subdominant · departure',fD:'Dominant · tension',
+  fTd:(vi,iii,I,c1,c2)=>`Home. ${vi} shares ${c1} with ${I}, and ${iii} shares ${c2}. That is why they can replace it.`,
+  fSDd:(ii,IV,c)=>`Leaves home without hurry. ${ii} shares ${c} with ${IV}.`,
+  fDd:(vii,V,c,lt)=>`Contains the leading tone (${lt}) and asks to go home. ${vii} shares ${c} with ${V}.`,
+  flow:'The typical phrase: T → SD → D → T. Home, departure, tension, return.',
+  patTitle:'Famous progressions',chordsLabel:'Chords · tap to hear',prevC:'◀',nextC:'▶',playProg:'Play progression',
+  lgFT:'tonic (T)',lgFSD:'subdominant (SD)',lgFD:'dominant (D)',lgWas:'where the voice was',
+  progStart:(a,f)=>`${a} · ${f} function · starting point.`,
+  progMove:(a,b,m,n,list,feel)=>`${a} → ${b} · ${m} · ${n} ${n===1?'common tone':'common tones'}${list?` (${list})`:''} · ${feel}`,
+  mv:['same chord','root rises a step','root rises a third','root rises a fourth (= falls a fifth)','root rises a fifth','root falls a third','root falls a step'],
+  feel:['repetition','contrast: a push','smooth: a change of color','strong: cadential motion','strong, but moving away from home','smooth: a change of color','contrast'],
+  logicTitle:'The logic underneath',
+  pLogic:[
+   '<b>A falling fifth is the strongest motion</b>: the root drops a fifth (V → I, ii → V). One note stays and the others move by whole or half step. On the circle, it is a counter-clockwise step toward the tonic.',
+   '<b>A third is the smoothest motion</b>: two notes stay and only one moves. That is why I → vi or IV → ii sound like a change of color, not of place.',
+   '<b>A step is the contrasting motion</b>: no notes in common (IV → V). The ear feels a push.',
+   '<b>Voice leading</b>: on the keyboard, each chord appears in the position closest to the previous one. Common tones stay put, and the dashed keys show where the other voices came from. This is how pianists connect chords without jumping around the keyboard.'],
+  composeTitle:'Composing in practice <span class="sub">· from melody to chord</span>',
+  composeDesc:'Every scale note appears in exactly three diatonic chords: as root, as third and as fifth. Pick a melody note and hear the three options. The top note is the same; what changes is the function, and with it the feeling.',
+  melLabel:'Melody note',roleRoot:'root',roleThird:'third',roleFifth:'fifth',
+  harmRole:(n,r)=>`${n} is the chord’s ${r}`,playHarm:'Play with the melody on top',fnName:{T:'tonic',SD:'subdominant',D:'dominant'},
+  recipeTitle:'A recipe for a phrase',
+  recipe:[
+   'Choose the key and list its 7 chords. That is your vocabulary.',
+   'Think in question and answer: 4 bars ending on V, like a comma, and 4 bars ending V → I, the period. Hear the “8-bar phrase” in the player above.',
+   'Fill the path with functions: T → SD → D → T. For variety, swap a chord for another with the same function: vi for I, ii for IV.',
+   'In the melody, use chord tones on strong beats and scale notes between them as passing tones. If the melody comes first, use the tool above to find the possible chords.',
+   'Harmonic rhythm: one chord per bar is the default. Changing faster near the cadence builds momentum.',
+   'In the bass, roots falling by fifth sound decisive, by third sound smooth, and by step give a push.',
+   'Test the ending: swap the last I for vi. If it sounds unfinished, your cadence is working.'],
+  glossTitle:'Glossary <span class="sub">· the terms from this lesson</span>',
+  search:'leading tone, enharmonic, P5…',
+  footer:'Next lesson: minor scales and relative keys, the inner ring of the circle.',
+  major:'major',none:'no accidentals',inSig:n=>`${n} in the key signature`,
+  sig:'Key signature: ',sigEmpty:'Key signature: empty, white keys only',staffNone:'no accidentals',
+  up5:'up a perfect fifth · 7 half steps',up4:'up a perfect fourth · 5 half steps',
+  change:(a,b,d,role,key)=>`Only one note changes: <span class="pill chg">${a} → ${b}</span>, which becomes degree ${d} (${role}) of ${key}.`,
+  role7:'leading tone',role4:'subdominant',
+  ruleCw:'Clockwise: degree 4 of the previous scale rises a half step and becomes the new leading tone.',
+  ruleCcw:'Counter-clockwise: the leading tone of the previous scale drops a half step and becomes the new degree 4 (subdominant).',
+  enh:(a,b,c)=>`You are viewing the spelling ${a}, the enharmonic of ${b}: same keys, different names. Coming from this side of the circle, the logical spelling is ${c}.`,
+  chkSharp:(a,b)=>`Check · last sharp + half step = tonic: ${a} + H = ${b} ✓`,
+  chkFlats:(a,b)=>`Check · second-to-last flat = tonic: ${a} = ${b} ✓`,
+  chkFlat1:(a,b)=>`Check · one flat only: ${a} is degree 4, so the tonic is a fourth below: ${b} ✓`,
+  chkNone:a=>`Check · no accidentals: ${a} is where the circle starts.`,
+  steps:'half steps',tapAgain:'tap again',W:'W',H:'H',
+  count:(a,b)=>`${a} of ${b} terms`,empty:'No terms found. Try “fifth” or “sharp”.',
+  circleAria:'Circle of fifths: tap a key'
+ }
+};
+
+/* ---------- music model ---------- */
+const NAT=[0,2,4,5,7,9,11], OFF=[0,2,4,5,7,9,11];
+const LET=['C','D','E','F','G','A','B'], SOL=['Dó','Ré','Mi','Fá','Sol','Lá','Si'];
+const ACC={'-2':'𝄫','-1':'♭','0':'','1':'♯','2':'𝄪'};
+const SLOTS=[[0,0],[4,0],[1,0],[5,0],[2,0],[6,0],null,[1,-1],[5,-1],[2,-1],[6,-1],[3,0]];
+const FS=[3,1], GB=[4,-1];
+const SHARP_ORDER=[3,0,4,1,5,2,6], FLAT_ORDER=[6,2,5,1,4,0,3];
+const ST_SHARP={3:8,0:5,4:9,1:6,5:3,2:7,6:4}, ST_FLAT={6:4,2:7,5:3,1:6,4:2,0:5,3:1};
+const st={k:1,dir:'cw',enh:'Fs',nt:'en',lang:'pt',tune:'pure',deg:0,ivl:5,ivr:0};
+const $=id=>document.getElementById(id);
+const L=()=>T[st.lang];
+
+const pcOf=t=>(NAT[t[0]]+t[1]+12)%12;
+const same=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+function scaleOf(t){const tp=pcOf(t);return OFF.map((o,i)=>{const l=(t[0]+i)%7;let a=(((tp+o)%12-NAT[l])%12+12)%12;if(a>6)a-=12;return[l,a]})}
+function nm(n){return (st.nt==='pt'?SOL:LET)[n[0]]+ACC[n[1]]}
+function keyName(t){return nm(t)+' '+L().major}
+function sigOf(t){const acc=scaleOf(t).filter(n=>n[1]!==0);if(!acc.length)return{type:0,list:[]};
+  const sharp=acc[0][1]>0,ord=sharp?SHARP_ORDER:FLAT_ORDER;
+  return{type:sharp?1:-1,list:ord.map(l=>acc.find(n=>n[0]===l)).filter(Boolean)}}
+function sigShort(t){const s=sigOf(t);return s.type===0?'0':s.list.length+(s.type>0?'♯':'♭')}
+function displayed(k){return k===6?(st.enh==='Gb'?GB:FS):SLOTS[k]}
+function logical(k){return k===6?(st.dir==='cw'?FS:GB):SLOTS[k]}
+function predSlot(k){return st.dir==='cw'?(k+11)%12:(k+1)%12}
+function predLogical(k){const p=predSlot(k);if(p===6)return st.dir==='cw'?GB:FS;return SLOTS[p]}
+function diff(pred,cur){const pm={};scaleOf(pred).forEach(n=>pm[n[0]]=n[1]);
+  const sc=scaleOf(cur);for(let i=0;i<7;i++){const n=sc[i];if(pm[n[0]]!==n[1])return{l:n[0],from:pm[n[0]],to:n[1],deg:i+1}}return null}
+
+/* ---------- circle ---------- */
+function drawCircle(){
+  const cx=180,cy=180,R=124,RO=163,svg=$('circle');
+  svg.setAttribute('aria-label',L().circleAria);
+  const pos=(k,r)=>{const a=(-90+30*k)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+  const p=predSlot(st.k);
+  const [px,py]=pos(p,R),[qx,qy]=pos(st.k,R);
+  const a1=st.dir==='cw'?-122:-58,a2=st.dir==='cw'?-58:-122,rr=88;
+  const ap=a=>[cx+rr*Math.cos(a*Math.PI/180),cy+rr*Math.sin(a*Math.PI/180)];
+  const [sx,sy]=ap(a1),[ex,ey]=ap(a2);
+  let h=`<defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L8 5L1 9" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>`;
+  h+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+  h+=`<path d="M${sx.toFixed(1)} ${sy.toFixed(1)} A${rr} ${rr} 0 0 ${st.dir==='cw'?1:0} ${ex.toFixed(1)} ${ey.toFixed(1)}" fill="none" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#ah)"/>`;
+  h+=`<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${qx.toFixed(1)}" y2="${qy.toFixed(1)}" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4"/>`;
+  for(let k=0;k<12;k++){
+    const [x,y]=pos(k,R),[ox,oy]=pos(k,RO),t=displayed(k);
+    const side=k===0||k===6?'n':(k<6?'s':'f');
+    let fill='var(--surface)',stroke='var(--line)',ink='var(--fg)',dash='';
+    if(side==='s'){fill='var(--accent-soft)';stroke='var(--accent-soft)';ink='var(--accent-ink)'}
+    if(side==='f'){fill='var(--flat-soft)';stroke='var(--flat-soft)';ink='var(--flat-ink)'}
+    if(k===p){stroke='var(--accent)';dash=' stroke-dasharray="3 3"'}
+    if(k===st.k){fill='var(--accent)';stroke='var(--accent)';ink='var(--on-accent)';dash=''}
+    const lab=k===6?'6♯ / 6♭':(k===0?'0':(k<6?k+'♯':(12-k)+'♭'));
+    const label=nm(t);
+    h+=`<g class="node" role="button" tabindex="0" data-k="${k}" aria-label="${keyName(t)}, ${lab}">`+
+       `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="23" fill="${fill}" stroke="${stroke}" stroke-width="1.5"${dash}/>`+
+       `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" style="font:500 ${label.length>3?12:15}px var(--f-body);fill:${ink}">${label}</text></g>`;
+    h+=`<text x="${ox.toFixed(1)}" y="${oy.toFixed(1)}" text-anchor="middle" dominant-baseline="central" style="font:400 12px var(--f-mono);fill:var(--muted)">${lab}</text>`;
+  }
+  const cur=displayed(st.k);
+  h+=`<text x="${cx}" y="${cy+4}" text-anchor="middle" dominant-baseline="central" style="font:400 30px var(--f-display);fill:var(--fg)">${nm(cur)}</text>`;
+  h+=`<text x="${cx}" y="${cy+34}" text-anchor="middle" style="font:400 12px var(--f-mono);fill:var(--muted)">${L().major} · ${sigShort(cur)}</text>`;
+  if(st.k===6)h+=`<text x="${cx}" y="${cy+52}" text-anchor="middle" style="font:400 11px var(--f-body);fill:var(--muted)">${L().tapAgain}: ${nm(FS)} ↔ ${nm(GB)}</text>`;
+  svg.innerHTML=h;
+}
+
+/* ---------- keyboard ---------- */
+const KW=28,WHH=118,BH=72;
+const isBlack=s=>[1,3,6,8,10].includes(((s%12)+12)%12);
+function layout(from,to){const wx={},whites=[],blacks=[];
+  for(let s=from;s<=to;s++)if(!isBlack(s)){wx[s]=1+whites.length*KW;whites.push(s)}
+  for(let s=from;s<=to;s++)if(isBlack(s)&&wx[s-1]!=null&&wx[s+1]!=null)blacks.push(s);
+  const x=s=>isBlack(s)?wx[s-1]+KW-8.5:wx[s],c=s=>isBlack(s)?x(s)+8.5:x(s)+KW/2;
+  return{whites,blacks,x,c,width:whites.length*KW+2}}
+function drawKeys(svg,marks,steps,o={}){
+  const lay=o.lay||layout(0,23),TOP=o.top||24,H=TOP+WHH+(steps?54:32);
+  svg.setAttribute('viewBox',`0 0 ${lay.width} ${H}`);
+  let h='',ghosts='';
+  lay.whites.forEach(s=>{const m=marks[s],x=lay.x(s);
+    h+=`<rect class="kk" x="${x}" y="${TOP}" width="${KW}" height="${WHH}" rx="3" style="fill:${m&&m.fill?m.fill:'var(--k-ivory)'};stroke:var(--k-edge);stroke-width:1"/>`;
+    if(m&&m.ghost)ghosts+=`<rect x="${x+2}" y="${TOP+2}" width="${KW-4}" height="${WHH-4}" rx="3" fill="none" style="stroke:${m.ghost};stroke-width:2.2;stroke-dasharray:5 3"/>`;
+    if(m&&m.label!=null)h+=`<text class="klab" x="${x+KW/2}" y="${TOP+WHH-14}" text-anchor="middle" style="fill:${m.ink}">${m.label}</text>`;
+    if(m&&m.name)h+=`<text class="kname" x="${x+KW/2}" y="${TOP+WHH+18}" text-anchor="middle">${m.name}</text>`;});
+  lay.blacks.forEach(s=>{const m=marks[s],x=lay.x(s);
+    h+=`<rect class="kk" x="${x}" y="${TOP}" width="17" height="${BH}" rx="2" style="fill:${m&&m.fill?m.fill:'var(--k-ebony)'};stroke:var(--k-ebony);stroke-width:1"/>`;
+    if(m&&m.ghost)ghosts+=`<rect x="${x+1.5}" y="${TOP+1.5}" width="14" height="${BH-3}" rx="2" fill="none" style="stroke:${m.ghost};stroke-width:2.2;stroke-dasharray:5 3"/>`;
+    if(m&&m.label!=null)h+=`<text class="klab" x="${x+8.5}" y="${TOP+BH-11}" text-anchor="middle" style="fill:${m.ink}">${m.label}</text>`;
+    if(m&&m.name)h+=`<text class="kname" x="${x+8.5}" y="${TOP-9}" text-anchor="middle">${m.name}</text>`;});
+  h+=ghosts;
+  if(steps)steps.forEach(s2=>{h+=`<text class="kstep${s2.h?' h':''}" x="${s2.x}" y="${TOP+WHH+42}" text-anchor="middle">${s2.t}</text>`});
+  if(o.ann)h+=o.ann;
+  svg.innerHTML=h;
+}
+function bracket(lay,a,b,y,label){const x1=lay.c(a).toFixed(1),x2=lay.c(b).toFixed(1),mx=((lay.c(a)+lay.c(b))/2).toFixed(1);
+  return `<path d="M${x1} ${y+10} V${y} H${x2} V${y+10}" fill="none" stroke="var(--muted)" stroke-width="1.2"/><text class="ann" x="${mx}" y="${y-7}" text-anchor="middle">${label}</text>`}
+
+/* ---------- functions piano ---------- */
+function renderFunc(cur){
+  const tr=L(),sc=scaleOf(cur),c=pcOf(cur)+12,sub=c-7,lt=c-1,dom=c+7;
+  const lay=layout(isBlack(sub)?sub-1:sub,isBlack(dom)?dom+1:dom),marks={};
+  marks[sub]={fill:'var(--k-sub)',ink:'var(--k-sub-ink)',label:4,name:nm(sc[3])};
+  marks[lt]={fill:'var(--k-lt)',ink:'var(--k-lt-ink)',label:7,name:nm(sc[6])};
+  marks[c]={fill:'var(--k-tonic)',ink:'var(--k-tonic-ink)',label:1,name:nm(sc[0])};
+  marks[dom]={fill:'var(--k-dom)',ink:'var(--k-dom-ink)',label:5,name:nm(sc[4])};
+  const x1=lay.c(lt),x2=lay.c(c);
+  let ann=`<defs><marker id="fa" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="var(--change)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>`;
+  ann+=bracket(lay,sub,c,26,tr.fifthBelow)+bracket(lay,c,dom,26,tr.fifthAbove);
+  ann+=`<path d="M${(x1-2).toFixed(1)} 52 Q${((x1+x2)/2).toFixed(1)} 40 ${(x2-2).toFixed(1)} 51" fill="none" stroke="var(--change)" stroke-width="1.8" marker-end="url(#fa)"/>`;
+  drawKeys($('func'),marks,null,{lay,top:72,ann});
+  $('func').setAttribute('aria-label',`${nm(sc[3])} 4, ${nm(sc[6])} 7, ${nm(sc[0])} 1, ${nm(sc[4])} 5`);
+  $('funcnow').textContent=keyName(cur);
+  $('funcnotes').innerHTML=
+    `<li><i class="sw" style="background:var(--k-tonic)"></i><span>${tr.fTonic(nm(sc[0]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-sub)"></i><span>${tr.fSub(nm(sc[3]),keyName(sc[3]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-dom)"></i><span>${tr.fDom(nm(sc[4]),keyName(sc[4]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-lt)"></i><span>${tr.fLt(nm(sc[6]),nm(sc[0]))}</span></li>`;
+  window._func={lt,c};
+}
+
+/* ---------- line of fifths helpers ---------- */
+const LIDX=[1,3,5,0,2,4,6], ORD=[3,0,4,1,5,2,6], SLOTD=[1,3,5,0,2,4,6], ROM=['I','II','III','IV','V','VI','VII'];
+const fIdx=n=>LIDX[n[0]]+7*n[1];
+const fromF=f=>[ORD[((f%7)+7)%7],Math.floor(f/7)];
+
+/* ---------- origin: stacked fifths ---------- */
+function renderOrigin(){
+  const tr=L(),svg=$('origin'),cx=180,cy=180,pure=st.tune!=='eq',pts=[];
+  for(let k=0;k<=12;k++){const cents=pure?(k*701.955)%1200:(k*700)%1200,a=cents/1200*2*Math.PI-Math.PI/2,r=pure?64+k*8:128;
+    pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a),r,a])}
+  let h=`<line x1="${cx}" y1="62" x2="${cx}" y2="6" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 4"/>`;
+  if(!pure)h+=`<circle cx="${cx}" cy="${cy}" r="128" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+  h+=`<polyline points="${pts.slice(0,pure?13:13).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-linejoin="round" opacity=".8"/>`;
+  pts.forEach((p,k)=>{const last=k===12;if(!pure&&last)return;
+    const col=k===0?'var(--k-tonic)':(last?'var(--change)':'var(--accent)');
+    h+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${k===0||last?5:3.5}" fill="${col}"/>`;
+    const lr=p[2]+16,lx=cx+lr*Math.cos(p[3]),ly=cy+lr*Math.sin(p[3]);
+    const name=k===0&&!pure?`${nm(fromF(1))} = ${nm(fromF(13))}`:nm(fromF(1+k));
+    h+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="central" style="font:500 12px var(--f-mono);fill:${last?'var(--change)':'var(--fg)'}">${name}</text>`});
+  if(pure)h+=`<text x="${cx+26}" y="36" dominant-baseline="central" style="font:500 12px var(--f-mono);fill:var(--change)">${tr.comma}</text>`;
+  svg.innerHTML=h;
+  svg.setAttribute('aria-label',pure?tr.readPure:tr.readEq);
+  $('originread').textContent=pure?tr.readPure:tr.readEq;
+  $('tune-pure').setAttribute('aria-pressed',pure);$('tune-eq').setAttribute('aria-pressed',!pure);
+}
+
+/* ---------- window on the line of fifths ---------- */
+function slotBox(x,y,w,h,fill,stroke,dash){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" style="fill:${fill};stroke:${stroke};stroke-width:1.2${dash?';stroke-dasharray:4 3':''}"/>`}
+function renderWindow(cur){
+  const tr=L(),sc=scaleOf(cur),f0=fIdx(sc[3]),svg=$('win'),W=34,G=4,from=-2,to=8;
+  const X=j=>2+(j-from)*(W+G),DEG=[4,1,5,2,6,3,7];
+  const ROLE={0:['var(--k-sub)','var(--k-sub-ink)'],1:['var(--k-tonic)','var(--k-tonic-ink)'],2:['var(--k-dom)','var(--k-dom-ink)'],6:['var(--k-lt)','var(--k-lt-ink)']};
+  let h=`<path d="M${X(0)} 30 V22 H${X(6)+W} V30" fill="none" stroke="var(--muted)" stroke-width="1.2"/><text class="ann" x="${(X(0)+X(6)+W)/2}" y="12" text-anchor="middle">${keyName(cur)}</text>`;
+  for(let j=from;j<=to;j++){const n=fromF(f0+j),x=X(j),inW=j>=0&&j<=6,y=36,hh=54;
+    if(inW){const r=ROLE[j]||['var(--accent-soft)','var(--accent-ink)'];
+      h+=slotBox(x,y,W,hh,r[0],r[0],false);
+      h+=`<text x="${x+W/2}" y="${y+20}" text-anchor="middle" dominant-baseline="central" style="font:500 13px var(--f-mono);fill:${r[1]}">${nm(n)}</text>`;
+      h+=`<text x="${x+W/2}" y="${y+40}" text-anchor="middle" dominant-baseline="central" style="font:400 11px var(--f-mono);fill:${r[1]}">${DEG[j]}</text>`}
+    else{const near=j===-1||j===7;
+      h+=slotBox(x,y,W,hh,'transparent',near?'var(--change)':'var(--line)',true);
+      h+=`<text x="${x+W/2}" y="${y+20}" text-anchor="middle" dominant-baseline="central" style="font:500 13px var(--f-mono);fill:${near?'var(--fg)':'var(--muted)'}">${nm(n)}</text>`;
+      if(near)h+=`<text x="${x+W/2}" y="${y+40}" text-anchor="middle" dominant-baseline="central" style="font:500 13px var(--f-mono);fill:var(--change)">${j<0?'←':'→'}</text>`}}
+  svg.setAttribute('viewBox',`0 0 ${X(to)+W+2} 100`);svg.innerHTML=h;
+  const win=[0,1,2,3,4,5,6].map(j=>nm(fromF(f0+j))).join(' ');
+  svg.setAttribute('aria-label',`${keyName(cur)}: ${win}`);
+  $('winnow').textContent=win;
+  $('winnotes').innerHTML=
+    `<li><i class="sw" style="background:var(--accent-soft)"></i><span>${tr.winRead(keyName(cur),win)}</span></li>`+
+    `<li><i class="sw dash"></i><span>${tr.winR(nm(fromF(f0)),nm(fromF(f0+7)),keyName(fromF(f0+2)))}</span></li>`+
+    `<li><i class="sw dash"></i><span>${tr.winL(nm(fromF(f0+6)),nm(fromF(f0-1)),keyName(fromF(f0)))}</span></li>`;
+}
+
+/* ---------- harmonic field ---------- */
+function chordInfo(sc,d){const i=SLOTD[d],q=i<=2?'maj':(i<=5?'min':'dim');
+  const lab=nm(sc[d])+(q==='min'?'m':(q==='dim'?'°':''));
+  const rom=q==='maj'?ROM[d]:ROM[d].toLowerCase()+(q==='dim'?'°':'');
+  return{i,q,lab,rom}}
+function renderField(cur){
+  const tr=L(),sc=scaleOf(cur),f0=fIdx(sc[3]),d=st.deg||0,ci=chordInfo(sc,d),i=ci.i;
+  const chip=k=>{const c=chordInfo(sc,k);return `<button class="chip ${c.q}" data-d="${k}" aria-pressed="${k===d}">${c.rom}<small>${c.lab}</small></button>`};
+  $('chips-scale').innerHTML=[0,1,2,3,4,5,6].map(chip).join('');
+  $('chips-win').innerHTML=[3,0,4,1,5,2,6].map(chip).join('');
+  const third=i+(ci.q==='maj'?4:-3),fifth=i+(ci.q==='dim'?-6:1);
+  const role={};role[i]='1';role[third]='3';role[fifth]='5';
+  const QC={maj:['var(--k-tonic)','var(--k-tonic-ink)'],min:['var(--k-sub)','var(--k-sub-ink)'],dim:['var(--k-lt)','var(--k-lt-ink)']}[ci.q];
+  const tests=[['maj',tr.tMaj,[i+4,i+1]],['min',tr.tMin,[i-3,i+1]],['dim',tr.tDim,[i-3,i-6]]];
+  const ghosts={};tests.forEach(t=>{if(t[0]!==ci.q)t[2].forEach(s=>{if(s<0||s>6)ghosts[s]=1})});
+  const W=36,G=4,from=-1,to=7,X=j=>2+(j-from)*(W+G);
+  let h=`<path d="M${X(0)} 30 V22 H${X(6)+W} V30" fill="none" stroke="var(--muted)" stroke-width="1.2"/><text class="ann" x="${(X(0)+X(6)+W)/2}" y="12" text-anchor="middle">${tr.window} · ${keyName(cur)}</text>`;
+  for(let j=from;j<=to;j++){const n=fromF(f0+j),x=X(j),inW=j>=0&&j<=6,y=36,hh=54,r=role[j];
+    if(inW&&r){h+=slotBox(x,y,W,hh,QC[0],QC[0],false);
+      h+=`<text x="${x+W/2}" y="${y+20}" text-anchor="middle" dominant-baseline="central" style="font:500 13px var(--f-mono);fill:${QC[1]}">${nm(n)}</text><text x="${x+W/2}" y="${y+40}" text-anchor="middle" dominant-baseline="central" style="font:500 12px var(--f-mono);fill:${QC[1]}">${r}</text>`}
+    else if(inW){h+=slotBox(x,y,W,hh,'var(--surface)','var(--accent)',false);
+      h+=`<text x="${x+W/2}" y="${y+20}" text-anchor="middle" dominant-baseline="central" style="font:400 13px var(--f-mono);fill:var(--muted)">${nm(n)}</text>`}
+    else{const g=ghosts[j];h+=slotBox(x,y,W,hh,'transparent',g?'var(--change)':'var(--line)',true);
+      h+=`<text x="${x+W/2}" y="${y+20}" text-anchor="middle" dominant-baseline="central" style="font:400 13px var(--f-mono);fill:var(--muted)">${nm(n)}</text>`;
+      if(g)h+=`<text x="${x+W/2}" y="${y+40}" text-anchor="middle" dominant-baseline="central" style="font:500 13px var(--f-mono);fill:var(--change)">✗</text>`}}
+  const svg=$('fieldwin');svg.setAttribute('viewBox',`0 0 ${X(to)+W+2} 100`);svg.innerHTML=h;
+  const names=[i,third,fifth].map(s=>nm(fromF(f0+s)));
+  svg.setAttribute('aria-label',`${ci.lab}: ${names.join(' ')}`);
+  $('tests').innerHTML=tests.map(t=>{const ok=t[0]===ci.q,miss=t[2].filter(s=>s<0||s>6).map(s=>nm(fromF(f0+s)));
+    return `<li><span class="${ok?'ok':'no'}">${ok?'✓':'✗'}</span><span>${t[1]} · ${ok?tr.fits(names.join(' ')):tr.outside(miss.join(tr.and))}</span></li>`}).join('');
+  const rootN=sc[d],rp=pcOf(rootN),a=ci.q==='maj'?4:3,b=ci.q==='min'?4:3,ps=[rp,rp+a,rp+a+b],lay=layout(0,19),marks={};
+  ps.forEach((p,k)=>{marks[p]={fill:QC[0],ink:QC[1],label:['1','3','5'][k],name:names[k]}});
+  const steps=[{x:((lay.c(ps[0])+lay.c(ps[1]))/2).toFixed(1),t:a,h:false},{x:((lay.c(ps[1])+lay.c(ps[2]))/2).toFixed(1),t:b,h:false}];
+  drawKeys($('fieldkeys'),marks,steps,{lay});
+  $('fieldkeys').setAttribute('aria-label',tr.chordRead(ci.lab,names,a,b));
+  $('fieldnow').textContent=tr.chordRead(ci.lab,names,a,b);
+  window._chord=ps;
+}
+
+/* ---------- tetrachords ---------- */
+function renderTetra(cur){
+  const tr=L(),sc=scaleOf(cur),b=pcOf(cur),dsc=scaleOf(sc[4]);
+  const lay=layout(isBlack(b)?b-1:b,isBlack(b+19)?b+20:b+19),marks={};
+  const T1=[0,2,4,5],T2=[7,9,11,12],T3=[14,16,18,19];
+  const n1=[sc[0],sc[1],sc[2],sc[3]],n2=[sc[4],sc[5],sc[6],sc[0]],n3=[dsc[4],dsc[5],dsc[6],dsc[0]];
+  T1.forEach((o,i)=>{const s=b+o;marks[s]={fill:fillFor(s,'var(--k-scale)','var(--k-scaleb)'),ink:fillFor(s,'var(--k-scale-ink)','var(--k-scaleb-ink)'),label:i+1,name:nm(n1[i])}});
+  T2.forEach((o,i)=>{const s=b+o;marks[s]={fill:'var(--k-dom)',ink:'var(--k-dom-ink)',label:i+1,name:nm(n2[i])}});
+  T3.forEach((o,i)=>{const s=b+o,ch=i===2;marks[s]={fill:ch?'var(--k-lt)':fillFor(s,'var(--k-acc)','var(--k-accb)'),ink:ch?'var(--k-lt-ink)':fillFor(s,'var(--k-acc-ink)','var(--k-accb-ink)'),label:i+1,name:nm(n3[i])}});
+  const all=[...T1,...T2,...T3].map(o=>b+o),steps=[];
+  for(let i=0;i<all.length-1;i++){const d=all[i+1]-all[i];steps.push({x:((lay.c(all[i])+lay.c(all[i+1]))/2).toFixed(1),t:d===2?tr.W:tr.H,h:d===1})}
+  const ann=bracket(lay,b,b+12,22,keyName(cur))+bracket(lay,b+7,b+19,50,keyName(sc[4]));
+  drawKeys($('tetra'),marks,steps,{lay,top:78,ann});
+  const j=a=>a.map(nm).join(' ');
+  $('tetra').setAttribute('aria-label',`${j(n1)} | ${j(n2)} | ${j(n3)}`);
+  $('tetranow').textContent=`${j(n1)} · ${j(n2)} · ${j(n3)}`;
+  $('tetranotes').innerHTML=
+    `<li><i class="sw" style="background:var(--k-scale)"></i><span>${tr.tetN1(keyName(cur),j(n1),j(n2))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-lt)"></i><span>${tr.tetN2(j(n2),keyName(sc[4]),j(n3),nm(dsc[6]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-dom)"></i><span>${tr.tetN3}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-acc)"></i><span>${tr.tetN4}</span></li>`;
+  window._tetra=all;
+}
+
+/* ---------- names: the mirror ---------- */
+function renderNames(cur){
+  const tr=L(),sc=scaleOf(cur),c=pcOf(cur)+7;
+  const lay=layout(isBlack(c-7)?c-8:c-7,isBlack(c+7)?c+8:c+7),marks={};
+  const P=[[c-7,3,'var(--k-sub)','var(--k-sub-ink)','var(--k-sub)','var(--k-sub-ink)'],
+    [c-3,5,'var(--k-acc)','var(--k-acc-ink)','var(--k-accb)','var(--k-accb-ink)'],
+    [c-1,6,'var(--k-lt)','var(--k-lt-ink)','var(--k-lt)','var(--k-lt-ink)'],
+    [c,0,'var(--k-tonic)','var(--k-tonic-ink)','var(--k-tonic)','var(--k-tonic-ink)'],
+    [c+2,1,'var(--k-chg)','var(--k-chg-ink)','var(--k-chgb)','var(--k-chgb-ink)'],
+    [c+4,2,'var(--k-acc)','var(--k-acc-ink)','var(--k-accb)','var(--k-accb-ink)'],
+    [c+7,4,'var(--k-dom)','var(--k-dom-ink)','var(--k-dom)','var(--k-dom-ink)']];
+  P.forEach(p=>{const s=p[0];marks[s]={fill:fillFor(s,p[2],p[4]),ink:fillFor(s,p[3],p[5]),label:p[1]+1,name:nm(sc[p[1]])}});
+  const ann=bracket(lay,c-7,c+7,22,tr.mFifth)+bracket(lay,c-3,c+4,48,tr.mThird)+bracket(lay,c-1,c+2,74,tr.mStep);
+  drawKeys($('mirror'),marks,null,{lay,top:100,ann});
+  $('mirror').setAttribute('aria-label',P.map(p=>nm(sc[p[1]])).join(' '));
+  const svg=$('staffint'),ys=[96,91,86,81,76],xs=[100,140,180,220,260];let h='';
+  for(let i=0;i<5;i++)h+=`<line x1="40" x2="290" y1="${46+i*10}" y2="${46+i*10}" stroke="var(--fg)" stroke-width="1" opacity=".7"/>`;
+  h+=`<text x="44" y="76" class="mus" style="font-size:48px;fill:var(--fg)">𝄞</text>`;
+  h+=`<line x1="${xs[0]-12}" x2="${xs[0]+12}" y1="96" y2="96" stroke="var(--fg)" stroke-width="1" opacity=".7"/>`;
+  xs.forEach((x,i)=>{const end=i===0||i===4,col=end?'var(--accent)':'var(--fg)';
+    h+=`<ellipse cx="${x}" cy="${ys[i]}" rx="6.5" ry="4.6" transform="rotate(-20 ${x} ${ys[i]})" fill="${col}"/>`;
+    h+=`<text x="${x}" y="116" text-anchor="middle" style="font:500 12px var(--f-mono);fill:${col}">${i+1}</text>`;
+    h+=`<text x="${x}" y="30" text-anchor="middle" style="font:400 12px var(--f-mono);fill:var(--muted)">${nm([i,0])}</text>`});
+  svg.innerHTML=h;
+  const cap=tr.staffCap(nm([0,0]),nm([4,0]));svg.setAttribute('aria-label',cap);$('staffcap').textContent=cap;
+  $('namenotes').innerHTML=tr.nI.map(s=>`<li><span>${s}</span></li>`).join('');
+}
+
+/* ---------- intervals ---------- */
+const REF={1:0,2:2,3:4,4:5,5:7,6:9,7:11,8:12},PERF=[1,4,5,8];
+function qual(g,s){const d=s-REF[g];if(PERF.includes(g))return d===0?'P':(d<0?'d':'A');return d===0?'M':(d===-1?'m':(d>0?'A':'d'))}
+function ivName(g,s){const tr=L();return tr.ivName(g,tr.q[qual(g,s)])}
+function renderInt(cur){
+  const tr=L(),sc=scaleOf(cur),g=st.ivl||5,stp=g-1,r=st.ivr||0;
+  $('ivchips').innerHTML=[2,3,4,5,6,7,8].map(n=>`<button class="chip neutral" data-g="${n}" aria-pressed="${n===g}">${tr.ord(n)}</button>`).join('');
+  const size=rr=>stp===7?12:(OFF[(rr+stp)%7]-OFF[rr]+12)%12,QC={P:'q-a',M:'q-a',m:'q-b',A:'q-c',d:'q-c'};
+  $('census').innerHTML=[0,1,2,3,4,5,6].map(rr=>{const s=size(rr),q=qual(g,s);let cells='';
+    for(let i=0;i<12;i++)cells+=`<i class="${i<s?QC[q]:''}"></i>`;
+    return `<button class="crow" data-r="${rr}" aria-pressed="${rr===r}"><span>${nm(sc[rr])}–${nm(sc[(rr+stp)%7])}</span><span class="cbar" aria-hidden="true">${cells}</span><span class="cq ${QC[q]}t">${s} · ${tr.q[q]}</span></button>`}).join('');
+  const p0=pcOf(sc[r]),s=size(r),marks={},pts=[],lay=layout(isBlack(p0)?p0-1:p0,isBlack(p0+12)?p0+13:p0+12);
+  for(let k=0;k<=stp;k++){const d=(r+k)%7,p=p0+(k===7?12:(OFF[d]-OFF[r]+12)%12),end=k===0||k===stp;pts.push(p);
+    marks[p]={fill:end?'var(--k-tonic)':fillFor(p,'var(--k-scale)','var(--k-scaleb)'),ink:end?'var(--k-tonic-ink)':fillFor(p,'var(--k-scale-ink)','var(--k-scaleb-ink)'),label:k+1,name:nm(sc[d])}}
+  const steps=[];for(let i=0;i<pts.length-1;i++){const w=pts[i+1]-pts[i]===2;steps.push({x:((lay.c(pts[i])+lay.c(pts[i+1]))/2).toFixed(1),t:w?tr.W:tr.H,h:!w})}
+  drawKeys($('intkeys'),marks,steps,{lay,top:50,ann:bracket(lay,p0,p0+s,22,`${s} ${tr.steps}`)});
+  const a=nm(sc[r]),b=nm(sc[(r+stp)%7]),now=tr.intNow(a,b,g,s,ivName(g,s));
+  $('intnow').textContent=now;$('intkeys').setAttribute('aria-label',now);
+  $('intinv').innerHTML=tr.intInv(b,a,ivName(9-g,12-s),12-s,g,9-g,s);
+  $('intnotes').innerHTML=tr.intWhy.map(x=>`<li><span>${x}</span></li>`).join('');
+  window._int=[p0,p0+s];
+}
+
+/* ---------- tritone ---------- */
+function renderTri(cur){
+  const tr=L(),sc=scaleOf(cur),s=pcOf(sc[3]),R=[0,2,4,6,7,9,11,12],D=[3,4,5,6,0,1,2,3];
+  const lay=layout(isBlack(s)?s-1:s,isBlack(s+12)?s+13:s+12),marks={};
+  R.forEach((o,i)=>{const p=s+o,d=D[i];let f,ink;
+    if(d===3){f='var(--k-sub)';ink='var(--k-sub-ink)'}
+    else if(d===6){f='var(--k-lt)';ink='var(--k-lt-ink)'}
+    else if(d===0){f='var(--k-tonic)';ink='var(--k-tonic-ink)'}
+    else if(i<3){f=fillFor(p,'var(--k-path)','var(--k-scaleb)');ink=fillFor(p,'var(--k-path-ink)','var(--k-scaleb-ink)')}
+    else{f=fillFor(p,'var(--k-scale)','var(--k-scaleb)');ink=fillFor(p,'var(--k-scale-ink)','var(--k-scaleb-ink)')}
+    marks[p]={fill:f,ink,label:d+1,name:nm(sc[d])}});
+  const steps=[];for(let i=0;i<7;i++){const a=s+R[i],z=s+R[i+1],w=z-a===2;steps.push({x:((lay.c(a)+lay.c(z))/2).toFixed(1),t:w?tr.W:tr.H,h:!w})}
+  drawKeys($('tri'),marks,steps,{lay,top:74,ann:bracket(lay,s,s+6,22,tr.triB1)+bracket(lay,s+6,s+12,48,tr.triB2)});
+  $('tri').setAttribute('aria-label',`${nm(sc[3])}–${nm(sc[6])}`);
+  $('trinow').textContent=`${nm(sc[3])}–${nm(sc[6])} · 6 ${tr.steps}`;
+  $('trinotes').innerHTML=
+    `<li><i class="sw" style="background:var(--k-path)"></i><span>${tr.trName(nm(sc[3]),nm(sc[4]),nm(sc[5]),nm(sc[6]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-scale)"></i><span>${tr.trMirror}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-sub)"></i><span>${tr.trUnique(nm(sc[3]),nm(sc[6]),keyName(cur))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-lt)"></i><span>${tr.trRes(nm(sc[3]),nm(sc[6]),nm(sc[2]),nm(sc[0]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--line)"></i><span>${tr.trDevil}</span></li>`;
+  window._tri=s;
+}
+
+/* ---------- progressions ---------- */
+const FN=['T','SD','T','SD','D','T','D'];
+const FC={T:['var(--k-tonic)','var(--k-tonic-ink)'],SD:['var(--k-sub)','var(--k-sub-ink)'],D:['var(--k-dom)','var(--k-dom-ink)']};
+const triad=(sc,d)=>[sc[d],sc[(d+2)%7],sc[(d+4)%7]];
+function common(sc,a,b){const A=triad(sc,a).map(pcOf);return triad(sc,b).filter(n=>A.includes(pcOf(n)))}
+function voice(pcs,prev){
+  if(!prev){const v=[pcs[0]];let x=pcs[1];while(x<=v[0])x+=12;v.push(x);x=pcs[2];while(x<=v[1])x+=12;v.push(x);return v}
+  let best=null,bc=1e9;
+  for(const a of [pcs[0],pcs[0]+12])for(const b of [pcs[1],pcs[1]+12])for(const c of [pcs[2],pcs[2]+12]){
+    const v=[a,b,c].sort((x,y)=>x-y);if(v[2]-v[0]>12||v[2]>22)continue;
+    const cost=v.reduce((s,x,i)=>s+Math.abs(x-prev[i]),0);if(cost<bc){bc=cost;best=v}}
+  return best||voice(pcs,null)}
+const PATS=[
+ {deg:[0,3,4,0],pt:'A história completa: casa, afastamento, tensão, volta. É a base de hinos, folk, rock e blues.',en:'The complete story: home, departure, tension, return. The backbone of hymns, folk, rock and blues.'},
+ {deg:[0,4,5,3],pt:'A progressão mais usada no pop das últimas décadas (“Let It Be”, “Don’t Stop Believin’”). Chega à tensão no V e, em vez de voltar ao I, cai no vi, primo menor da tônica, e respira no IV.',en:'The most used progression in pop of recent decades (“Let It Be”, “Don’t Stop Believin’”). It reaches tension on V and, instead of going home to I, lands on vi, the tonic’s minor cousin, then breathes on IV.'},
+ {deg:[5,3,0,4],pt:'Os mesmos quatro acordes, começando no vi. Como o primeiro acorde é menor, o ouvido ouve a música como mais melancólica.',en:'The same four chords, starting on vi. Because the first chord is minor, the ear hears the song as more melancholic.'},
+ {deg:[0,5,3,4],pt:'A progressão dos anos 50 (“Stand by Me”). T → T → SD → D: o vi prolonga a casa antes de sair.',en:'The 1950s progression (“Stand by Me”). T → T → SD → D: vi prolongs home before leaving.'},
+ {deg:[1,4,0],pt:'O motor do jazz e da bossa nova. SD → D → T, com as fundamentais caindo de quinta em quinta.',en:'The engine of jazz and bossa nova. SD → D → T, with roots falling fifth by fifth.'},
+ {deg:[5,1,4,0],pt:'O ciclo de quintas: cada fundamental desce uma quinta. São quatro passos anti-horários no círculo até chegar em casa.',en:'The cycle of fifths: each root falls a fifth. Four counter-clockwise steps on the circle until you reach home.'},
+ {deg:[0,3,0],pt:'Cadência plagal, o “Amém” dos hinos: SD → T, sem a sensível. Soa como um repouso tranquilo, não como tensão que se resolve.',en:'Plagal cadence, the “Amen” of hymns: SD → T, with no leading tone. It sounds like quiet rest rather than tension resolving.'},
+ {deg:[0,3,4,5],pt:'Cadência de engano: depois do V o ouvido espera o I e recebe o vi, que tem duas notas em comum com ele. A frase continua em vez de terminar.',en:'Deceptive cadence: after V the ear expects I and gets vi, which shares two notes with it. The phrase keeps going instead of ending.'},
+ {deg:[0,4,5,2,3,0,3,4],npt:'Cânon de Pachelbel',nen:'Pachelbel’s Canon',pt:'As fundamentais descem uma quarta e sobem um grau, em degraus (I–V, vi–iii, IV–I). O padrão virou base de centenas de canções.',en:'The roots fall a fourth and rise a step, like stairs (I–V, vi–iii, IV–I). The pattern became the basis of hundreds of songs.'},
+ {deg:[0,5,3,4,0,5,1,4,0],npt:'Frase de 8 compassos',nen:'8-bar phrase',pt:'Pergunta e resposta: os 4 primeiros compassos terminam no V (cadência suspensiva, como uma vírgula). Os seguintes trocam o IV pelo ii, da mesma função, e terminam em V → I (cadência perfeita, o ponto final).',en:'Question and answer: the first 4 bars end on V (half cadence, like a comma). The next ones swap IV for ii, same function, and end V → I (authentic cadence, the period).'}];
+function patName(p,sc){return (st.lang==='pt'?p.npt:p.nen)||p.deg.map(d=>chordInfo(sc,d).rom).join('–')}
+function renderProg(cur){
+  const tr=L(),sc=scaleOf(cur),pi=Math.min(st.pat||0,PATS.length-1),P=PATS[pi],degs=P.deg;
+  if(!(st.pi>=0&&st.pi<degs.length))st.pi=0;
+  const ci=d=>chordInfo(sc,d),cn=(a,b)=>common(sc,a,b).map(nm).join(tr.and);
+  const chipS=d=>`<span class="chip static f${FN[d]}">${ci(d).rom}<small>${ci(d).lab}</small></span>`;
+  const fcard=(f,title,ds,text)=>`<div class="fcard"><h3><i class="sw" style="background:${FC[f][0]}"></i>${f} · ${title}</h3><div class="chips">${ds.map(chipS).join('')}</div><p>${text}</p></div>`;
+  $('fmap').innerHTML=fcard('T',tr.fT,[0,5,2],tr.fTd(ci(5).lab,ci(2).lab,ci(0).lab,cn(0,5),cn(0,2)))+
+    fcard('SD',tr.fSD,[3,1],tr.fSDd(ci(1).lab,ci(3).lab,cn(3,1)))+
+    fcard('D',tr.fD,[4,6],tr.fDd(ci(6).lab,ci(4).lab,cn(4,6),nm(sc[6])));
+  $('pats').innerHTML=PATS.map((p,i)=>`<button class="chip neutral" data-p="${i}" aria-pressed="${i===pi}">${patName(p,sc)}</button>`).join('');
+  $('patdesc').innerHTML=P[st.lang];
+  $('progchips').innerHTML=degs.map((d,i)=>`<button class="chip f${FN[d]}" data-c="${i}" aria-pressed="${i===st.pi}">${ci(d).rom}<small>${ci(d).lab} · ${FN[d]}</small></button>`).join('');
+  const vs=[];let prev=null;degs.forEach(d=>{const v=voice(triad(sc,d).map(pcOf),prev);vs.push(v);prev=v});
+  const v=vs[st.pi],d=degs[st.pi],fc=FC[FN[d]],tri=triad(sc,d),marks={};
+  if(st.pi>0)vs[st.pi-1].forEach(p=>{if(!v.includes(p))marks[p]={ghost:'var(--muted)'}});
+  v.forEach(p=>{const k=tri.findIndex(n=>pcOf(n)===((p%12)+12)%12);marks[p]={fill:fc[0],ink:fc[1],label:['1','3','5'][k],name:nm(tri[k])}});
+  drawKeys($('progkeys'),marks,null,{lay:layout(0,23)});
+  const c=ci(d);let read;
+  if(st.pi===0)read=tr.progStart(`${c.rom} (${c.lab})`,FN[d]);
+  else{const d0=degs[st.pi-1],c0=ci(d0),diff=(d-d0+7)%7,cm=common(sc,d0,d);
+    read=tr.progMove(`${c0.rom} (${c0.lab})`,`${c.rom} (${c.lab})`,tr.mv[diff],cm.length,cm.map(nm).join(tr.and),tr.feel[diff])}
+  $('progread').textContent=read;$('progkeys').setAttribute('aria-label',read);
+  $('prognow').textContent=`${keyName(cur)} · ${st.pi+1}/${degs.length}`;
+  $('proglogic').innerHTML=tr.pLogic.map(s=>`<li><span>${s}</span></li>`).join('');
+  window._prog={vs,roots:degs.map(d=>pcOf(sc[d]))};
+}
+
+/* ---------- composing ---------- */
+function renderCompose(cur){
+  const tr=L(),sc=scaleOf(cur),m=st.mel||0;
+  $('melchips').innerHTML=sc.map((n,i)=>`<button class="chip neutral" data-m="${i}" aria-pressed="${i===m}">${nm(n)}<small>${i+1}</small></button>`).join('');
+  const opts=[[m,'roleRoot'],[(m+5)%7,'roleThird'],[(m+3)%7,'roleFifth']];
+  $('harm').innerHTML=opts.map(([d,r])=>{const c=chordInfo(sc,d);
+    return `<button class="hcard f${FN[d]}" data-h="${d}"><span class="hrom">${c.rom} · ${c.lab}</span><span>${tr.harmRole(nm(sc[m]),tr[r])}</span><span class="hfn">${FN[d]} · ${tr.fnName[FN[d]]}</span><span class="hplay">▶ ${tr.playHarm}</span></button>`}).join('');
+  $('recipe').innerHTML=tr.recipe.map(s=>`<li>${s}</li>`).join('');
+}
+
+/* ---------- hinges piano ---------- */
+function renderHinge(cur){
+  const tr=L(),sc=scaleOf(cur),b=pcOf(cur),notes=OFF.map(o=>b+o).concat(b+12);
+  const lay=layout(isBlack(b)?b-1:b,isBlack(b+12)?b+13:b+12),marks={};
+  notes.forEach((s,i)=>{const n=sc[i%7],deg=i%7+1;let f,ink;
+    if(deg===1){f='var(--k-tonic)';ink='var(--k-tonic-ink)'}
+    else if(deg===4){f='var(--k-sub)';ink='var(--k-sub-ink)'}
+    else if(deg===7){f='var(--k-lt)';ink='var(--k-lt-ink)'}
+    else{f=fillFor(s,'var(--k-scale)','var(--k-scaleb)');ink=fillFor(s,'var(--k-scale-ink)','var(--k-scaleb-ink)')}
+    marks[s]={fill:f,ink,label:deg,name:nm(n)}});
+  const up=notes[3]+1,down=notes[6]-1,upN=[sc[3][0],sc[3][1]+1],dnN=[sc[6][0],sc[6][1]-1];
+  marks[up]={ghost:'var(--k-lt-line)',ink:fillFor(up,'var(--k-start-ink)','var(--k-tonic-ink)'),label:'↑',name:nm(upN)};
+  marks[down]={ghost:'var(--k-sub-line)',ink:fillFor(down,'var(--k-start-ink)','var(--k-tonic-ink)'),label:'↓',name:nm(dnN)};
+  const steps=[];for(let i=0;i<7;i++){const a=notes[i],z=notes[i+1],w=z-a===2;steps.push({x:((lay.c(a)+lay.c(z))/2).toFixed(1),t:w?tr.W:tr.H,h:!w})}
+  drawKeys($('hinge'),marks,steps,{lay,top:72,ann:bracket(lay,notes[3],notes[6],26,tr.tritone)});
+  $('hinge').setAttribute('aria-label',`${nm(sc[3])}–${nm(sc[6])}`);
+  $('hingenow').textContent=`${keyName(cur)} · ${nm(sc[3])}–${nm(sc[6])}`;
+  $('hingenotes').innerHTML=
+    `<li><i class="sw dash"></i><span>${tr.hUp(nm(sc[3]),nm(upN),keyName(sc[4]))}</span></li>`+
+    `<li><i class="sw dash2"></i><span>${tr.hDown(nm(sc[6]),nm(dnN),keyName(sc[3]))}</span></li>`+
+    `<li><i class="sw" style="background:var(--k-scale)"></i><span>${tr.hRes(nm(sc[3]),nm(sc[6]),nm(sc[2]),nm(sc[0]))}</span></li>`;
+  window._hinge={n4:notes[3],n7:notes[6]};
+}
+const fillFor=(s,w,b)=>isBlack(s)?b:w;
+
+/* ---------- staff ---------- */
+function drawStaff(t,newLetter){
+  const s=sigOf(t),svg=$('staff');let h='';
+  const yb=62,gap=9;
+  for(let i=0;i<5;i++)h+=`<line x1="4" x2="236" y1="${yb-i*gap}" y2="${yb-i*gap}" stroke="var(--fg)" stroke-width="1" opacity=".75"/>`;
+  h+=`<text x="8" y="${yb-gap}" class="mus" style="font-size:44px;fill:var(--fg)">𝄞</text>`;
+  s.list.forEach((n,i)=>{const idx=(s.type>0?ST_SHARP:ST_FLAT)[n[0]],y=yb-idx*gap/2,x=58+i*15;
+    const col=n[0]===newLetter?'var(--change)':'var(--fg)';
+    h+=`<text x="${x}" y="${(s.type>0?y:y-3).toFixed(1)}" text-anchor="middle" dominant-baseline="central" class="mus" style="font-size:22px;fill:${col}">${s.type>0?'♯':'♭'}</text>`});
+  if(!s.list.length)h+=`<text x="70" y="${yb-2*gap}" dominant-baseline="central" style="font:400 12px var(--f-mono);fill:var(--muted)">${L().staffNone}</text>`;
+  svg.innerHTML=h;
+}
+
+/* ---------- render ---------- */
+function applyStatic(){
+  document.documentElement.lang=st.lang==='pt'?'pt-BR':'en';
+  document.title=L().title;
+  $('toc').setAttribute('aria-label',L().navLabel);
+  $('staff').setAttribute('aria-label',L().staffAria);
+  document.querySelector('section.top').setAttribute('aria-label',L().secAria);
+  document.querySelectorAll('[data-i]').forEach(el=>{const v=L()[el.dataset.i];if(typeof v==='string')el.innerHTML=v});
+  $('gq').placeholder=L().search;
+  $('lang-pt').setAttribute('aria-pressed',st.lang==='pt');$('lang-en').setAttribute('aria-pressed',st.lang==='en');
+}
+function render(){
+  const tr=L(),k=st.k,cur=displayed(k),lcur=logical(k),pred=predLogical(k),consistent=same(cur,lcur);
+  const d=diff(pred,lcur),up=st.dir==='cw'?7:5;
+  drawCircle();
+  $('keyname').innerHTML=`${keyName(cur)}<small>${sigShort(cur)==='0'?tr.none:tr.inSig(sigShort(cur))}</small>`;
+  const sig=sigOf(cur),newL=consistent&&d&&d.to!==0?d.l:-1;
+  drawStaff(cur,newL);
+  $('sigtext').innerHTML=sig.list.length?tr.sig+sig.list.map(n=>n[0]===newL?`<span class="new">${nm(n)}</span>`:nm(n)).join(' '):tr.sigEmpty;
+  let c=`<p class="move">${keyName(pred)}<span class="arrow">→</span>${keyName(lcur)}</p>`;
+  c+=`<p><span class="pill">${st.dir==='cw'?tr.up5:tr.up4}</span></p>`;
+  if(d){c+=`<p>${tr.change(nm([d.l,d.from]),nm([d.l,d.to]),d.deg,d.deg===7?tr.role7:tr.role4,keyName(lcur))}</p>`;
+    c+=`<p class="rule">${st.dir==='cw'?tr.ruleCw:tr.ruleCcw}</p>`}
+  if(!consistent)c+=`<p class="rule">${tr.enh(keyName(cur),keyName(lcur),nm(lcur))}</p>`;
+  $('change').innerHTML=c;
+  const sc=scaleOf(cur);let chk;
+  if(sig.type>0)chk=tr.chkSharp(nm(sig.list[sig.list.length-1]),nm(cur));
+  else if(sig.type<0&&sig.list.length>1)chk=tr.chkFlats(nm(sig.list[sig.list.length-2]),nm(cur));
+  else if(sig.type<0)chk=tr.chkFlat1(nm(sig.list[0]),nm(cur));
+  else chk=tr.chkNone(nm(cur));
+  $('check').textContent=chk;
+
+  /* jump */
+  const s0=pcOf(pred),marks={};
+  for(let i=0;i<=up;i++){const s=s0+i;
+    if(i===0)marks[s]={fill:fillFor(s,'var(--k-start)','var(--k-startb)'),ink:fillFor(s,'var(--k-start-ink)','var(--k-startb-ink)'),label:'0',name:nm(pred)};
+    else if(i===up)marks[s]={fill:'var(--k-tonic)',ink:'var(--k-tonic-ink)',label:i,name:nm(lcur)};
+    else marks[s]={fill:fillFor(s,'var(--k-path)','var(--k-scaleb)'),ink:fillFor(s,'var(--k-path-ink)','var(--k-scaleb-ink)'),label:i}}
+  if(d&&st.dir==='cw'){const s=s0+6;marks[s]={fill:fillFor(s,'var(--k-chg)','var(--k-chgb)'),ink:fillFor(s,'var(--k-chg-ink)','var(--k-chgb-ink)'),label:6,name:nm([d.l,d.to])}}
+  drawKeys($('jump'),marks,null);
+  $('jump').setAttribute('aria-label',`${nm(pred)} → ${nm(lcur)}`);
+  $('jumpnow').textContent=`${nm(pred)} → ${nm(lcur)} · ${up} ${tr.steps}`;
+  window._jump=[s0,s0+up];
+
+  /* scale */
+  const base=pcOf(cur),sm={},notes=OFF.map(o=>base+o).concat(base+12),stepTxt=[];
+  const chIdx=consistent&&d?d.deg-1:-1;
+  notes.forEach((s,i)=>{const n=sc[i%7],deg=(i%7)+1;let f,ink;
+    if(i%7===0){f='var(--k-tonic)';ink='var(--k-tonic-ink)'}
+    else if(i===chIdx){f=fillFor(s,'var(--k-chg)','var(--k-chgb)');ink=fillFor(s,'var(--k-chg-ink)','var(--k-chgb-ink)')}
+    else if(n[1]!==0){f=fillFor(s,'var(--k-acc)','var(--k-accb)');ink=fillFor(s,'var(--k-acc-ink)','var(--k-accb-ink)')}
+    else{f=fillFor(s,'var(--k-scale)','var(--k-scaleb)');ink=fillFor(s,'var(--k-scale-ink)','var(--k-scaleb-ink)')}
+    sm[s]={fill:f,ink:ink,label:deg,name:nm(n)}});
+  const Ls=layout(0,23);
+  for(let i=0;i<7;i++){const a=notes[i],b=notes[i+1],w=b-a===2;stepTxt.push({x:((Ls.c(a)+Ls.c(b))/2).toFixed(1),t:w?tr.W:tr.H,h:!w})}
+  drawKeys($('scale'),sm,stepTxt,{lay:Ls});
+  renderFunc(cur);renderHinge(cur);renderOrigin();renderWindow(cur);renderField(cur);
+  renderTetra(cur);renderNames(cur);renderInt(cur);renderTri(cur);renderProg(cur);renderCompose(cur);
+  $('scale').setAttribute('aria-label',`${keyName(cur)}: ${sc.map(nm).join(' ')}`);
+  $('scalenow').textContent=`${keyName(cur)} · ${sc.map(nm).join(' ')}`;
+  window._scale=notes;
+
+  $('dir-cw').setAttribute('aria-pressed',st.dir==='cw');$('dir-ccw').setAttribute('aria-pressed',st.dir==='ccw');
+  $('nt-en').setAttribute('aria-pressed',st.nt==='en');$('nt-pt').setAttribute('aria-pressed',st.nt==='pt');
+}
+
+function go(k){const wasSame=((k%12)+12)%12===st.k;st.k=((k%12)+12)%12;
+  if(st.k===6){if(wasSame)st.enh=st.enh==='Fs'?'Gb':'Fs';else st.enh=st.dir==='cw'?'Fs':'Gb'}
+  render();save()}
+$('circle').addEventListener('click',e=>{const g=e.target.closest('.node');if(g)go(+g.dataset.k)});
+$('circle').addEventListener('keydown',e=>{const g=e.target.closest('.node');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();const kk=g.dataset.k;go(+kk);setTimeout(()=>{const n=document.querySelector(`.node[data-k="${kk}"]`);n&&n.focus()},0)}});
+$('next').onclick=()=>go(st.k+(st.dir==='cw'?1:-1));
+$('prev').onclick=()=>go(st.k+(st.dir==='cw'?-1:1));
+$('dir-cw').onclick=()=>{st.dir='cw';if(st.k===6)st.enh='Fs';render();save()};
+$('dir-ccw').onclick=()=>{st.dir='ccw';if(st.k===6)st.enh='Gb';render();save()};
+$('nt-en').onclick=()=>{st.nt='en';render();renderGloss();save()};
+$('nt-pt').onclick=()=>{st.nt='pt';render();renderGloss();save()};
+function setLang(l){st.lang=l;st.nt=l==='pt'?'pt':'en';applyStatic();render();renderGloss();save()}
+$('lang-pt').onclick=()=>setLang('pt');
+$('lang-en').onclick=()=>setLang('en');
+
+/* ---------- sound ---------- */
+let ac=null;
+function tone(s,t0,dur,v){toneHz(261.63*Math.pow(2,s/12),t0,dur,v)}
+function toneHz(f,t0,dur,v){const o=ac.createOscillator(),g=ac.createGain();
+  o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(v||0.22,t0+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);o.connect(g).connect(ac.destination);o.start(t0);o.stop(t0+dur+0.05)}
+function audio(){try{if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();return true}catch(e){return false}}
+$('play-jump').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,[a,b]=window._jump;tone(a,t,0.7);tone(b,t+0.6,0.7);tone(a,t+1.35,1.2);tone(b,t+1.35,1.2)};
+let playTok=0;
+const rer=()=>displayed(st.k);
+function playChordAt(i){if(!audio())return;const P=window._prog,t=ac.currentTime+0.03;tone(P.roots[i]-12,t,1.1,0.15);P.vs[i].forEach(p=>tone(p,t,1.1,0.15))}
+function playInt(){if(!audio())return;const t=ac.currentTime+0.05,[a,b]=window._int;tone(a,t,0.6);tone(b,t+0.55,0.6);tone(a,t+1.2,1.3,0.18);tone(b,t+1.2,1.3,0.18)}
+$('play-int').onclick=playInt;
+$('ivchips').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(!b)return;st.ivl=+b.dataset.g;renderInt(rer());save()});
+$('census').addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(!b)return;st.ivr=+b.dataset.r;renderInt(rer());save();playInt()});
+$('play-tetra').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,a=window._tetra;a.forEach((s,i)=>tone(s,t+i*0.3+Math.floor(i/4)*0.35,0.45))};
+$('play-tri').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,s=window._tri;tone(s,t,1.3);tone(s+6,t,1.3);tone(s,t+1.5,1.3);tone(s+7,t+1.5,1.3)};
+$('pats').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;playTok++;st.pat=+b.dataset.p;st.pi=0;renderProg(rer());save()});
+$('progchips').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;playTok++;st.pi=+b.dataset.c;renderProg(rer());playChordAt(st.pi)});
+$('pc-prev').onclick=()=>{playTok++;const n=PATS[st.pat||0].deg.length;st.pi=((st.pi||0)-1+n)%n;renderProg(rer());playChordAt(st.pi)};
+$('pc-next').onclick=()=>{playTok++;const n=PATS[st.pat||0].deg.length;st.pi=((st.pi||0)+1)%n;renderProg(rer());playChordAt(st.pi)};
+$('play-prog').onclick=()=>{if(!audio())return;const tok=++playTok,P=window._prog,D=1.0,t=ac.currentTime+0.08;
+  P.vs.forEach((v,i)=>{tone(P.roots[i]-12,t+i*D,D*0.95,0.15);v.forEach(p=>tone(p,t+i*D,D*0.95,0.15));
+    setTimeout(()=>{if(tok!==playTok)return;st.pi=i;renderProg(rer())},i*D*1000+80)})};
+$('melchips').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;st.mel=+b.dataset.m;renderCompose(rer());save()});
+$('harm').addEventListener('click',e=>{const b=e.target.closest('[data-h]');if(!b||!audio())return;
+  const sc=scaleOf(rer()),d=+b.dataset.h,pcs=triad(sc,d).map(pcOf),mp=pcOf(sc[st.mel||0])+12,t=ac.currentTime+0.03;
+  tone(pcs[0]-12,t,1.6,0.15);
+  pcs.filter(p=>p!==mp%12).forEach(p=>{let x=p;while(x+12<mp)x+=12;while(x>=mp)x-=12;tone(x,t,1.6,0.14)});
+  tone(mp,t,1.6,0.24)});
+$('play-fifth').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,c=261.63,g=st.tune==='eq'?c*Math.pow(2,7/12):c*1.5;toneHz(c,t,0.8);toneHz(g,t+0.75,0.8);toneHz(c,t+1.6,1.8);toneHz(g,t+1.6,1.8)};
+$('play-comma').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,c=261.63,bs=st.tune==='eq'?c:c*Math.pow(1.5,12)/128;toneHz(c,t,0.9);toneHz(bs,t+0.85,0.9);toneHz(c,t+1.8,2.6);toneHz(bs,t+1.8,2.6)};
+$('play-chord').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,p=window._chord;p.forEach((s,i)=>tone(s,t+i*0.35,0.6));p.forEach(s=>tone(s,t+1.15,1.6))};
+$('tune-pure').onclick=()=>{st.tune='pure';renderOrigin();save()};
+$('tune-eq').onclick=()=>{st.tune='eq';renderOrigin();save()};
+$('slide-r').onclick=()=>{st.dir='cw';go(st.k+1)};
+$('slide-l').onclick=()=>{st.dir='ccw';go(st.k-1)};
+['chips-scale','chips-win'].forEach(id=>$(id).addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(!b)return;st.deg=+b.dataset.d;renderField(displayed(st.k));save()}));
+$('play-func').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,f=window._func;tone(f.lt,t,0.75);tone(f.c,t+0.7,1.3)};
+$('play-hinge').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05,h=window._hinge;tone(h.n4,t,1);tone(h.n7,t,1);tone(h.n4-1,t+0.95,1.4);tone(h.n7+1,t+0.95,1.4)};
+$('play-scale').onclick=()=>{if(!audio())return;const t=ac.currentTime+0.05;window._scale.forEach((s,i)=>tone(s,t+i*0.32,0.5))};
+
+/* ---------- glossary: [EN term, EN alt, PT term, PT definition, EN definition] ---------- */
+const G=[
+ ['Half step','semitone','Semitom','A menor distância do teclado: de uma tecla para a vizinha imediata, branca ou preta. Mi–Fá e Si–Dó são semitons sem tecla preta no meio.','The smallest distance on the keyboard: from one key to the very next, white or black. E–F and B–C are half steps with no black key between them.'],
+ ['Whole step','whole tone','Tom','Dois semitons. Na fórmula da escala maior aparece como T.','Two half steps. Written as W in the major scale formula.'],
+ ['Interval','','Intervalo','A distância entre duas notas, medida em semitons e em nomes de nota.','The distance between two notes, measured in half steps and in note names.'],
+ ['Perfect fifth','P5','Quinta justa','7 semitons; cinco nomes de nota contando as pontas (Dó–Ré–Mi–Fá–Sol). É o passo do círculo no sentido horário.','7 half steps; five note names counting both ends (C–D–E–F–G). The clockwise step of the circle.'],
+ ['Perfect fourth','P4','Quarta justa','5 semitons. É a inversão da quinta: 5 + 7 = 12. É o passo do círculo no sentido anti-horário.','5 half steps. The inversion of the fifth: 5 + 7 = 12. The counter-clockwise step of the circle.'],
+ ['Octave','','Oitava','12 semitons: a mesma nota, uma volta acima. Por isso o círculo fecha em 12 passos.','12 half steps: the same note, one turn higher. That is why the circle closes after 12 steps.'],
+ ['Pitch class','','Classe de altura','A nota sem considerar a oitava, como aritmética módulo 12. Como 7 e 12 não têm divisor comum, somar 7 percorre as 12 notas.','A note regardless of octave, as arithmetic modulo 12. Since 7 and 12 share no divisor, adding 7 visits all 12 pitch classes.'],
+ ['Major scale','','Escala maior','Sete notas com a fórmula T T S T T T S, a partir da tônica.','Seven notes following W W H W W W H from the tonic.'],
+ ['Tetrachord','','Tetracorde','Do grego tetra (quatro) + chordé (corda): um bloco de quatro notas que cobre uma quarta justa, como as quatro cordas da lira grega. A escala maior são dois tetracordes T T S unidos por um tom; o de cima de uma escala é o de baixo da próxima no círculo.','From Greek tetra (four) + chordé (string): a block of four notes spanning a perfect fourth, like the four strings of the Greek lyre. A major scale is two W W H tetrachords joined by a whole step; the upper one of a scale is the lower one of the next key on the circle.'],
+ ['Perfect interval','','Intervalo justo','Uníssono, 4ª, 5ª e 8ª: as consonâncias perfeitas da teoria medieval (razões 1:1, 4:3, 3:2, 2:1). Têm um só tamanho natural na escala (exceto Fá–Si) e continuam justos quando invertidos.','Unison, 4th, 5th and octave: the perfect consonances of medieval theory (ratios 1:1, 4:3, 3:2, 2:1). They come in one natural size in the scale (except F–B) and stay perfect when inverted.'],
+ ['Interval number','generic interval','Número do intervalo','Quantos nomes de nota o intervalo abrange, contando as duas pontas: Dó–Sol tem 5 nomes, é uma 5ª. Mede posições na pauta.','How many letter names the interval spans, counting both ends: C–G spans 5 names, a 5th. It measures staff positions.'],
+ ['Interval quality','','Qualidade do intervalo','O tamanho exato em semitons: justa, maior, menor, aumentada ou diminuta. Duas 3ªs podem ter 4 semitons (maior) ou 3 (menor).','The exact size in half steps: perfect, major, minor, augmented or diminished. Two 3rds can have 4 half steps (major) or 3 (minor).'],
+ ['Augmented, diminished','','Aumentado, diminuto','Um semitom acima da justa ou maior (aumentado), ou um semitom abaixo da justa ou menor (diminuto). Fá–Si é uma 4ª aumentada; Si–Fá, uma 5ª diminuta.','A half step above perfect or major (augmented), or a half step below perfect or minor (diminished). F–B is an augmented 4th; B–F, a diminished 5th.'],
+ ['Compound interval','','Intervalo composto','Maior que uma oitava. A 9ª é uma 2ª uma oitava acima: 2 + 8 − 1, porque a oitava compartilha uma nota.','Larger than an octave. A 9th is a 2nd an octave up: 2 + 8 − 1, because the octave shares a note.'],
+ ['Imperfect consonance','','Consonância imperfeita','Na teoria medieval, as 3ªs e 6ªs: agradáveis, mas menos estáveis que as consonâncias perfeitas (uníssono, 4ª, 5ª, 8ª).','In medieval theory, 3rds and 6ths: pleasant, but less stable than the perfect consonances (unison, 4th, 5th, octave).'],
+ ['Inversion','','Inversão','Virar o intervalo: a nota de baixo sobe uma oitava. Os nomes somam 9 (5ª ↔ 4ª, 3ª ↔ 6ª) e os semitons somam 12.','Flipping an interval: the lower note goes up an octave. The names add up to 9 (5th ↔ 4th, 3rd ↔ 6th) and the half steps add up to 12.'],
+ ['Supertonic','','Supertônica','O 2º grau, logo acima da tônica.','Degree 2, just above the tonic.'],
+ ['Mediant','','Mediante','O 3º grau, no meio do caminho entre a tônica e a dominante.','Degree 3, halfway between the tonic and the dominant.'],
+ ['Submediant','','Submediante','O 6º grau, no meio do caminho entre a tônica e a subdominante de baixo. Espelho da mediante.','Degree 6, halfway between the tonic and the lower dominant. The mediant’s mirror.'],
+ ['Scale degree','','Grau','A posição de cada nota na escala, de 1 a 7.','The position of each note in the scale, from 1 to 7.'],
+ ['Tonic','','Tônica','O 1º grau, o centro da tonalidade.','Degree 1, the center of the key.'],
+ ['Subdominant','','Subdominante','O 4º grau (Fá em Dó maior). O nome quer dizer “dominante de baixo”: fica uma quinta abaixo da tônica, assim como a dominante fica uma quinta acima. No círculo é o vizinho anti-horário da tônica. Quando você anda no sentido horário, é ela que sobe meio tom e vira a sensível da nova tonalidade.','Degree 4 (F in C major). The name means “the lower dominant”: it sits a fifth below the tonic, just as the dominant sits a fifth above. On the circle it is the tonic’s counter-clockwise neighbor. When you move clockwise, it rises a half step and becomes the new key’s leading tone.'],
+ ['Dominant','','Dominante','O 5º grau (Sol em Dó maior), uma quinta acima da tônica. Depois da tônica é a nota mais forte da tonalidade, e o acorde de dominante é o que puxa de volta para casa. No círculo é o vizinho horário da tônica: cada passo no sentido horário leva você para a dominante.','Degree 5 (G in C major), a fifth above the tonic. After the tonic it is the strongest note in the key, and the dominant chord is what pulls the music back home. On the circle it is the tonic’s clockwise neighbor: every clockwise step takes you to the dominant.'],
+ ['Leading tone','','Sensível','O 7º grau (Si em Dó maior), um semitom abaixo da tônica. Toque a escala e pare nela: o ouvido pede a tônica. Quando você anda no sentido anti-horário, é ela que desce meio tom e vira a subdominante da nova tonalidade.','Degree 7 (B in C major), a half step below the tonic. Play the scale and stop on it: your ear asks for the tonic. When you move counter-clockwise, it drops a half step and becomes the new key’s subdominant.'],
+ ['Tritone','','Trítono','Do latim tri + tonus: três tons inteiros, 6 semitons, exatamente meia oitava. É o único intervalo que, invertido, continua igual. Na escala maior só existe um, entre o 4º e o 7º graus (Fá–Si em Dó maior): as duas notas que mudam no círculo e o coração do acorde dominante. Ele é instável e resolve com cada nota andando meio tom (Fá→Mi, Si→Dó).','From Latin tri + tonus: three whole steps, 6 half steps, exactly half an octave. The only interval that stays the same when inverted. A major scale has only one, between degrees 4 and 7 (F–B in C major): the two notes that change on the circle and the core of the dominant chord. It is unstable and resolves with each note moving a half step (F→E, B→C).'],
+ ['Key','tonality','Tonalidade','O conjunto de notas e a tônica em torno das quais a música se organiza.','The set of notes, and the tonic, around which the music is organized.'],
+ ['Key signature','','Armadura de clave','Os sustenidos ou bemóis no começo da pauta. É a lista de notas que a fórmula obrigou a alterar.','The sharps or flats at the start of the staff: the notes the formula forced you to alter.'],
+ ['Accidental','','Acidente','Símbolo que altera uma nota: sustenido, bemol ou bequadro.','A sign that alters a note: sharp, flat or natural.'],
+ ['Sharp','♯','Sustenido','Sobe a nota um semitom.','Raises a note by a half step.'],
+ ['Flat','♭','Bemol','Desce a nota um semitom.','Lowers a note by a half step.'],
+ ['Natural','♮','Bequadro','Cancela um sustenido ou bemol.','Cancels a sharp or flat.'],
+ ['Order of sharps','F C G D A E B','Ordem dos sustenidos','Cada sustenido novo é a sensível da tonalidade seguinte, então eles entram em quintas a partir de Fá.','Each new sharp is the leading tone of the next key, so sharps enter in fifths starting from F.'],
+ ['Order of flats','B E A D G C F','Ordem dos bemóis','A ordem dos sustenidos ao contrário, porque a quarta é a quinta invertida. Cada bemol novo é o 4º grau da tonalidade seguinte.','The order of sharps reversed, because a fourth is an inverted fifth. Each new flat is degree 4 of the next key.'],
+ ['Enharmonic','','Enarmônico','Mesma tecla, nomes diferentes: Fá♯ = Sol♭, Mi♯ = Fá, Dó♭ = Si. Fá♯ maior e Sol♭ maior são tonalidades enarmônicas.','Same key, different names: F♯ = G♭, E♯ = F, C♭ = B. F♯ major and G♭ major are enharmonic keys.'],
+ ['Circle of fifths','','Círculo das quintas','As 12 tonalidades em passos de quinta justa no sentido horário. Vizinhos diferem em uma única nota.','The 12 keys in perfect-fifth steps, clockwise. Neighbors differ by a single note.'],
+ ['Circle of fourths','','Círculo das quartas','O mesmo círculo lido no sentido anti-horário, em passos de quarta justa.','The same circle read counter-clockwise, in perfect-fourth steps.'],
+ ['Clockwise','counter-clockwise','Horário / anti-horário','Horário soma sustenidos ou tira bemóis; anti-horário soma bemóis ou tira sustenidos.','Clockwise adds sharps or removes flats; counter-clockwise adds flats or removes sharps.'],
+ ['Diatonic','','Diatônico','As notas que pertencem à escala da tonalidade.','The notes that belong to the key\'s scale.'],
+ ['Chromatic','','Cromático','Nota ou movimento fora da escala; a escala cromática tem os 12 semitons.','A note or motion outside the scale; the chromatic scale has all 12 half steps.'],
+ ['Treble clef','G clef','Clave de sol','A clave da pauta de cima no piano; a espiral marca a linha do Sol.','The clef of the piano\'s upper staff; its curl marks the G line.'],
+ ['Fingering','','Dedilhado','Os números dos dedos (1 = polegar). Em Dó maior, mão direita: 1-2-3-1-2-3-4-5.','Finger numbers (1 = thumb). C major, right hand: 1-2-3-1-2-3-4-5.'],
+ ['Thumb under','','Passagem do polegar','O polegar passa por baixo da mão para continuar a escala sem saltos.','The thumb passes under the hand so the scale continues without a jump.'],
+ ['Pythagorean comma','','Coma pitagórica','A sobra de cerca de 23,5 cents quando se comparam 12 quintas puras (3:2) com 7 oitavas. É por isso que, na afinação pura, o círculo vira espiral.','The roughly 23.5-cent surplus when 12 pure fifths (3:2) are compared with 7 octaves. It is why, in pure tuning, the circle becomes a spiral.'],
+ ['Cent','','Cent','Um centésimo de semitom temperado. A oitava tem 1200 cents.','One hundredth of an equal-tempered half step. An octave has 1200 cents.'],
+ ['Equal temperament','12-TET','Temperamento igual','Divide a oitava em 12 semitons idênticos. Cada quinta fica com 700 cents, um pouco menor que a pura (701,96), e o círculo fecha.','Divides the octave into 12 identical half steps. Each fifth becomes 700 cents, slightly narrower than pure (701.96), and the circle closes.'],
+ ['Line of fifths','','Linha de quintas','O círculo esticado numa linha. Uma tonalidade maior ocupa 7 casas seguidas: a da esquerda é a subdominante e a da direita, a sensível.','The circle stretched into a line. A major key fills 7 consecutive slots: the leftmost is the subdominant and the rightmost the leading tone.'],
+ ['Root','','Fundamental','A nota que dá nome ao acorde, a base da pilha de terças.','The note that names the chord, the bottom of the stack of thirds.'],
+ ['Triad','','Tríade','Acorde de três notas empilhadas em terças: fundamental, terça e quinta.','A three-note chord stacked in thirds: root, third and fifth.'],
+ ['Major third','M3','Terça maior','4 semitons. Na linha de quintas, 4 casas à direita (Dó → Sol → Ré → Lá → Mi).','4 half steps. On the line of fifths, 4 slots to the right (C → G → D → A → E).'],
+ ['Minor third','m3','Terça menor','3 semitons. Na linha de quintas, 3 casas à esquerda (Lá → Ré → Sol → Dó).','3 half steps. On the line of fifths, 3 slots to the left (A → D → G → C).'],
+ ['Major, minor, diminished','triad qualities','Maior, menor, diminuto','Maior = 3ª maior + 3ª menor (4 + 3). Menor = 3ª menor + 3ª maior (3 + 4). Diminuto = duas 3ªs menores (3 + 3), com quinta diminuta de 6 semitons.','Major = major third + minor third (4 + 3). Minor = minor third + major third (3 + 4). Diminished = two minor thirds (3 + 3), with a 6-half-step diminished fifth.'],
+ ['Diatonic chords','harmonic field','Campo harmônico','Os 7 acordes formados empilhando terças só com notas da escala. Em toda tonalidade maior: I ii iii IV V vi vii°.','The 7 chords built by stacking thirds using only scale notes. In every major key: I ii iii IV V vi vii°.'],
+ ['Harmonic function','T · SD · D','Função harmônica','O papel do acorde na história: tônica (repouso: I, vi, iii), subdominante (afastamento: IV, ii) e dominante (tensão: V, vii°). Acordes da mesma função têm duas notas em comum.','A chord’s role in the story: tonic (rest: I, vi, iii), subdominant (departure: IV, ii) and dominant (tension: V, vii°). Chords with the same function share two notes.'],
+ ['Roman numerals','','Algarismos romanos','Nomeiam os acordes pelo grau: maiúsculo = maior (I, IV, V), minúsculo = menor (ii, iii, vi), ° = diminuto (vii°). Servem em qualquer tonalidade.','Name chords by degree: uppercase = major (I, IV, V), lowercase = minor (ii, iii, vi), ° = diminished (vii°). They work in any key.'],
+ ['Progression','','Progressão','Uma sequência de acordes. A lógica dela vem das funções (T → SD → D → T) e do movimento das fundamentais.','A sequence of chords. Its logic comes from functions (T → SD → D → T) and from how the roots move.'],
+ ['Cadence','','Cadência','O final de uma frase harmônica, como a pontuação de um texto.','The ending of a harmonic phrase, like punctuation in a sentence.'],
+ ['Authentic cadence','perfect cadence','Cadência perfeita','V → I. O ponto final: a sensível sobe para a tônica e o trítono se resolve.','V → I. The period: the leading tone rises to the tonic and the tritone resolves.'],
+ ['Plagal cadence','Amen cadence','Cadência plagal','IV → I, o “Amém” dos hinos. Repouso sem a tensão da sensível.','IV → I, the “Amen” of hymns. Rest without the leading tone’s tension.'],
+ ['Half cadence','','Cadência suspensiva','Frase que termina no V. Soa como uma vírgula ou uma pergunta.','A phrase ending on V. It sounds like a comma or a question.'],
+ ['Deceptive cadence','','Cadência de engano','V → vi. O ouvido espera o I e recebe o vi, que tem duas notas em comum com ele.','V → vi. The ear expects I and gets vi, which shares two notes with it.'],
+ ['Voice leading','','Condução de vozes','Ligar acordes movendo cada voz o mínimo possível: notas comuns ficam, as outras andam por tom ou semitom.','Connecting chords by moving each voice as little as possible: common tones stay, the others move by step.'],
+ ['Common tone','','Nota comum','Nota presente em dois acordes seguidos. Quanto mais notas comuns, mais suave a passagem.','A note shared by two consecutive chords. The more common tones, the smoother the change.'],
+ ['Harmonic rhythm','','Ritmo harmônico','A frequência com que os acordes mudam. Um por compasso é o padrão; acelerar perto da cadência cria impulso.','How often the chords change. One per bar is the default; speeding up near the cadence builds momentum.'],
+ ['Relative minor','','Relativa menor','A escala menor com a mesma armadura, três semitons abaixo (Lá menor para Dó maior). Tema da aula 3.','The minor scale with the same key signature, three half steps below (A minor for C major). Topic of lesson 3.']
+];
+function renderGloss(){
+  const tr=L(),q=($('gq').value||'').trim().toLowerCase();
+  const items=G.filter(g=>!q||(st.lang==='pt'?[g[2],g[3]]:[g[0],g[1],g[4]]).join(' ').toLowerCase().includes(q));
+  $('gloss').innerHTML=items.length?items.map(g=>{
+    const [en,alt,pt,dpt,den]=g;
+    const sym=/^[♯♭♮]$/.test(alt)?alt:'';
+    const dt=st.lang==='pt'
+      ?`${pt}${sym?` <span class="alt">${sym}</span>`:''}`
+      :`${en}${alt?` <span class="alt">${alt}</span>`:''}`;
+    return `<div class="gi"><dt>${dt}</dt><dd>${st.lang==='pt'?dpt:den}</dd></div>`}).join(''):`<p class="empty">${tr.empty}</p>`;
+  $('gcount').textContent=tr.count(items.length,G.length);
+}
+$('gq').addEventListener('input',renderGloss);
+
+function save(){try{localStorage.setItem('cof-lab',JSON.stringify(st))}catch(e){}}
+st.nt='pt';
+try{const s=JSON.parse(localStorage.getItem('cof-lab')||'null');if(s&&typeof s.k==='number'){Object.assign(st,s);if(!T[st.lang])st.lang='pt'}}catch(e){}
+applyStatic();render();renderGloss();
+</script>
