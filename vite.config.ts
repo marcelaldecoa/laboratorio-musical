@@ -3,11 +3,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+const artifact = process.env.ARTIFACT === '1';
+
 export default defineConfig({
   base: './',
   plugins: [
     react(),
-    VitePWA({
+    !artifact && VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
@@ -44,6 +46,9 @@ export default defineConfig({
       },
     }),
   ],
-  build: { rollupOptions: { output: { manualChunks: { tone: ['tone'], react: ['react', 'react-dom'] } } } },
+  build: artifact
+    ? { outDir: 'dist-artifact', assetsInlineLimit: 1e7, rollupOptions: { output: { inlineDynamicImports: true } } }
+    : { rollupOptions: { output: { manualChunks: { tone: ['tone'], react: ['react', 'react-dom'] } } } },
+  resolve: artifact ? { alias: { 'virtual:pwa-register': '/src/pwa-stub.ts' } } : undefined,
   test: { environment: 'node', include: ['src/**/*.test.ts'] },
 });
