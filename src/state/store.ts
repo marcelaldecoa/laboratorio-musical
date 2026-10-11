@@ -27,6 +27,14 @@ export interface LabState {
   last: string;
   /** practice records */
   best: Record<string, number>;
+  /** lessons the user marked as done */
+  done: string[];
+  /** days with study activity, as YYYY-MM-DD (local time) */
+  days: string[];
+  /** spaced review: question id → Leitner box and due time (ms) */
+  review: Record<string, { box: number; due: number }>;
+  /** show lesson notes one step at a time */
+  stepMode: boolean;
 }
 
 const KEY = 'laboratorio-musical';
@@ -34,6 +42,7 @@ const KEY = 'laboratorio-musical';
 const defaults: LabState = {
   k: 0, dir: 'cw', enh: 'Fs', nt: 'pt', lang: 'pt', theme: 'auto', tune: 'pure',
   deg: 0, ivl: 5, ivr: 0, pat: 0, pi: 0, mel: 0, last: '', best: {},
+  done: [], days: [], review: {}, stepMode: false,
 };
 
 function load(): LabState {
@@ -111,4 +120,55 @@ export function setDirection(dir: Direction) {
 
 export function setLang(lang: Lang) {
   setState({ lang, nt: lang === 'pt' ? 'pt' : 'en' });
+}
+
+/* ---------- progress ---------- */
+export const today = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+/** Records that the user studied today (lesson opened or drill answered). */
+export function markStudied() {
+  const d = today();
+  if (!getState().days.includes(d)) setState((s) => ({ days: [...s.days, d].slice(-400) }));
+}
+
+/** Consecutive study days ending today (or yesterday, so the streak survives until tonight). */
+export function streak(days: string[], now = new Date()): number {
+  const set = new Set(days);
+  const d = new Date(now);
+  if (!set.has(today(d))) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (set.has(today(d))) {
+    n++;
+    d.setDate(d.getDate() - 1);
+  }
+  return n;
+}
+
+export function toggleDone(id: string) {
+  setState((s) => ({ done: s.done.includes(id) ? s.done.filter((x) => x !== id) : [...s.done, id] }));
+}
+
+/* ---------- spaced review (Leitner boxes) ---------- */
+const DAY = 24 * 60 * 60 * 1000;
+export const BOX_DAYS = [0, 1, 3, 7, 16, 35];
+
+/** Updates a question's box after an answer: wrong goes back to box 0, right moves up one box. */
+export function nextBox(prev: { box: number; due: number } | undefined, ok: boolean, now = Date.now()) {
+  const box = ok ? Math.min((prev?.box ?? 0) + 1, BOX_DAYS.length - 1) : 0;
+  return { box, due: now + BOX_DAYS[box] * DAY };
+}
+
+export function recordAnswer(id: string, ok: boolean) {
+  const prev = getState().review[id];
+  // only track questions once they have been missed, so review stays focused on weak spots
+  if (!prev && ok) return;
+  setState((s) => ({ review: { ...s.review, [id]: nextBox(prev, ok) } }));
+}
+
+export function dueReviews(review: LabState['review'], now = Date.now()): string[] {
+  return Object.entries(review)
+    .filter(([, r]) => r.due <= now && r.box < BOX_DAYS.length - 1)
+    .sort((a, b) => a[1].due - b[1].due)
+    .map(([id]) => id);
 }

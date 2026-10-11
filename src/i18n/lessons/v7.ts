@@ -1,0 +1,89 @@
+import type { LessonText } from '../lessonText';
+
+type S = string;
+
+const pt = {
+  meta: {
+    nav: 'O V7 e o trítono',
+    title: 'O V7 e o trítono',
+    sub: 'a tensão que pede a tônica',
+    teaser: 'O acorde da dominante guarda a sensível e a subdominante: um trítono que se resolve sozinho.',
+  },
+  desc: (v7: S, key: S) => `Empilhe terças a partir do 5º grau e você tem o ${v7}, o acorde de dominante com sétima de ${key}. Ele é azul, a cor da dominante, mas por dentro guarda duas notas especiais: a sensível (coral) e a subdominante (roxo). Entre elas há um trítono.`,
+  steps: [
+    (root: S, v7: S) => `A fundamental ${root} é o 5º grau: é ela que dá nome ao ${v7}.`,
+    (lt: S, tonic: S) => `A 3ª do acorde, ${lt}, é a sensível: meio tom abaixo de ${tonic}.`,
+    (sub: S, third: S) => `A 7ª do acorde, ${sub}, é a subdominante: meio tom acima de ${third}, a 3ª da tônica.`,
+    (lt: S, sub: S) => `${lt} e ${sub} estão a 6 semitons, um trítono. É o único trítono da escala.`,
+  ],
+  view: 'Mostrar',
+  vV7: 'o V7',
+  vI: 'a resolução',
+  tritone: 'trítono · 6',
+  third: '3ª maior · 4',
+  readV7: (v7: S, names: S) => `${v7} = ${names}`,
+  readI: (lt: S, tonic: S, sub: S, third: S) => `${lt} sobe para ${tonic} e ${sub} desce para ${third}: o trítono (6) se fecha numa 3ª maior (4).`,
+  playV7I: 'V7 → I',
+  playVI: 'V → I',
+  playTri: 'Só o trítono',
+  compare: 'Compare: o V sem a 7ª também resolve, mas falta a subdominante descendo. Com a 7ª, as duas notas do trítono andam meio tom cada uma, e a chegada fica muito mais firme.',
+  lgDom: 'dominante (5º e 2º graus)',
+  lgLt: 'sensível (7º grau)',
+  lgSub: 'subdominante (4º grau)',
+  lgTon: 'tônica (acorde I)',
+  lgGo: 'para onde a voz vai',
+  lgWas: 'onde a voz estava',
+  numNote: 'Os números dentro das teclas são os graus da escala.',
+  logicTitle: 'A lógica por baixo',
+  logic: [
+    '<b>Por que a 7ª do V é a subdominante:</b> é só contar terças na escala. A partir do 5º grau: 5, 7, 2, 4. O 4º grau entra como 7ª do acorde, e a sensível (7º grau) já estava lá como 3ª.',
+    '<b>Por que o trítono pede resolução:</b> 6 semitons são exatamente meia oitava, o intervalo mais instável. A saída mais curta é cada nota andar meio tom: a sensível sobe para a tônica e a subdominante desce para a 3ª da tônica. O trítono se fecha em uma 3ª maior.',
+    '<b>Na linha de quintas:</b> o V7 ocupa as duas pontas da janela de 7 quintas (a subdominante na esquerda e a sensível na direita). Escrito com essas letras, esse trítono só existe em uma tonalidade maior, e por isso o V7 diz ao ouvido, sem dúvida, qual é a tônica.',
+    '<b>A fundamental também puxa:</b> o baixo do V7 cai uma quinta (ou sobe uma quarta) até a tônica, o mesmo passo do círculo das quintas no sentido anti-horário.',
+    '<b>De onde veio:</b> Jean-Philippe Rameau, no Tratado de Harmonia (1722), chamou este acorde de “dominante tônica”: a dominante que leva à tônica. A regra da época era clara: a dissonância (a 7ª) deve descer por grau.',
+  ],
+};
+
+const en: typeof pt = {
+  meta: {
+    nav: 'The V7 and the tritone',
+    title: 'The V7 and the tritone',
+    sub: 'the tension that asks for the tonic',
+    teaser: 'The dominant chord holds the leading tone and the subdominant: a tritone that resolves by itself.',
+  },
+  desc: (v7: S, key: S) => `Stack thirds from degree 5 and you get ${v7}, the dominant seventh chord of ${key}. It is blue, the dominant’s color, but inside it holds two special notes: the leading tone (coral) and the subdominant (purple). Between them lies a tritone.`,
+  steps: [
+    (root: S, v7: S) => `The root ${root} is degree 5: it gives ${v7} its name.`,
+    (lt: S, tonic: S) => `The chord’s 3rd, ${lt}, is the leading tone: a half step below ${tonic}.`,
+    (sub: S, third: S) => `The chord’s 7th, ${sub}, is the subdominant: a half step above ${third}, the tonic’s 3rd.`,
+    (lt: S, sub: S) => `${lt} and ${sub} are 6 half steps apart, a tritone. It is the only tritone in the scale.`,
+  ],
+  view: 'Show',
+  vV7: 'the V7',
+  vI: 'the resolution',
+  tritone: 'tritone · 6',
+  third: 'major 3rd · 4',
+  readV7: (v7: S, names: S) => `${v7} = ${names}`,
+  readI: (lt: S, tonic: S, sub: S, third: S) => `${lt} rises to ${tonic} and ${sub} falls to ${third}: the tritone (6) closes into a major 3rd (4).`,
+  playV7I: 'V7 → I',
+  playVI: 'V → I',
+  playTri: 'Just the tritone',
+  compare: 'Compare: V without the 7th also resolves, but the falling subdominant is missing. With the 7th, both notes of the tritone move a half step each, and the arrival feels much firmer.',
+  lgDom: 'dominant (degrees 5 and 2)',
+  lgLt: 'leading tone (degree 7)',
+  lgSub: 'subdominant (degree 4)',
+  lgTon: 'tonic (chord I)',
+  lgGo: 'where the voice goes',
+  lgWas: 'where the voice was',
+  numNote: 'The numbers inside the keys are scale degrees.',
+  logicTitle: 'The logic underneath',
+  logic: [
+    '<b>Why the 7th of V is the subdominant:</b> just count thirds in the scale. From degree 5: 5, 7, 2, 4. Degree 4 enters as the chord’s 7th, and the leading tone (degree 7) was already there as its 3rd.',
+    '<b>Why the tritone wants to resolve:</b> 6 half steps is exactly half an octave, the most unstable interval. The shortest way out is for each note to move a half step: the leading tone rises to the tonic and the subdominant falls to the tonic’s 3rd. The tritone closes into a major 3rd.',
+    '<b>On the line of fifths:</b> V7 touches both ends of the 7-fifth window (the subdominant on the left and the leading tone on the right). Spelled with these letters, that tritone exists in only one major key, so V7 tells the ear, beyond doubt, where the tonic is.',
+    '<b>The root pulls too:</b> the bass of V7 falls a fifth (or rises a fourth) to the tonic, the same step as the circle of fifths counter-clockwise.',
+    '<b>Where it came from:</b> Jean-Philippe Rameau, in his Treatise on Harmony (1722), called this chord the “dominante tonique”: the dominant that leads to the tonic. The rule of the time was clear: the dissonance (the 7th) must fall by step.',
+  ],
+};
+
+export const text = { pt, en } satisfies LessonText<typeof pt>;

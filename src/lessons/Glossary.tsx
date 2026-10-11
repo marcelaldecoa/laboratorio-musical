@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { GLOSSARY } from '../i18n/glossary';
+import { GLOSSARY as BASE } from '../i18n/glossary';
+import { EXTRA } from './extra';
+
+// lessons may introduce the same term; keep the first definition of each
+const seen = new Set<string>();
+const GLOSSARY = [...BASE, ...EXTRA.flatMap((L) => L.text?.glossary ?? [])].filter(([en, , pt]) => {
+  const k = (en + '|' + pt).toLowerCase();
+  if (seen.has(k) || seen.has(en.toLowerCase()) || seen.has(pt.toLowerCase())) return false;
+  seen.add(k).add(en.toLowerCase()).add(pt.toLowerCase());
+  return true;
+});
 import { useLab } from '../state/useLab';
 
 export function Glossary() {

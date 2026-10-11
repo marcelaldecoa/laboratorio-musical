@@ -1,0 +1,92 @@
+import type { LessonText } from '../lessonText';
+
+type S = string;
+
+const pt = {
+  meta: {
+    nav: 'Extensões 9, 11, 13',
+    title: 'Extensões: 9, 11 e 13',
+    sub: 'as terças continuam acima da oitava',
+    teaser: 'Continue empilhando terças depois da 7ª: 9, 11 e 13 são a 2, a 4 e a 6 uma oitava acima.',
+  },
+  desc: 'Depois da 7ª a pilha de terças não precisa parar. A próxima terça cai acima da oitava e se chama 9ª; depois vêm a 11ª e a 13ª. Mais uma terça e você volta à fundamental, duas oitavas acima: por isso as extensões param no 13.',
+  pick: (key: S) => `Tétrades de ${key}`,
+  exts: 'Extensões (toque para ligar ou desligar)',
+  view: 'Ver',
+  stacked: 'empilhada',
+  folded: 'dobrada na oitava',
+  avail: 'disponível',
+  avoid: 'evitada',
+  playStack: 'Tocar a pilha',
+  playChord: 'Tocar o acorde',
+  ord: (n: number) => `${n}ª`,
+  sum: (n: number, simple: number) => `${n} = ${simple} + 8 − 1`,
+  read: (sym: S, names: S) => `${sym} = ${names}`,
+  clashRead: (ext: S, n: S, tone: S) => `${ext} (${n}) fica meio tom acima de ${tone}, uma nota do acorde: as duas brigam (9ª menor).`,
+  okRead: (list: S) => `Disponíveis: ${list}. Cada uma fica a pelo menos um tom das notas do acorde.`,
+  none: 'nenhuma',
+  minor9: '9ª m · 13',
+  lgRoot: 'fundamental',
+  lgTones: '3ª, 5ª e 7ª',
+  lgExt: 'extensão (tensão)',
+  lgAvoid: 'nota evitada',
+  lgFold: 'onde a nota estava na pilha',
+  stepsNote: 'Embaixo das teclas: os semitons de cada terça da pilha.',
+  logicTitle: 'A lógica por baixo',
+  logic: [
+    '<b>Por que 9 = 2 + 8 − 1:</b> contar intervalos inclui as duas pontas. Subir uma oitava soma 7 nomes de nota, não 8, porque a oitava compartilha a nota de partida. Então 2 + 7 = 9, 4 + 7 = 11 e 6 + 7 = 13.',
+    '<b>Por que não existe 10, 12 ou 14:</b> os números pares acima da oitava repetem notas do acorde: 10 = 3, 12 = 5, 14 = 7, e 15 é a fundamental de novo. Só os ímpares que caem fora da tríade (9, 11, 13) trazem cor nova.',
+    '<b>Por que algumas são evitadas:</b> uma extensão meio tom acima de uma nota do acorde forma com ela uma 9ª menor, o choque mais áspero que existe. Sobre um acorde maior (I7M, V7) a 11ª fica meio tom acima da 3ª e apaga o caráter maior. Por isso, sobre acordes maiores, a 11 aparece como ♯11.',
+    '<b>Por acorde:</b> 7M aceita 9, ♯11 e 13; 7 (dominante) aceita 9 e 13, e as alteradas ♭9, ♯9, ♯11 e ♭13; m7 aceita 9 e 11 (a 13 depende do grau); m7(♭5) aceita 11 e ♭13. Toque cada grau acima e veja a regra do meio tom funcionando.',
+    '<b>Na prática:</b> no piano raramente se tocam as sete notas. Em geral se tira a 5ª (e às vezes a fundamental, que o baixo já toca) e se mantêm 3ª, 7ª e as tensões, que são as notas que dão cor.',
+  ],
+};
+
+const en: typeof pt = {
+  meta: {
+    nav: 'Extensions 9, 11, 13',
+    title: 'Extensions: 9, 11 and 13',
+    sub: 'the thirds keep going above the octave',
+    teaser: 'Keep stacking thirds after the 7th: 9, 11 and 13 are the 2, 4 and 6 an octave up.',
+  },
+  desc: 'After the 7th the stack of thirds does not have to stop. The next third lands above the octave and is called the 9th; then come the 11th and the 13th. One more third and you are back at the root, two octaves up: that is why extensions stop at 13.',
+  pick: (key: S) => `Seventh chords of ${key}`,
+  exts: 'Extensions (tap to turn on or off)',
+  view: 'View',
+  stacked: 'stacked',
+  folded: 'folded into the octave',
+  avail: 'available',
+  avoid: 'avoid',
+  playStack: 'Play the stack',
+  playChord: 'Play the chord',
+  ord: (n: number) => (n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`),
+  sum: (n: number, simple: number) => `${n} = ${simple} + 8 − 1`,
+  read: (sym: S, names: S) => `${sym} = ${names}`,
+  clashRead: (ext: S, n: S, tone: S) => `${ext} (${n}) sits a half step above ${tone}, a chord tone: they clash (minor 9th).`,
+  okRead: (list: S) => `Available: ${list}. Each one is at least a whole step from the chord tones.`,
+  none: 'none',
+  minor9: 'm9 · 13',
+  lgRoot: 'root',
+  lgTones: '3rd, 5th and 7th',
+  lgExt: 'extension (tension)',
+  lgAvoid: 'avoid note',
+  lgFold: 'where the note was in the stack',
+  stepsNote: 'Under the keys: the half steps of each third in the stack.',
+  logicTitle: 'The logic underneath',
+  logic: [
+    '<b>Why 9 = 2 + 8 − 1:</b> counting intervals includes both ends. Going up an octave adds 7 letter names, not 8, because the octave shares its starting note. So 2 + 7 = 9, 4 + 7 = 11 and 6 + 7 = 13.',
+    '<b>Why there is no 10, 12 or 14:</b> the even numbers above the octave repeat chord tones: 10 = 3, 12 = 5, 14 = 7, and 15 is the root again. Only the odd ones outside the triad (9, 11, 13) bring new color.',
+    '<b>Why some are avoided:</b> an extension a half step above a chord tone makes a minor 9th with it, the harshest clash there is. Over a major chord (Imaj7, V7) the 11th sits a half step above the 3rd and blurs the major sound. That is why, over major chords, the 11 shows up as ♯11.',
+    '<b>Chord by chord:</b> maj7 takes 9, ♯11 and 13; 7 (dominant) takes 9 and 13, plus the altered ♭9, ♯9, ♯11 and ♭13; m7 takes 9 and 11 (the 13 depends on the degree); m7♭5 takes 11 and ♭13. Tap each degree above and watch the half-step rule at work.',
+    '<b>In practice:</b> pianists rarely play all seven notes. Usually the 5th is dropped (and sometimes the root, which the bass already plays), keeping the 3rd, the 7th and the tensions, the notes that give the color.',
+  ],
+};
+
+export const text = {
+  pt,
+  en,
+  glossary: [
+    ['Extension', 'tension, 9th, 11th, 13th', 'Extensão', 'Nota acima da 7ª na pilha de terças: 9ª, 11ª e 13ª, que são a 2ª, a 4ª e a 6ª uma oitava acima. Também chamada de tensão.', 'A note above the 7th in the stack of thirds: 9th, 11th and 13th, which are the 2nd, 4th and 6th an octave up. Also called a tension.'],
+    ['Avoid note', '', 'Nota evitada', 'Extensão que fica meio tom acima de uma nota do acorde e forma com ela uma 9ª menor, como a 11ª (Fá) sobre Dó maior com Mi.', 'An extension a half step above a chord tone, forming a minor 9th with it, like the 11th (F) over C major with E.'],
+  ],
+} satisfies LessonText<typeof pt>;

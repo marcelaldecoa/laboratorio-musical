@@ -1,0 +1,30 @@
+/* Piano track (fingering, left hand, reading) */
+.piano-ctrls{display:flex;flex-wrap:wrap;gap:8px}
+.piano-ctrls .seg{flex:1 1 220px}
+.piano-cross{font-size:11px;fill:var(--change)}
+
+.piano-ftable{display:flex;flex-direction:column;gap:4px;max-width:520px}
+.piano-frow{display:grid;grid-template-columns:minmax(64px,1fr) minmax(0,1.3fr) minmax(0,1.3fr);gap:8px;align-items:center;
+  padding:8px 12px;min-height:44px;border-radius:10px;text-align:left;font:500 .88rem/1.2 var(--f-mono)}
+.piano-frow.head{font:500 .72rem/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-height:0;padding:2px 12px}
+.piano-frow span{min-width:0;white-space:nowrap}
+.piano-frow[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+
+.piano-tag{font-size:11px;fill:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.piano-beats{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;max-width:520px}
+.piano-beats span{display:flex;align-items:center;justify-content:center;min-height:40px;border-radius:8px;border:2px solid transparent;
+  background:var(--surface-2);color:var(--muted);font:500 .8rem/1.1 var(--f-mono);text-align:center;padding:2px;min-width:0;overflow-wrap:anywhere}
+.piano-beats span.strong{box-shadow:inset 0 -3px 0 var(--line)}
+.piano-beats span.on{border-color:var(--glow);transform:scale(1.06)}
+
+.piano-staff{display:block;width:100%;max-width:560px;height:auto;margin:0 auto;touch-action:manipulation}
+.piano-clef{fill:var(--fg)}
+.piano-acc{font-size:19px;fill:var(--fg)}
+.piano-staff-mid{font:500 10px var(--f-mono);fill:var(--change)}
+.piano-staff-lab{font:500 11px var(--f-mono)}
+.piano-fb{font-weight:500}
+.piano-fb.ok{color:var(--accent)}
+.piano-fb.no{color:var(--change)}
+.piano-score{font-family:var(--f-mono);font-size:.88rem;color:var(--muted)}
+.piano-nudge{display:flex;gap:6px}
+.piano-nudge button{min-width:48px;min-height:44px}

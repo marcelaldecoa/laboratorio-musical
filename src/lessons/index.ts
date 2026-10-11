@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { LessonMeta, LessonText } from '../i18n/lessonText';
 import { Compose } from './Compose';
 import { Field } from './Field';
 import { Func } from './Func';
@@ -13,23 +14,40 @@ import { Scale } from './Scale';
 import { Tetra } from './Tetra';
 import { Tritone } from './Tritone';
 import { Window } from './Window';
+import { EXTRA } from './extra';
 
-export type LessonId = 'jump' | 'scale' | 'tetra' | 'func' | 'names' | 'int' | 'hinge' | 'tri' | 'origin' | 'win' | 'field' | 'prog' | 'comp' | 'gloss';
+export type TrackId = 'circle' | 'physics' | 'scales' | 'chords' | 'motion' | 'melody' | 'piano' | 'rhythm' | 'ref';
+export const TRACKS: TrackId[] = ['circle', 'physics', 'scales', 'chords', 'motion', 'melody', 'piano', 'rhythm', 'ref'];
+
+export interface LessonDef {
+  id: string;
+  Comp: ComponentType;
+  icon: string;
+  tone: string;
+  track: TrackId;
+  /** texts for lessons added after the prototype (the prototype's lessons use Dict.lessons) */
+  text?: LessonText<{ meta: LessonMeta }>;
+}
 
 /** Lessons in the order of the prototype page (docs/ROADMAP.md, Phase 2). */
-export const LESSONS: { id: LessonId; Comp: ComponentType; icon: string; tone: string }[] = [
-  { id: 'jump', Comp: Jump, icon: '↻', tone: 'accent' },
-  { id: 'scale', Comp: Scale, icon: '𝄞', tone: 'accent' },
-  { id: 'tetra', Comp: Tetra, icon: '⊞', tone: 'dom' },
-  { id: 'func', Comp: Func, icon: '⌂', tone: 'flat' },
-  { id: 'names', Comp: Names, icon: '⇋', tone: 'flat' },
-  { id: 'int', Comp: Intervals, icon: '↔', tone: 'accent' },
-  { id: 'hinge', Comp: Hinge, icon: '↕', tone: 'change' },
-  { id: 'tri', Comp: Tritone, icon: '◐', tone: 'change' },
-  { id: 'origin', Comp: Origin, icon: '◎', tone: 'accent' },
-  { id: 'win', Comp: Window, icon: '▭', tone: 'dom' },
-  { id: 'field', Comp: Field, icon: '△', tone: 'accent' },
-  { id: 'prog', Comp: Progressions, icon: '→', tone: 'dom' },
-  { id: 'comp', Comp: Compose, icon: '♪', tone: 'flat' },
-  { id: 'gloss', Comp: Glossary, icon: 'Aa', tone: 'neutral' },
+const CIRCLE: LessonDef[] = [
+  { id: 'jump', Comp: Jump, icon: '↻', tone: 'accent', track: 'circle' },
+  { id: 'scale', Comp: Scale, icon: '𝄞', tone: 'accent', track: 'circle' },
+  { id: 'tetra', Comp: Tetra, icon: '⊞', tone: 'dom', track: 'circle' },
+  { id: 'func', Comp: Func, icon: '⌂', tone: 'flat', track: 'circle' },
+  { id: 'names', Comp: Names, icon: '⇋', tone: 'flat', track: 'circle' },
+  { id: 'int', Comp: Intervals, icon: '↔', tone: 'accent', track: 'circle' },
+  { id: 'hinge', Comp: Hinge, icon: '↕', tone: 'change', track: 'circle' },
+  { id: 'tri', Comp: Tritone, icon: '◐', tone: 'change', track: 'circle' },
+  { id: 'origin', Comp: Origin, icon: '◎', tone: 'accent', track: 'circle' },
+  { id: 'win', Comp: Window, icon: '▭', tone: 'dom', track: 'circle' },
+  { id: 'field', Comp: Field, icon: '△', tone: 'accent', track: 'circle' },
+  { id: 'prog', Comp: Progressions, icon: '→', tone: 'dom', track: 'circle' },
+  { id: 'comp', Comp: Compose, icon: '♪', tone: 'flat', track: 'circle' },
 ];
+
+const GLOSS: LessonDef = { id: 'gloss', Comp: Glossary, icon: 'Aa', tone: 'neutral', track: 'ref' };
+
+/** Every lesson in study order: the prototype's chain first, then the new tracks (docs/ROADMAP.md, Phase 3). */
+export const LESSONS: LessonDef[] = [...CIRCLE, ...EXTRA, GLOSS];
+

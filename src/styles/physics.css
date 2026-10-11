@@ -1,0 +1,25 @@
+/* Physics track (harmonic series). */
+.board svg.phys-modes{max-width:440px}
+.phys-mlab{font:500 12px var(--f-mono);fill:var(--fg)}
+@media (prefers-reduced-motion:no-preference){
+  .phys-wave{animation:phys-swing .45s ease-in-out infinite alternate}
+}
+@keyframes phys-swing{from{transform:scaleY(1)}to{transform:scaleY(-1)}}
+.phys-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:6px 0 4px}
+@media (min-width:700px){.phys-grid{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.phys-cell{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 4px;border-radius:10px;
+  background:var(--k-scale);color:var(--k-scale-ink);border:2px solid transparent;font:500 .82rem/1.25 var(--f-mono);min-width:0}
+.phys-cell.oct{background:var(--k-tonic);color:var(--k-tonic-ink)}
+.phys-cell.off{background:var(--k-chg);color:var(--k-chg-ink)}
+.phys-cell[aria-pressed="true"]{border-color:var(--fg)}
+.phys-n{font-size:.72rem;opacity:.85}
+.phys-name{font-size:.95rem;font-family:var(--f-body);font-weight:600}
+.phys-range{display:flex;flex-direction:column;gap:6px;font:500 .88rem var(--f-mono);color:var(--fg);margin:8px 0 10px}
+.phys-range input{width:100%;accent-color:var(--accent);min-height:32px}
+.board svg.phys-spec{min-width:0;max-width:520px;margin:0 auto}
+.phys-tick{font:500 10px var(--f-mono);fill:var(--muted)}
+.phys-crow{grid-template-columns:minmax(96px,auto) minmax(0,1fr) auto}
+.phys-r{font-size:.78rem;color:var(--muted);font-weight:400}
+.phys-cbar{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:2px;height:14px}
+.phys-cbar i{background:var(--line);border-radius:2px}
+.phys-cbar i.q-a{background:var(--accent)}.phys-cbar i.q-b{background:var(--flat)}

@@ -6,11 +6,12 @@ import { KeyControls } from './components/KeyControls';
 import { Sheet } from './components/Sheet';
 import { Seg } from './components/ui';
 import { DICTS } from './i18n';
-import { LESSONS } from './lessons';
+import { LESSONS, TRACKS } from './lessons';
+import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
 import { Practice } from './pages/Practice';
 import { href, useRoute, type Route } from './router';
-import { setLang, setState } from './state/store';
+import { dueReviews, markStudied, setLang, setState, streak, today, toggleDone } from './state/store';
 import { useLab } from './state/useLab';
 import { sigShort } from './theory';
 
@@ -54,6 +55,11 @@ function Settings() {
       <Seg value={s.nt} onChange={(nt) => setState({ nt })} options={[{ v: 'en', label: 'C D E' }, { v: 'pt', label: 'Dó Ré Mi' }]} />
       <p className="rowlab">{k.theme}</p>
       <Seg value={s.theme} onChange={(theme) => setState({ theme })} options={[{ v: 'auto', label: k.themeAuto }, { v: 'light', label: k.themeLight }, { v: 'dark', label: k.themeDark }]} />
+      <p className="rowlab">{t.stepper.mode}</p>
+      <label className="toggle">
+        <input type="checkbox" checked={s.stepMode} onChange={(e) => setState({ stepMode: e.target.checked })} />
+        <span>{t.stepper.modeHint}</span>
+      </label>
       <p className="rowlab">{k.sound}</p>
       <p className="sound-status">
         <span className={'dot ' + snd} />
@@ -75,16 +81,80 @@ function KeyPanel({ onPick }: { onPick?: () => void }) {
 }
 
 function LessonCard({ i, active }: { i: number; active?: boolean }) {
-  const { t } = useLab();
+  const { s, t } = useLab();
   const L = LESSONS[i];
-  const m = t.lessons[L.id];
+  const m = lessonMeta(L, t, s.lang);
   return (
-    <a className={'lcard tone-' + L.tone + (active ? ' active' : '')} href={href({ page: 'lesson', id: L.id })}>
-      <span className="lnum">{i + 1}</span>
+    <a className={'lcard tone-' + L.tone + (active ? ' active' : '') + (s.done.includes(L.id) ? ' done' : '')} href={href({ page: 'lesson', id: L.id })}>
+      <span className="lnum">{i + 1}{s.done.includes(L.id) && <span className="ldone"> ✓</span>}</span>
       <span className="licon" aria-hidden="true">{L.icon}</span>
       <span className="ltitle">{m.title}</span>
       <span className="lteaser">{m.teaser}</span>
     </a>
+  );
+}
+
+function LessonGrid({ activeId }: { activeId?: string }) {
+  const { t } = useLab();
+  return (
+    <div className="tracks">
+      {TRACKS.map((tr) => {
+        const items = LESSONS.map((L, i) => ({ L, i })).filter(({ L }) => L.track === tr);
+        if (!items.length) return null;
+        return (
+          <section key={tr} className="track">
+            <h3 className="track-title">{t.tracks[tr]} <span className="track-n">{items.length}</span></h3>
+            <div className="lgrid">{items.map(({ L, i }) => <LessonCard key={L.id} i={i} active={L.id === activeId} />)}</div>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
+function ProgressCard() {
+  const { s, t } = useLab();
+  const P = t.progress;
+  const n = streak(s.days);
+  const due = dueReviews(s.review).length;
+  const counted = LESSONS.filter((L) => L.track !== 'ref');
+  const done = counted.filter((L) => s.done.includes(L.id)).length;
+  const week = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return s.days.includes(today(d));
+  });
+  return (
+    <section className="card progress" aria-label={P.title}>
+      <div className="prog-row">
+        <div className="prog-streak">
+          <span className="prog-big">{n}</span>
+          <span>{n ? P.streak(n) : P.noStreak}</span>
+        </div>
+        <div className="prog-week" aria-label={P.week}>
+          {week.map((on, i) => <i key={i} className={on ? 'on' : ''} />)}
+        </div>
+      </div>
+      <div className="prog-bar" aria-hidden="true"><i style={{ width: `${(100 * done) / counted.length}%` }} /></div>
+      <div className="prog-row small">
+        <span>{P.lessons(done, counted.length)}</span>
+        <a href={href({ page: 'practice' })} className={due ? 'due' : ''}>{P.review(due)}</a>
+      </div>
+      <div className="prog-tracks">
+        {TRACKS.filter((tr) => tr !== 'ref').map((tr) => {
+          const items = LESSONS.filter((L) => L.track === tr);
+          if (!items.length) return null;
+          const d = items.filter((L) => s.done.includes(L.id)).length;
+          return (
+            <span key={tr} className="prog-track" title={t.tracks[tr]}>
+              <span className="pt-name">{t.tracks[tr]}</span>
+              <span className="pt-dots">{items.map((L) => <i key={L.id} className={s.done.includes(L.id) ? 'on tone-' + L.tone : ''} />)}</span>
+              <span className="pt-n">{d}/{items.length}</span>
+            </span>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -98,13 +168,14 @@ function Home() {
         <h1>{t.title}</h1>
         <p className="lede">{t.lede}</p>
       </header>
+      <ProgressCard />
       <section className="top" aria-label={t.secAria}>
         <div className="circle-wrap"><KeyPanel /></div>
         <KeyCard />
       </section>
       <div className="cta">
         <a className="btn primary" href={href({ page: 'lesson', id: LESSONS[s.last ? lastIdx : 0].id })}>
-          {s.last ? `${t.nav.continue}: ${t.lessons[LESSONS[lastIdx].id].title}` : t.nav.start} →
+          {s.last ? `${t.nav.continue}: ${lessonMeta(LESSONS[lastIdx], t, s.lang).title}` : t.nav.start} →
         </a>
         <a className="btn" href={href({ page: 'piano' })}>🎹 {t.nav.piano}</a>
         <a className="btn" href={href({ page: 'practice' })}>✓ {t.nav.practice}</a>
@@ -112,7 +183,7 @@ function Home() {
       <section>
         <h2 className="sec-title">{t.nav.allLessons}</h2>
         <p className="desc">{t.nav.chain}</p>
-        <div className="lgrid">{LESSONS.map((_, i) => <LessonCard key={i} i={i} />)}</div>
+        <LessonGrid />
       </section>
     </div>
   );
@@ -124,18 +195,19 @@ function LessonsPage() {
     <div className="page">
       <h1 className="page-title">{t.nav.lessons}</h1>
       <p className="desc">{t.nav.chain}</p>
-      <div className="lgrid">{LESSONS.map((L, i) => <LessonCard key={i} i={i} active={L.id === s.last} />)}</div>
+      <LessonGrid activeId={s.last} />
     </div>
   );
 }
 
 function LessonPage({ id }: { id: string }) {
-  const { t } = useLab();
+  const { s, t } = useLab();
   const i = Math.max(0, LESSONS.findIndex((l) => l.id === id));
   const L = LESSONS[i];
-  const m = t.lessons[L.id];
+  const m = lessonMeta(L, t, s.lang);
   useEffect(() => {
     setState({ last: L.id });
+    markStudied();
     window.scrollTo({ top: 0 });
     return () => stopAll();
   }, [L.id]);
@@ -144,16 +216,21 @@ function LessonPage({ id }: { id: string }) {
   return (
     <article className={'page lesson tone-' + L.tone} key={L.id}>
       <header className="sec-head">
-        <p className="eyebrow">{t.nav.lessonN(i + 1)} · {LESSONS.length}</p>
+        <p className="eyebrow">{t.nav.lessonN(i + 1)} · {t.tracks[L.track]}</p>
         <h1>{m.title} <span className="sub">· {m.sub}</span></h1>
       </header>
       <div className="lesson-body"><L.Comp /></div>
+      {L.track !== 'ref' && (
+        <button type="button" className={'done-btn' + (s.done.includes(L.id) ? ' on' : '')} aria-pressed={s.done.includes(L.id)} onClick={() => toggleDone(L.id)}>
+          {s.done.includes(L.id) ? t.progress.isDone : t.progress.markDone}
+        </button>
+      )}
       <nav className="pager" aria-label={t.nav.lessons}>
         {prev ? (
-          <a className="pg prev" href={href({ page: 'lesson', id: prev.id })}><small>← {t.nav.prev}</small><span>{t.lessons[prev.id].title}</span></a>
+          <a className="pg prev" href={href({ page: 'lesson', id: prev.id })}><small>← {t.nav.prev}</small><span>{lessonMeta(prev, t, s.lang).title}</span></a>
         ) : <span />}
         {next ? (
-          <a className="pg next" href={href({ page: 'lesson', id: next.id })}><small>{t.nav.next} →</small><span>{t.lessons[next.id].title}</span></a>
+          <a className="pg next" href={href({ page: 'lesson', id: next.id })}><small>{t.nav.next} →</small><span>{lessonMeta(next, t, s.lang).title}</span></a>
         ) : <span />}
       </nav>
     </article>
@@ -201,9 +278,10 @@ export function App() {
   }, [s.lang, s.theme]);
 
   useEffect(() => {
-    const title = route.page === 'lesson' ? t.lessons[route.id as keyof typeof t.lessons]?.title : null;
+    const L = route.page === 'lesson' ? LESSONS.find((l) => l.id === route.id) : undefined;
+    const title = L ? lessonMeta(L, t, s.lang).title : null;
     document.title = title ? `${title} · ${t.appName}` : t.appName;
-  }, [route, t]);
+  }, [route, t, s.lang]);
 
   let content;
   if (route.page === 'lesson') content = <LessonPage id={route.id} />;
@@ -222,16 +300,21 @@ export function App() {
           <a href="#/" aria-current={route.page === 'home' ? 'page' : undefined}>◉ {t.nav.home}</a>
           <a href="#/piano" aria-current={route.page === 'piano' ? 'page' : undefined}>🎹 {t.nav.piano}</a>
           <a href="#/praticar" aria-current={route.page === 'practice' ? 'page' : undefined}>✓ {t.nav.practice}</a>
-          <p className="rowlab">{t.nav.lessons}</p>
-          <ol>
-            {LESSONS.map((L) => (
-              <li key={L.id}>
-                <a href={href({ page: 'lesson', id: L.id })} aria-current={curLesson === L.id ? 'page' : undefined}>
-                  <span className={'dotl tone-' + L.tone} />{t.lessons[L.id].nav}
-                </a>
-              </li>
-            ))}
-          </ol>
+          {TRACKS.map((tr) => (
+            <div key={tr} className="side-track">
+              <p className="rowlab">{t.tracks[tr]}</p>
+              <ol>
+                {LESSONS.map((L, i) => ({ L, i })).filter(({ L }) => L.track === tr).map(({ L, i }) => (
+                  <li key={L.id}>
+                    <a href={href({ page: 'lesson', id: L.id })} aria-current={curLesson === L.id ? 'page' : undefined}>
+                      <span className="side-n">{i + 1}</span>
+                      <span className={'dotl tone-' + L.tone} />{lessonMeta(L, t, s.lang).nav}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
         </nav>
       </aside>
 

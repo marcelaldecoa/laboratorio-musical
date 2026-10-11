@@ -64,6 +64,10 @@ export const pt = {
     gloss: { nav: 'Glossário', title: 'Glossário', sub: 'os termos da aula', teaser: 'Todos os termos, em pt e en.' },
   },
 
+  tracks: {
+    circle: 'O círculo das quintas', physics: 'A física por baixo', scales: 'Escalas e modos', chords: 'Acordes',
+    motion: 'Harmonia em movimento', melody: 'Melodia e forma', piano: 'Piano na prática', rhythm: 'Ritmo', ref: 'Referência',
+  } as Record<string, S>,
   /* jump */
   jumpDesc: 'Os semitons contados da tonalidade anterior até a atual: 7 no sentido horário (quinta justa), 5 no anti-horário (quarta justa).',
   playJump: 'Ouvir o salto', lgStart: 'partida', lgPath: 'semitons contados', lgDest: 'nova tônica', lgChg: 'a nota que muda',
@@ -228,20 +232,55 @@ export const pt = {
   practice: {
     title: 'Praticar', sub: 'exercícios rápidos, sem decorar',
     desc: 'Cada exercício usa a lógica das aulas. Erre à vontade: a explicação aparece logo depois.',
-    modes: { sig: 'Armadura → tonalidade', int: 'Nomeie o intervalo', fn: 'Função do acorde', ear: 'Intervalo de ouvido' } as Record<string, S>,
+    modes: {
+      sig: 'Armadura → tonalidade', int: 'Nomeie o intervalo', fn: 'Função do acorde', ear: 'Intervalo de ouvido',
+      sev: 'Tipo de tétrade', mode: 'Modo de ouvido', dict: 'Ditado de progressão', review: 'Revisão do dia',
+    } as Record<string, S>,
     modeDesc: {
       sig: 'Veja a armadura de clave e descubra a tonalidade maior.',
       int: 'Duas teclas acesas: qual é o intervalo?',
       fn: 'Tônica, subdominante ou dominante?',
       ear: 'Ouça duas notas e reconheça o intervalo.',
+      sev: 'Ouça e veja uma tétrade do campo: 7M, 7, m7 ou m7(♭5)?',
+      mode: 'Uma escala tocada a partir da tônica: qual modo é?',
+      dict: 'Ouça quatro acordes e escolha a progressão.',
+      review: 'As questões que você errou, de volta no dia certo.',
     } as Record<string, S>,
-    question: { sig: 'Qual tonalidade maior tem esta armadura?', int: 'Que intervalo é este?', fn: (c: S, k: S) => `Em ${k}, qual é a função de ${c}?`, ear: 'Que intervalo você ouviu?' },
+    question: {
+      sig: 'Qual tonalidade maior tem esta armadura?', int: 'Que intervalo é este?', fn: (c: S, k: S) => `Em ${k}, qual é a função de ${c}?`, ear: 'Que intervalo você ouviu?',
+      sev: 'Que tipo de tétrade é esta?', mode: 'Que modo você ouviu?', dict: (k: S) => `Em ${k}, qual progressão você ouviu?`,
+    },
+    sevNames: { maj7: '7M · maior com 7ª maior', dom7: '7 · dominante', m7: 'm7 · menor com 7ª menor', hd: 'm7(♭5) · meio-diminuto' } as Record<string, S>,
+    sevWhy: (c: S, notes: S, steps: S) => `${c} = ${notes}: terças de ${steps} semitons.`,
+    modeNames: { ionian: 'Jônio (maior)', dorian: 'Dórico', phrygian: 'Frígio', lydian: 'Lídio', mixolydian: 'Mixolídio', aeolian: 'Eólio (menor natural)' } as Record<string, S>,
+    modeWhy: {
+      ionian: 'Jônio é a própria escala maior: nada alterado.',
+      dorian: 'Dórico: menor com a 6ª maior. A 6ª clara é a cor dele.',
+      phrygian: 'Frígio: menor com a 2ª menor, meio tom acima da tônica logo no começo.',
+      lydian: 'Lídio: maior com a 4ª aumentada, a nota que “flutua”.',
+      mixolydian: 'Mixolídio: maior com a 7ª menor, sem sensível.',
+      aeolian: 'Eólio é a menor natural: 3ª, 6ª e 7ª menores.',
+    } as Record<string, S>,
+    dictWhy: (p: S, f: S) => `${p}: ${f}.`,
+    reviewEmpty: 'Nada para revisar hoje. Os erros dos exercícios voltam aqui no dia certo: amanhã, em 3 dias, em uma semana…',
+    reviewDue: (n: number) => (n === 1 ? '1 questão para revisar' : `${n} questões para revisar`),
+    reviewDone: 'Revisão de hoje concluída!',
+    play: 'Ouvir',
     score: 'Acertos', streak: 'Sequência', best: 'Recorde', next: 'Próxima →', replay: 'Ouvir de novo', back: '← Exercícios',
     right: 'Certo!', wrong: 'Quase.',
     whySig: (sig: S, k: S) => `${sig} → ${k}.`,
     whyInt: (a: S, b: S, s: number, n: S) => `${a}–${b}: ${s} semitons = ${n}.`,
     whyFn: (c: S, f: S, notes: S) => `${c} (${notes}) tem função de ${f}.`,
   },
+  progress: {
+    title: 'Seu progresso', streak: (n: number) => (n === 1 ? '1 dia seguido' : `${n} dias seguidos`), noStreak: 'Comece hoje a sua sequência',
+    lessons: (a: number, b: number) => `${a} de ${b} aulas concluídas`, review: (n: number) => (n ? `${n} para revisar hoje` : 'revisão em dia'),
+    markDone: 'Marcar aula como concluída', isDone: 'Aula concluída ✓', week: 'Últimos 7 dias',
+  },
+  stepper: {
+    mode: 'Passo a passo', modeHint: 'Mostra as explicações uma de cada vez.', next: 'Próximo passo →', all: 'Mostrar tudo', of: (a: number, b: number) => `passo ${a} de ${b}`,
+  },
+  rec: { record: '● Gravar', stop: '■ Parar', play: '▶ Ouvir gravação', clear: 'Apagar', recording: 'gravando…', notes: (n: number) => `${n} notas gravadas` },
 };
 
 export type Dict = typeof pt;

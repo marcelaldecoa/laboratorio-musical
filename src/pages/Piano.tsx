@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { NoteEvent } from '../audio/audio';
 import { playNotes, unlock } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, roleMark } from '../components/layout';
@@ -19,6 +20,17 @@ export function Piano() {
   const [show, setShow] = useState(true);
   const [last, setLast] = useState<string>('');
   const [midi, setMidi] = useState<'off' | 'on' | 'none'>('off');
+  const [recording, setRecording] = useState(false);
+  const [take, setTake] = useState<NoteEvent[]>([]);
+  const recStart = useRef(0);
+  /** plays and, while recording, remembers the notes with their time */
+  const sound = (evs: NoteEvent[]) => {
+    playNotes(evs, 'piano');
+    if (recording) {
+      const at = (performance.now() - recStart.current) / 1000;
+      setTake((tk) => [...tk, ...evs.map((e) => ({ ...e, t: e.t + at }))]);
+    }
+  };
 
   const from = oct === 3 ? -12 : 0;
   const to = from + oct * 12;
@@ -45,11 +57,11 @@ export function Piano() {
         while (mod(x, 12) !== pc) x++;
         notes.push(x);
       }
-      playNotes([{ s: s - 12, t: 0, d: 1.4, v: 0.45 }, ...notes.map((n) => ({ s: n, t: 0, d: 1.4, v: 0.55 }))], 'piano');
+      sound([{ s: s - 12, t: 0, d: 1.4, v: 0.45 }, ...notes.map((n) => ({ s: n, t: 0, d: 1.4, v: 0.55 }))]);
       const c = chordInfo(sc, d);
       setLast(`${nm(c.root)}${c.suffix} · ${c.roman} · ${FUNCTION_OF[d]} (${t.fnName[FUNCTION_OF[d]]}) · ${triad(sc, d).map(nm).join(' ')}`);
     } else {
-      playNotes([{ s, t: 0, d: 1.2 }], 'piano');
+      sound([{ s, t: 0, d: 1.2 }]);
       setLast(d >= 0 ? `${nm(sc[d])} · ${p.degree(d + 1)} · ${t.degreeNames[d]}` : `${p.outside}`);
     }
   };
@@ -90,6 +102,16 @@ export function Piano() {
       <Board className="piano-board">
         <Keyboard lay={lay} marks={marks} channel="piano" onKey={onKey} minWidth={lay.whites.length * 38} maxScale={4} className="big" />
       </Board>
+      <div className="rec-bar">
+        <button type="button" className={'rec' + (recording ? ' on' : '')} onClick={() => {
+          unlock();
+          if (recording) setRecording(false);
+          else { setTake([]); recStart.current = performance.now(); setRecording(true); }
+        }}>{recording ? t.rec.stop : t.rec.record}</button>
+        <button type="button" className="play" disabled={!take.length || recording} onClick={() => playNotes(take, 'piano')}>{t.rec.play}</button>
+        <button type="button" className="ghost" disabled={!take.length || recording} onClick={() => setTake([])}>{t.rec.clear}</button>
+        <span className="hint">{recording ? t.rec.recording : take.length ? t.rec.notes(take.length) : ''}</span>
+      </div>
       {hasMidi ? (
         <p className="hint">
           <button type="button" onClick={() => { unlock(); setMidi('on'); }} disabled={midi === 'on'}>

@@ -123,10 +123,10 @@ export function playNotes(events: NoteEvent[], channel?: string) {
 }
 
 /** Play raw frequencies with a clean synth (used for tuning demos). */
-export function playHz(events: { hz: number; t: number; d: number }[]) {
+export function playHz(events: { hz: number; t: number; d: number; v?: number }[]) {
   unlock();
   const now = Tone.now() + 0.05;
-  for (const e of events) pure?.triggerAttackRelease(e.hz, e.d, now + e.t, 0.6);
+  for (const e of events) pure?.triggerAttackRelease(e.hz, e.d, now + e.t, e.v ?? 0.6);
 }
 
 export function stopAll() {

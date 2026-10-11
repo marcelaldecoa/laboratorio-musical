@@ -1,4 +1,6 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { DICTS } from '../i18n';
+import { useStore } from '../state/store';
 
 /** Renders trusted dictionary strings that carry simple markup (<b>, <span class="pill">). */
 export function Html({ html, as: Tag = 'span', className }: { html: string; as?: 'span' | 'p' | 'li' | 'div'; className?: string }) {
@@ -36,17 +38,36 @@ export interface NoteItem {
   html: string;
 }
 
+/** The "why" list. In step-by-step mode it reveals one explanation at a time. */
 export function Notes({ items }: { items: NoteItem[] }) {
+  const stepMode = useStore((st) => st.stepMode);
+  const lang = useStore((st) => st.lang);
+  const [n, setN] = useState(1);
+  const key = items.map((it) => it.html.slice(0, 24)).join('|');
+  useEffect(() => setN(1), [key]);
+  const T = DICTS[lang].stepper;
+  const stepping = stepMode && n < items.length;
+  const shown = stepping ? items.slice(0, n) : items;
   return (
-    <ul className="notes">
-      {items.map((it, i) => (
-        <li key={i}>
-          {it.color && <i className="sw" style={{ background: it.color }} />}
-          {it.dash && <i className="sw" style={{ background: 'transparent', border: `2px dashed ${it.dash}` }} />}
-          <Html html={it.html} />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className={'notes' + (stepMode ? ' stepping' : '')}>
+        {shown.map((it, i) => (
+          <li key={i} className={stepMode && i === n - 1 && n > 1 ? 'fresh' : undefined}>
+            {stepMode && <span className="step-n">{i + 1}</span>}
+            {it.color && <i className="sw" style={{ background: it.color }} />}
+            {it.dash && <i className="sw" style={{ background: 'transparent', border: `2px dashed ${it.dash}` }} />}
+            <Html html={it.html} />
+          </li>
+        ))}
+      </ul>
+      {stepping && (
+        <div className="step-bar">
+          <span className="step-of">{T.of(n, items.length)}</span>
+          <button type="button" className="ghost" onClick={() => setN(items.length)}>{T.all}</button>
+          <button type="button" className="primary" onClick={() => setN(n + 1)}>{T.next}</button>
+        </div>
+      )}
+    </>
   );
 }
 
