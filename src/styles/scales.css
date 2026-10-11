@@ -1,0 +1,16 @@
+/* "scales" track (lessons minor, minorvar, modes, penta, sym) */
+.scales-formula{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin:6px 0}
+.scales-frow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-width:0}
+.scales-flab{font:500 .85rem/1.2 var(--f-body);color:var(--fg);min-width:7.5em}
+.scales-ftoks{display:flex;flex-wrap:wrap;gap:4px}
+.scales-tok{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 4px;border-radius:7px;
+  font:500 .85rem var(--f-mono);background:var(--accent-soft);color:var(--accent-ink);border:2px solid transparent}
+.scales-tok.h{background:var(--change-soft);color:var(--change-ink)}
+.scales-tok.mv{border:2px dashed var(--fg)}
+.scales-frow .hint{flex-basis:100%}
+.scales-circle{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+.scales-circle .node{cursor:pointer}
+.scales-circle .node:focus-visible circle{stroke:var(--fg);stroke-width:2.5}
+.scales-two{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:860px){.scales-two{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.chips .chip.scales-mode{min-width:92px}
