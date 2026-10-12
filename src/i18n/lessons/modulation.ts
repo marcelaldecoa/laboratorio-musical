@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -56,8 +57,22 @@ const pt = {
     `<b>As menores vêm junto:</b> uma tonalidade menor usa a mesma janela da sua relativa maior. ${vi} tem as mesmas notas de ${key}, e as relativas de ${v} e ${iv} também ficam a 1 passo. São 5 tonalidades vizinhas: V, IV, vi, ii e iii.`,
     `<b>Por que 4 pivôs:</b> se uma nota muda, todo acorde que a contém deixa de servir. Cada nota aparece em 3 das 7 tríades, então sobram 7 − 3 = 4 acordes comuns. Na relativa nada muda, e os 7 acordes são comuns.`,
     `<b>O pivô não basta:</b> ele é ambíguo de propósito. Quem confirma a nova tonalidade é a nota nova (a sensível do destino), que chega no V7. É a mesma ideia da dominante secundária, só que agora a música fica lá.`,
-    `<b>Na história:</b> na forma sonata clássica (Haydn, Mozart, Beethoven) a exposição quase sempre modula para a dominante, ou para a relativa maior quando a peça é menor. Essa viagem de ida e volta é o que dá à forma a sensação de partir e voltar para casa.`,
+    `<b>Na história:</b> na forma sonata clássica (Haydn, Mozart, Beethoven), a exposição em geral modula para a dominante, ou para a relativa maior quando a peça é menor. Essa viagem de ida e volta dá à forma a sensação de sair de casa e voltar.`,
   ],
+  predictQ: (from: S, to: S) =>
+    `De ${from} para ${to}: só um destes acordes de ${from} tem as três notas também em ${to}, e por isso pode servir de pivô. Qual?`,
+  predictA: (name: S, a: S, b: S, out: S) =>
+    `${name}: as três notas estão nas duas escalas. Os outros três contêm ${out}, a nota que sai na nova tonalidade. ${name} é ${a} na antiga e ${b} na nova, então já prepara o destino.`,
+  transfer: (k: S) => `Em ${k}, ache um acorde pivô para modular para a dominante. Que grau ele é em cada tonalidade?`,
+  recap: {
+    oneLine: 'O ouvido não estranha porque a ponte é um acorde que pertence às duas tonalidades (o pivô); logo depois, o V7 da nova traz a nota nova e confirma a mudança.',
+    confusions: [
+      '<b>Modulação × tonicização:</b> a dominante secundária só visita o acorde e volta; na modulação a música fica na nova tônica e faz cadência nela.',
+      '<b>Pivô × nota comum:</b> o pivô é um acorde inteiro que pertence às duas tonalidades; nota comum é uma só nota repetida entre dois acordes.',
+      '<b>Relativa × vizinha:</b> a relativa tem exatamente as mesmas 7 notas; as outras vizinhas (V, IV, ii, iii) diferem em uma nota.',
+    ],
+    show: 'Em Dó maior: toque C, Am, D7 e G. Depois pare em Am: até ali ainda soa como Dó. É o D7, com Fá♯, que leva a casa para Sol.',
+  } satisfies RecapText,
 };
 
 const en: typeof pt = {
@@ -114,8 +129,22 @@ const en: typeof pt = {
     `<b>The minor keys come along:</b> a minor key uses the same window as its relative major. ${vi} has the same notes as ${key}, and the relatives of ${v} and ${iv} are also 1 step away. That makes 5 neighboring keys: V, IV, vi, ii and iii.`,
     `<b>Why 4 pivots:</b> when one note changes, every chord containing it stops working. Each note belongs to 3 of the 7 triads, so 7 − 3 = 4 chords are shared. For the relative key nothing changes, and all 7 chords are shared.`,
     `<b>The pivot is not enough:</b> it is ambiguous on purpose. What confirms the new key is the new note (the destination’s leading tone), which arrives with the V7. Same idea as the secondary dominant, except now the music stays.`,
-    `<b>In history:</b> in Classical sonata form (Haydn, Mozart, Beethoven) the exposition almost always modulates to the dominant, or to the relative major when the piece is in minor. That round trip is what gives the form its sense of leaving home and coming back.`,
+    `<b>In history:</b> in Classical sonata form (Haydn, Mozart, Beethoven), the exposition usually modulates to the dominant, or to the relative major when the piece is in minor. That round trip gives the form its sense of leaving home and coming back.`,
   ],
+  predictQ: (from: S, to: S) =>
+    `From ${from} to ${to}: only one of these chords of ${from} has all three notes in ${to} too, so it can be the pivot. Which one?`,
+  predictA: (name: S, a: S, b: S, out: S) =>
+    `${name}: all three notes are in both scales. The other three contain ${out}, the note that leaves in the new key. ${name} is ${a} in the old key and ${b} in the new one, so it already prepares the destination.`,
+  transfer: (k: S) => `In ${k}, find a pivot chord to modulate to the dominant. Which degree is it in each key?`,
+  recap: {
+    oneLine: 'The ear notices no bump because the bridge is a chord that belongs to both keys (the pivot); right after it, the new key’s V7 brings the new note and confirms the change.',
+    confusions: [
+      '<b>Modulation vs tonicization:</b> a secondary dominant only visits a chord and comes back; in a modulation the music stays on the new tonic and cadences there.',
+      '<b>Pivot chord vs common tone:</b> a pivot is a whole chord that belongs to both keys; a common tone is a single note repeated between two chords.',
+      '<b>Relative vs neighbor:</b> the relative key has exactly the same 7 notes; the other neighbors (V, IV, ii, iii) differ by one note.',
+    ],
+    show: 'In C major: play C, Am, D7 and G. Then stop on Am: up to there it still sounds like C. It is D7, with F♯, that moves home to G.',
+  },
 };
 
 export const text = {

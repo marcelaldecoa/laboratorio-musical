@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { playNotes } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
-import { type Mark, layout } from '../components/layout';
+import { type Mark, layout, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { MotionFifthsLine, type FifthsCell } from '../components/MotionFifthsLine';
 import { MotionProgression, type ProgChord, type ProgTone } from '../components/MotionProgression';
 import { Bar, Board, Html, Legend, Notes, PlayButton } from '../components/ui';
@@ -21,7 +22,7 @@ const PROGS: { id: string; seq: (number | BorrowId)[] }[] = [
 ];
 
 export function Borrow() {
-  const { nm, cur, sc } = useLab();
+  const { s, nm, keyName, cur, sc } = useLab();
   const t = useLessonText(text);
   const [id, setId] = useState<BorrowId>('iv');
   const [pi, setPi] = useState(0);
@@ -79,6 +80,16 @@ export function Borrow() {
     const bc = borrowedChord(cur, x);
     return { notes: bc.notes, roman: bc.roman, name: sym(bc.notes), tone: 'B', hot: bc.changed };
   });
+  /* predict: which note of IV drops in iv? */
+  const ivChord = diatonicTriad(sc, 3);
+  const ivV = closeVoicing(ivChord.map(pcOf), null, 0, 23, 9);
+  const ivMarks: Record<number, Mark> = {};
+  let ivAnswer = 0;
+  ivV.forEach((x) => {
+    const k = ivChord.findIndex((n) => ((pcOf(n) - x) % 12 + 12) % 12 === 0);
+    ivMarks[x] = roleMark(x, 'sub', ['1', '3', '5'][k], nm(ivChord[k]));
+    if (k === 1) ivAnswer = x;
+  });
   const labels = { play: t.play, stop: t.stop, prev: t.prev, next: t.next, now: t.now };
 
   const chip = (ns: Note[], roman: string, cls: string, pressed: boolean | undefined, on: () => void, key: string) => (
@@ -89,7 +100,10 @@ export function Borrow() {
 
   return (
     <>
-      <p className="desc">{t.desc}</p>
+      <Html as="p" className="desc" html={t.desc} />
+      <Predict mode="key" resetOn={`${s.k}${s.enh}`} lay={layout(0, 23)} marks={ivMarks} answer={[ivAnswer]} anyOctave
+        prompt={t.predictQ(keyName(cur), sym(ivChord), ivChord.map(nm).join(' '))}
+        reveal={t.predictA(nm(sc[5]), nm(minor[5]))} />
       <h3 className="sub-h">{t.stepsTitle}</h3>
       <ol className="recipe">
         <Html as="li" html={t.step1(majName, minName)} />
@@ -157,7 +171,9 @@ export function Borrow() {
         ]} />
 
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic(majName, minName).map((html) => ({ html }))} />
+      <Notes items={t.logic(majName, minName).map((html) => ({ html }))} more={[4]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { playNotes } from '../audio/audio';
 import { Bracket, Keyboard } from '../components/Keyboard';
 import { type Mark, layout, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { MotionProgression, type ProgChord } from '../components/MotionProgression';
 import { Bar, Board, Html, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { type Note, chordInfo, displayed, fifthIndex, mod, pcOf } from '../theory';
@@ -82,12 +83,21 @@ export function TritSub() {
       : { notes: sub, roman: '♭II7', name: subName, tone: 'D', hot: [false, true, false, true] },
     { notes: tonicChord, roman: 'I', name: sym(tonicChord), tone: 'T' },
   ];
+  /* predict: where is the root of the other dominant with the same tritone? */
+  const vMarks: Record<number, Mark> = {};
+  vv.forEach((x) => {
+    const k = v.findIndex((n) => mod(pcOf(n) - x, 12) === 0);
+    vMarks[x] = roleMark(x, k === 1 || k === 3 ? 'lt' : 'dom', ['1', '3', '5', '7'][k], nm(v[k]));
+  });
   const labels = { play: t.play, stop: t.stop, prev: t.prev, next: t.next, now: t.now };
   const ger = tritoneSub(sc[4]);
 
   return (
     <>
       <p className="desc">{t.desc}</p>
+      <Predict mode="key" resetOn={`${s.k}${s.enh}`} lay={layout(0, 23)} marks={vMarks} answer={[mod(pcOf(sub[0]), 12)]} anyOctave
+        prompt={t.predictQ(vName, nm(v[1]), nm(v[3]))}
+        reveal={t.predictA(practical ? `${nm(sub[0])} (= ${nm(practical)})` : nm(sub[0]), nm(v[0]), nm(cur))} />
       <h3 className="sub-h">{t.stepsTitle}</h3>
       <ol className="recipe">
         <Html as="li" html={t.step1(vName, v.map(nm).join(' '), nm(v[1]), nm(v[3]))} />
@@ -162,7 +172,9 @@ export function TritSub() {
         ]} />
 
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic(vName, subName, sym(ger.sub), sym(diatonicTriad(sc, 4)), nm(v[1]), nm(sub[3])).map((html) => ({ html }))} />
+      <Notes items={t.logic(vName, subName, sym(ger.sub), sym(diatonicTriad(sc, 4)), nm(v[1]), nm(sub[3])).map((html) => ({ html }))} more={[3]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -59,8 +60,22 @@ const pt = {
     `<b>V/V é o vizinho do círculo:</b> em ${key}, o ${vv} traz ${sharp4}, o ${four} que sobe meio tom. É exatamente a nota que muda quando você dá um passo no sentido horário. A dominante secundária é uma espiada na tonalidade vizinha, sem se mudar para ela.`,
     `<b>Por que não vii°:</b> o acorde diminuto não tem quinta justa, então não soa como casa. Não existe tonalidade “de vii°” para pegar um V7 emprestado. E V/I seria o próprio V7.`,
     `<b>Tonicização ou modulação?</b> Quando o alvo aparece e a música volta logo para a tônica, é uma tonicização (uma visita). Se a música fica na nova tonalidade e faz cadência nela, é uma modulação (uma mudança). Esse é o assunto da próxima aula.`,
-    `<b>Na história:</b> o nome alemão <i>Doppeldominante</i> (“dupla dominante”) vem da teoria das funções do fim do século XIX, mas o som é muito mais antigo: os corais de Bach estão cheios de V/V e V/vi. Na música popular aparece em sequências como I – VI7 – ii – V, em que o VI7 é o V/ii.`,
+    `<b>Nomes:</b> na teoria das funções alemã, o V/V se chama <i>Doppeldominante</i> (“dupla dominante”). O som é bem mais antigo que o nome: os corais de Bach usam V/V e V/vi com frequência. Na música popular aparece em sequências como I – VI7 – ii – V (em Dó: C – A7 – Dm – G7), em que o VI7 é o V/ii.`,
   ],
+  predictQ: (key: S, v: S, notes: S, x: S) =>
+    `Em ${key}, o V/V é <b>${v}</b> = ${notes}: o V7 de ${x}. Uma dessas quatro notas não pertence a ${key}. Qual? Toque-a.`,
+  predictA: (key: S, lt: S, x: S) =>
+    `${lt} está fora de ${key}. É a terça do acorde e fica meio tom abaixo de ${x}: é a sensível emprestada, que sobe para ${x}. As outras três notas já são da escala.`,
+  transfer: (k: S) => `Em ${k}, qual é o V/V? Qual nota dele fica fora da tonalidade, e para onde ela sobe?`,
+  recap: {
+    oneLine: 'Para fazer um acorde soar como “casa” por um instante, toque antes dele o V7 da tonalidade dele. A nota de fora é uma sensível emprestada, que sobe meio tom até ele.',
+    confusions: [
+      '<b>V/V × V:</b> em Dó maior, o V é Sol (G7) e o V/V é Ré (D7). O V/V vem antes do V e prepara a chegada nele.',
+      '<b>Tonicização × modulação:</b> na tonicização o alvo soa como tônica por um instante e a música volta logo; na modulação ela fica na nova tonalidade e faz cadência lá.',
+      '<b>V/IV × I:</b> em Dó, C7 tem a mesma fundamental da tônica, mas a sétima Si♭ (fora da escala) faz o acorde apontar para Fá.',
+    ],
+    show: 'Em Dó maior: toque D7 (Ré Fá♯ Lá Dó) e depois G. Aponte o Fá♯ subindo para Sol, igual ao Si que sobe para Dó em G7 → C.',
+  } satisfies RecapText,
 };
 
 const en: typeof pt = {
@@ -120,8 +135,22 @@ const en: typeof pt = {
     `<b>V/V is the circle neighbor:</b> in ${key}, ${vv} brings ${sharp4}, the ${four} raised a half step. That is exactly the note that changes when you take one clockwise step. A secondary dominant peeks at the neighboring key without moving there.`,
     `<b>Why not vii°:</b> the diminished chord has no perfect fifth, so it does not sound like home. There is no “vii° key” to borrow a V7 from. And V/I would just be the V7 itself.`,
     `<b>Tonicization or modulation?</b> When the target arrives and the music soon returns to the tonic, it is a tonicization (a visit). If the music stays in the new key and cadences there, it is a modulation (a move). That is the next lesson.`,
-    `<b>In history:</b> the German name <i>Doppeldominante</i> (“double dominant”) comes from late 19th-century function theory, but the sound is much older: Bach’s chorales are full of V/V and V/vi. In popular music it shows up in sequences like I – VI7 – ii – V, where VI7 is V/ii.`,
+    `<b>Names:</b> in German function theory, V/V is called <i>Doppeldominante</i> (“double dominant”). The sound is much older than the name: Bach’s chorales use V/V and V/vi often. In popular music it shows up in sequences like I – VI7 – ii – V (in C: C – A7 – Dm – G7), where VI7 is V/ii.`,
   ],
+  predictQ: (key: S, v: S, notes: S, x: S) =>
+    `In ${key}, V/V is <b>${v}</b> = ${notes}: the V7 of ${x}. One of these four notes is not in ${key}. Which one? Tap it.`,
+  predictA: (key: S, lt: S, x: S) =>
+    `${lt} is outside ${key}. It is the chord’s third and sits a half step below ${x}: the borrowed leading tone, which rises to ${x}. The other three notes are already in the scale.`,
+  transfer: (k: S) => `In ${k}, what is V/V? Which of its notes falls outside the key, and where does it rise to?`,
+  recap: {
+    oneLine: 'To make a chord sound like “home” for a moment, play the V7 of its key right before it. The outside note is a borrowed leading tone that rises a half step into it.',
+    confusions: [
+      '<b>V/V vs V:</b> in C major, V is G (G7) and V/V is D (D7). V/V comes before V and prepares the arrival on it.',
+      '<b>Tonicization vs modulation:</b> in a tonicization the target sounds like a tonic for a moment and the music soon returns; in a modulation it stays in the new key and cadences there.',
+      '<b>V/IV vs I:</b> in C, C7 has the same root as the tonic, but its seventh B♭ (outside the scale) makes the chord point to F.',
+    ],
+    show: 'In C major: play D7 (D F♯ A C), then G. Point to F♯ rising to G, just like B rises to C in G7 → C.',
+  },
 };
 
 export const text = {

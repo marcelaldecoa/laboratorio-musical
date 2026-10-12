@@ -4,10 +4,11 @@ import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout } from '../components/layout';
 import { MotionFifthsLine, type FifthsCell } from '../components/MotionFifthsLine';
 import { MotionProgression, type ProgChord, type ProgTone } from '../components/MotionProgression';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Html, Legend, Notes } from '../components/ui';
 import { FUNCTION_OF, type Note, fifthIndex, fromFifthIndex, pcOf } from '../theory';
 import {
-  CLOSE_RELS, type CloseRel, type Key, SUFFIX, closeKey, closeVoicing, inScale, keyScale, modulation, qualityOf, windowOf,
+  CLOSE_RELS, type CloseRel, type Key, SUFFIX, closeKey, closeVoicing, diatonicTriad, inScale, keyScale, modulation, qualityOf, windowOf,
 } from '../theory/harmony';
 import { text } from '../i18n/lessons/modulation';
 import { useLessonText } from '../i18n/lessonText';
@@ -21,7 +22,7 @@ const QCOL: Record<string, [string, string]> = {
 };
 
 export function Modulation() {
-  const { nm, cur } = useLab();
+  const { s, nm, cur } = useLab();
   const t = useLessonText(text);
   const [rel, setRel] = useState<CloseRel>('V');
   const [pick, setPick] = useState<number | null>(null);
@@ -86,6 +87,13 @@ export function Modulation() {
     t.step4(sym(pivot.notes), pivot.romanA, pivot.romanB),
     t.step5(sym(cV), nm(lt), toName),
   ];
+  /* predict: from the current key to its dominant, which chord is a pivot? */
+  const pm = modulation(cur, 'V');
+  const pmA = keyScale(pm.from);
+  const pmB = keyScale(pm.to);
+  const pmDegrees = [0, 1, 2, 3, 4, 5, 6].filter((d) => d === pm.pivot.degA || !pm.pivots.some((p) => p.degA === d));
+  const pmOptions = pmDegrees.map((d) => sym(diatonicTriad(pmA, d)));
+  const pmOut = pmA.find((n) => !inScale(pmB, n));
   const labels = { play: t.play, stop: t.stop, prev: t.prev, next: t.next, now: t.now };
   const v = kn(closeKey(cur, 'V'));
   const iv = kn(closeKey(cur, 'IV'));
@@ -94,6 +102,9 @@ export function Modulation() {
   return (
     <>
       <p className="desc">{t.desc}</p>
+      <Predict mode="choice" resetOn={`${s.k}${s.enh}`} options={pmOptions} answer={sym(pm.pivot.notes)}
+        prompt={t.predictQ(kn(pm.from), kn(pm.to))}
+        reveal={t.predictA(sym(pm.pivot.notes), pm.pivot.romanA, pm.pivot.romanB, pmOut ? nm(pmOut) : '')} />
       <p className="rowlab">{t.targetLab}</p>
       <div className="chips" role="group">
         {CLOSE_RELS.map((r) => {
@@ -156,7 +167,9 @@ export function Modulation() {
         ]} />
 
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic(kn(m.from), v, iv, vi).map((html) => ({ html }))} />
+      <Notes items={t.logic(kn(m.from), v, iv, vi).map((html) => ({ html }))} more={[4]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

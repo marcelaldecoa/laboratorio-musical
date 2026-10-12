@@ -41,7 +41,7 @@ export const HOOKS: Record<string, { pt: string; en: string }> = {
   symbols: { pt: 'Como ler “Bm7(♭5)” e saber exatamente quais teclas tocar, sem decorar nada?', en: 'How do you read “Bm7♭5” and know exactly which keys to play, without memorizing anything?' },
   secdom: { pt: 'Como fazer qualquer acorde soar, por um instante, como se fosse a tônica?', en: 'How can you make any chord sound, for a moment, like the tonic?' },
   modulation: { pt: 'Como mudar de tonalidade no meio da música sem o ouvido estranhar?', en: 'How do you change key in the middle of a piece without the ear noticing a bump?' },
-  borrow: { pt: 'Por que trocar um único acorde pela sua versão menor dá aquela sombra tão bonita?', en: 'Why does swapping a single chord for its minor version cast such a beautiful shadow?' },
+  borrow: { pt: 'Por que trocar uma única nota de um acorde, vinda da menor com a mesma tônica, dá aquela sombra tão bonita?', en: 'Why does changing a single note of a chord, taken from the minor key on the same tonic, cast such a beautiful shadow?' },
   tritsub: { pt: 'Como dois acordes em lados opostos do círculo podem fazer o mesmo trabalho?', en: 'How can two chords on opposite sides of the circle do the same job?' },
   reading: { pt: 'Por que a pauta do piano tem duas partes, e onde está a linha que falta entre elas?', en: 'Why does the piano staff have two parts, and where is the missing line between them?' },
   fingering: { pt: 'Por que o polegar passa por baixo exatamente onde passa?', en: 'Why does the thumb pass under exactly where it does?' },
