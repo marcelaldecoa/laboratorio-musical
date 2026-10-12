@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { later, playHz, playNotes } from '../audio/audio';
 import { Bracket, Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
 import { text } from '../i18n/lessons/harmonics';
 import { useLessonText } from '../i18n/lessonText';
@@ -53,7 +54,8 @@ function StringModes({ labels, aria, onPick }: { labels: string[]; aria: string;
 }
 
 export function Harmonics() {
-  const { nm, cur } = useLab();
+  const { s, nm, cur } = useLab();
+  const reset = s.k + s.enh + s.lang + s.nt;
   const t = useLessonText(text);
   const [view, setView] = useState<View>('all');
   const [sel, setSel] = useState<number | null>(null);
@@ -154,6 +156,9 @@ export function Harmonics() {
       </Board>
 
       <h3 className="sub-h">{t.seriesTitle}</h3>
+      <Predict mode="key" prompt={t.pH3(fName)} lay={rangeAround(F, F + 24)} answer={[F + 19]} anyOctave resetOn={reset}
+        marks={{ [F]: roleMark(F, 'tonic', 1, nm(series[0].note)), [F + 12]: roleMark(F + 12, 'tonic', 2, nm(series[1].note)) }}
+        reveal={t.pH3Rev(nm(series[2].note))} />
       <p className="hint">{t.seriesHint(fName)}</p>
       <p className="rowlab">{t.viewPick}</p>
       <div className="chips" role="group" aria-label={t.viewPick}>
@@ -231,6 +236,7 @@ export function Harmonics() {
       <div className="row mt"><PlayButton label={t.buildPlay(build)} seconds={2.6} onPlay={playBuild} /></div>
 
       <h3 className="sub-h">{t.consTitle}</h3>
+      <Predict mode="choice" prompt={t.pCons} options={t.pConsOpts} answer={t.pConsOpts[1]} reveal={t.pConsRev} resetOn={s.lang} />
       <p className="hint">{t.consHint(fName)}</p>
       <div className="census">
         {JUST_INTERVALS.map((iv) => {
@@ -253,7 +259,9 @@ export function Harmonics() {
       </div>
 
       <h3 className="sub-h">{t.whyTitle}</h3>
-      <Notes items={t.why.map((html) => ({ html }))} />
+      <Notes items={t.why.map((html) => ({ html }))} more={t.more} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

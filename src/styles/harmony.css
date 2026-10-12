@@ -1,0 +1,13 @@
+/* Harmony track (campo harmônico, progressões, transposição). */
+.harmony-steps{list-style:none;counter-reset:hs;padding:0;margin:10px 0 14px;display:flex;flex-direction:column;gap:8px;max-width:70ch}
+.harmony-steps li{counter-increment:hs;position:relative;padding-left:34px;font-size:.97rem;color:var(--fg);min-height:24px}
+.harmony-steps li::before{content:counter(hs);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent-ink);font:500 .78rem var(--f-mono)}
+.harmony-steps li b{font-weight:600}
+.harmony-table{width:100%;border-collapse:collapse;font:500 .95rem var(--f-mono);min-width:280px}
+.harmony-table th,.harmony-table td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--line);color:var(--fg)}
+.harmony-table th{font:500 .74rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.harmony-table th[scope=row]{text-align:left;max-width:96px;line-height:1.25}
+.harmony-table td.harmony-acc{background:var(--change-soft);color:var(--change-ink);border-radius:6px}
+.harmony-table td.harmony-deg{color:var(--accent-ink);background:var(--accent-soft)}
+.harmony-kb-title{font:500 .88rem var(--f-mono);color:var(--fg);margin:12px 0 2px}

@@ -92,7 +92,8 @@ export function useStore<T = LabState>(sel?: (s: LabState) => T): T {
   return useSyncExternalStore(
     subscribe,
     () => (sel ? sel(state) : (state as unknown as T)),
-    () => (sel ? sel(defaults) : (defaults as unknown as T)),
+    // server rendering (tests, prerender) reads the live state too, so smoke tests see every key
+    () => (sel ? sel(state) : (state as unknown as T)),
   );
 }
 

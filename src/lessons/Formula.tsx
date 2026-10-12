@@ -3,6 +3,7 @@ import { playNotes, seq } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, rangeAround, roleMark, stepsFor } from '../components/layout';
 import { KeySigStaff } from '../components/Staff';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
 import { text } from '../i18n/lessons/formula';
 import { useLessonText } from '../i18n/lessonText';
@@ -45,12 +46,15 @@ export function Formula() {
   }
   const altered = sc.filter((q) => q.acc !== 0);
   const sig = keySignature(cur);
+  const cn = [0, 1, 2, 3, 4, 5, 6].map((l) => nm(note(l)));
+  const opts = x.pStepsOpts(cn);
 
   return (
     <>
       <p className="desc">{x.desc}</p>
 
       <h3 className="sub-h">{x.s1}</h3>
+      <Predict mode="choice" prompt={x.pSteps} options={opts} answer={opts[1]} reveal={x.pStepsRev(cn)} resetOn={s.lang + s.nt} />
       <p className="desc">{x.s1d}</p>
       <Bar now={cScale.map(nm).join(' ')}>
         <PlayButton label={x.play} seconds={3} onPlay={() => playNotes(seq(c), 'formula1')} />
@@ -60,6 +64,9 @@ export function Formula() {
 
       <h3 className="sub-h">{x.s2}</h3>
       <p className="desc">{x.s2d}</p>
+      <Predict mode="key" prompt={x.p7(keyName(cur), nm(sc[0]))} lay={lay} answer={[base + 11]} resetOn={s.k + s.enh}
+        marks={{ [base]: roleMark(base, 'tonic', 1, nm(sc[0])), [base + 12]: roleMark(base + 12, 'tonic', 8, nm(sc[0])) }}
+        reveal={x.p7Rev(nm(sc[6]), nm(note(sc[6].letter)), nm(sc[0]))} />
       <p className="rowlab">{x.start}</p>
       <div className="chips" role="group" aria-label={x.start}>
         {SLOTS.map((k) => (
@@ -103,7 +110,9 @@ export function Formula() {
       <p className="readout">{x.sigLabel(keyName(cur))} · {sig.list.length ? x.sigList(sig.list.map(nm).join(' ')) : x.sigNone}</p>
 
       <h3 className="sub-h">{x.why}</h3>
-      <Notes items={x.notes.map((html) => ({ html }))} />
+      <Notes items={x.notes.map((html) => ({ html }))} more={x.more} />
+      <Transfer question={x.transfer} />
+      <Recap {...x.recap} />
     </>
   );
 }

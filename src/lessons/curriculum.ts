@@ -18,11 +18,13 @@ export const CURRICULUM: Step[] = [
   // 1. Fundamentals: the keyboard, the formula, how to measure distances, the names of the degrees
   { id: 'keys', track: 'basics', needs: [], terms: ['Half step', 'Whole step', 'Accidental', 'Sharp', 'Flat', 'Natural', 'Enharmonic', 'Octave', 'Pitch class'] },
   { id: 'formula', track: 'basics', needs: ['keys'], terms: ['Major scale', 'Scale degree', 'Tonic', 'Key', 'Key signature', 'Diatonic'] },
-  { id: 'int', track: 'basics', needs: ['formula'], terms: ['Interval', 'Interval number', 'Interval quality', 'Perfect interval', 'Perfect fifth', 'Perfect fourth', 'Major third', 'Minor third', 'Augmented, diminished', 'Inversion', 'Compound interval', 'Imperfect consonance'] },
-  { id: 'names', track: 'basics', needs: ['int'], terms: ['Supertonic', 'Mediant', 'Subdominant', 'Dominant', 'Submediant', 'Leading tone'] },
+  { id: 'int', track: 'basics', needs: ['formula'], terms: ['Interval', 'Interval number', 'Compound interval', 'Inversion'] },
+  { id: 'intq', track: 'basics', needs: ['int'], terms: ['Interval quality', 'Perfect interval', 'Perfect fifth', 'Perfect fourth', 'Major third', 'Minor third', 'Augmented, diminished'] },
+  { id: 'names', track: 'basics', needs: ['int', 'formula'], terms: ['Supertonic', 'Mediant', 'Subdominant', 'Dominant', 'Submediant', 'Leading tone'] },
   // 2. Why the fifth: the physics under the circle
-  { id: 'harmonics', track: 'physics', needs: ['int'], terms: ['Harmonic series', 'Harmonic', 'Node', 'Timbre', 'Cent'] },
+  { id: 'harmonics', track: 'physics', needs: ['intq'], terms: ['Harmonic series', 'Harmonic', 'Fundamental', 'Node', 'Timbre', 'Cent'] },
   { id: 'origin', track: 'physics', needs: ['harmonics'], terms: ['Pythagorean comma', 'Equal temperament'] },
+  { id: 'consonance', track: 'physics', needs: ['origin', 'names', 'intq'], terms: ['Consonance', 'Dissonance', 'Resolution', 'Imperfect consonance'] },
   // 3. The circle of fifths, deduced from the formula
   { id: 'tetra', track: 'circle', needs: ['formula', 'int'], terms: ['Tetrachord', 'Order of sharps'] },
   { id: 'jump', track: 'circle', needs: ['tetra', 'origin'], terms: ['Circle of fifths', 'Circle of fourths', 'Clockwise'] },
@@ -34,8 +36,10 @@ export const CURRICULUM: Step[] = [
   // 4. Chords from the scale, and how they move
   { id: 'field', track: 'harmony', needs: ['win', 'int'], terms: ['Root', 'Triad', 'Major, minor, diminished', 'Diatonic chords', 'Roman numerals'] },
   { id: 'prog', track: 'harmony', needs: ['field', 'func'], terms: ['Harmonic function', 'Progression', 'Cadence', 'Authentic cadence', 'Plagal cadence', 'Half cadence', 'Deceptive cadence', 'Voice leading', 'Common tone'] },
+  { id: 'transpose', track: 'harmony', needs: ['prog'], terms: ['Transposition'] },
   // 5. Time
   { id: 'rhythm', track: 'rhythm', needs: ['keys'], terms: ['Beat', 'Time signature', 'Downbeat', 'Note value', 'Compound meter', 'Tempo'] },
+  { id: 'rhythm2', track: 'rhythm', needs: ['rhythm'], terms: ['Dotted note', 'Tie', 'Rest', 'Syncopation', 'Anacrusis', 'Triplet'] },
   // 6. Melody over chords, phrases, composing
   { id: 'chordtones', track: 'melody', needs: ['prog', 'rhythm'], terms: ['Step (conjunct motion)', 'Chord tone', 'Passing tone', 'Neighbor tone', 'Appoggiatura'] },
   { id: 'form', track: 'melody', needs: ['chordtones'], terms: ['Phrase', 'Period', 'Form', 'Bridge', 'Chorus'] },

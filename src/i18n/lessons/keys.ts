@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -38,12 +39,28 @@ const pt = {
   s4play: 'Ouvir a oitava',
   why: 'A lógica por baixo',
   notes: [
-    '<b>Por que 7 nomes e 12 teclas</b>: as teclas brancas são a escala mais antiga do Ocidente, com 7 notas. As pretas foram acrescentadas depois, para tocar notas “alteradas” meio tom acima ou abaixo. Por isso elas não ganharam nomes novos: são variações das 7 notas.',
-    '<b>Por que Mi–Fá e Si–Dó não têm preta</b>: os passos das 7 notas brancas não são todos iguais. Cinco são de um tom e dois são de meio tom. O teclado só põe uma preta onde cabe uma nota no meio, ou seja, nos passos de um tom. É dessa desigualdade que nasce a fórmula da próxima aula.',
-    '<b>Por que dois nomes para a mesma tecla</b>: o nome diz em que letra (e em que linha da pauta) a nota está; a tecla diz o som. Dó♯ e Ré♭ soam igual, mas um é “o Dó subido” e o outro “o Ré descido”. Qual nome usar depende da escala, como você vai ver: cada escala usa cada letra uma vez.',
+    '<b>1. Por que 7 teclas brancas</b>: as brancas são as 7 notas da escala diatônica, Dó Ré Mi Fá Sol Lá Si, a base da música ocidental há muitos séculos. Uma letra para cada tecla branca, e depois o desenho recomeça.',
+    '<b>2. Por que 5 pretas</b>: de uma branca até a seguinte há 7 passos por oitava (contando Si → Dó). Cinco são de um tom e dois de meio tom. Só cabe uma nota no meio de um passo de um tom, e é ali que fica uma preta. Cinco passos de tom, cinco pretas. Os dois meios tons, Mi–Fá e Si–Dó, ficam sem preta.',
+    '<b>3. Por que grupos de 2 e de 3</b>: as duas brechas (Mi–Fá e Si–Dó) cortam a fileira de pretas em dois pedaços. De Dó a Mi há dois passos de tom (Dó–Ré, Ré–Mi): grupo de 2. De Fá a Si há três (Fá–Sol, Sol–Lá, Lá–Si): grupo de 3. Por isso o grupo de 2 serve para achar o Dó.',
+    '<b>4. Por que dois nomes para a mesma tecla</b>: o nome diz em que letra (e em que linha da pauta) a nota está; a tecla diz o som. Dó♯ e Ré♭ soam igual, mas um é “o Dó subido” e o outro “o Ré descido”. Qual nome usar depende da escala, como você vai ver: cada escala usa cada letra uma vez.',
     '<b>Até nas brancas</b>: Mi♯ é a tecla de Fá, e Dó♭ é a tecla de Si. Parece estranho, mas segue a mesma regra: o sinal sobe ou desce meio tom a partir da letra.',
-    '<b>De onde vêm os nomes</b>: as letras A a G são o sistema mais antigo, da Idade Média. Dó Ré Mi veio das sílabas de um hino que Guido d’Arezzo usava, por volta do ano 1000, para ensinar canto: Ut queant laxis, REsonare fibris, MIra gestorum… O “Ut” virou “Dó” mais tarde, por ser mais fácil de cantar.',
+    '<b>As pretas vieram depois</b>: nos teclados medievais as notas alteradas foram acrescentadas aos poucos (o Si♭ costuma ser apontado como a primeira), até o teclado ganhar as 12 teclas por oitava no fim da Idade Média. Por isso as pretas não têm nome próprio: são variações das 7 notas.',
+    '<b>De onde vêm os nomes</b>: as letras são o sistema mais antigo, já usado na Idade Média. Dó Ré Mi vem das sílabas de um hino que Guido d’Arezzo usava, por volta de 1025, para ensinar canto: Ut queant laxis, REsonare fibris, MIra gestorum… Mais tarde, na Itália, o “Ut” virou “Dó”, mais fácil de cantar, e o “Si” foi acrescentado.',
   ],
+  more: [4, 5, 6],
+  pGap: 'Antes de ler a explicação: olhe o desenho das teclas pretas. Toque uma tecla branca que <b>não</b> tem tecla preta logo à sua direita.',
+  pGapRev: (a: S, b: S, c: S, d: S) => `${a} e ${c}. Depois de ${a} vem ${b}, e depois de ${c} vem ${d}, sem preta no meio. São os dois únicos lugares onde duas brancas vizinhas ficam a meio tom. É essa brecha que separa as pretas em grupos de 2 e de 3.`,
+  pEs: (n: S) => `Agora preveja: <b>${n}</b>. O ♯ sobe meio tom a partir da letra. Em que tecla cai?`,
+  pEsRev: (n: S, f: S, e: S) => `${f}. Meio tom acima de ${e} já é ${f}, porque entre eles não há tecla preta. ${n} e ${f} são a mesma tecla com dois nomes: o nome vem da letra, a tecla vem da conta de semitons.`,
+  recap: {
+    oneLine: 'As 7 brancas são as notas Dó a Si; entre elas há 5 passos de um tom, cada um com uma preta no meio, e 2 de meio tom (Mi–Fá e Si–Dó) sem preta, que separam as pretas em grupos de 2 e de 3.',
+    confusions: [
+      '<b>Semitom × tom</b>: semitom é de uma tecla para a vizinha imediata (branca ou preta); tom são dois semitons. Mi–Fá é um semitom mesmo sendo duas brancas.',
+      '<b>Dó♯ × Ré♭</b>: a mesma tecla, nomes diferentes. O nome diz qual letra foi alterada; qual usar depende da escala.',
+      '<b>“Sustenido é tecla preta”</b>: não é. ♯ quer dizer “meio tom acima da letra”. Mi♯ cai na tecla branca de Fá.',
+    ],
+    show: 'Ache um grupo de 2 pretas e mostre o Dó à esquerda dele. Toque Dó, Dó♯, Ré contando “semitom, semitom”: Dó–Ré é um tom. Depois toque Mi–Fá e mostre que ali não há preta: é só um semitom.',
+  } as RecapText,
 };
 
 const en: typeof pt = {
@@ -82,12 +99,28 @@ const en: typeof pt = {
   s4play: 'Play the octave',
   why: 'The logic underneath',
   notes: [
-    '<b>Why 7 names and 12 keys</b>: the white keys are the oldest scale in Western music, with 7 notes. The black keys were added later, to play notes “altered” a half step up or down. That is why they did not get new names: they are variations of the 7 notes.',
-    '<b>Why E–F and B–C have no black key</b>: the steps between the 7 white notes are not all equal. Five are whole steps and two are half steps. The keyboard only puts a black key where a note fits in between, that is, in the whole steps. The formula in the next lesson comes from this unevenness.',
-    '<b>Why two names for one key</b>: the name tells which letter (and which line of the staff) the note is on; the key tells the sound. C♯ and D♭ sound the same, but one is “C raised” and the other “D lowered”. Which name to use depends on the scale, as you will see: every scale uses each letter once.',
+    '<b>1. Why 7 white keys</b>: the white keys are the 7 notes of the diatonic scale, C D E F G A B, the basis of Western music for many centuries. One letter per white key, and then the pattern starts again.',
+    '<b>2. Why 5 black keys</b>: from one white key to the next there are 7 steps per octave (counting B → C). Five are whole steps and two are half steps. A note fits in the middle of a whole step only, and that is where a black key sits. Five whole steps, five black keys. The two half steps, E–F and B–C, have no black key.',
+    '<b>3. Why groups of 2 and 3</b>: the two gaps (E–F and B–C) cut the row of black keys in two. From C to E there are two whole steps (C–D, D–E): a group of 2. From F to B there are three (F–G, G–A, A–B): a group of 3. That is why the group of 2 helps you find C.',
+    '<b>4. Why two names for one key</b>: the name tells which letter (and which line of the staff) the note is on; the key tells the sound. C♯ and D♭ sound the same, but one is “C raised” and the other “D lowered”. Which name to use depends on the scale, as you will see: every scale uses each letter once.',
     '<b>Even on white keys</b>: E♯ is the F key, and C♭ is the B key. It looks odd, but it follows the same rule: the sign moves a half step up or down from the letter.',
-    '<b>Where the names come from</b>: the letters A to G are the oldest system, from the Middle Ages. Do Re Mi came from the syllables of a hymn Guido d’Arezzo used around the year 1000 to teach singing: Ut queant laxis, REsonare fibris, MIra gestorum… “Ut” later became “Do”, which is easier to sing.',
+    '<b>The black keys came later</b>: on medieval keyboards the altered notes were added little by little (B♭ is usually named as the first), until the keyboard had 12 keys per octave by the end of the Middle Ages. That is why black keys have no names of their own: they are variations of the 7 notes.',
+    '<b>Where the names come from</b>: the letters are the older system, already used in the Middle Ages. Do Re Mi comes from the syllables of a hymn Guido d’Arezzo used around 1025 to teach singing: Ut queant laxis, REsonare fibris, MIra gestorum… Later, in Italy, “Ut” became “Do”, easier to sing, and “Si” (Ti) was added.',
   ],
+  more: [4, 5, 6],
+  pGap: 'Before reading the explanation: look at the pattern of black keys. Tap a white key that has <b>no</b> black key right after it.',
+  pGapRev: (a: S, b: S, c: S, d: S) => `${a} and ${c}. After ${a} comes ${b}, and after ${c} comes ${d}, with no black key between. They are the only two places where neighboring white keys are a half step apart. That gap splits the black keys into groups of 2 and 3.`,
+  pEs: (n: S) => `Now predict: <b>${n}</b>. The ♯ goes a half step up from the letter. Which key is it?`,
+  pEsRev: (n: S, f: S, e: S) => `${f}. A half step above ${e} is already ${f}, because there is no black key between them. ${n} and ${f} are the same key with two names: the name comes from the letter, the key from counting half steps.`,
+  recap: {
+    oneLine: 'The 7 white keys are the notes C to B; between them are 5 whole steps, each with a black key in the middle, and 2 half steps (E–F and B–C) with none, which split the black keys into groups of 2 and 3.',
+    confusions: [
+      '<b>Half step vs whole step</b>: a half step goes from one key to the very next (white or black); a whole step is two half steps. E–F is a half step even though both keys are white.',
+      '<b>C♯ vs D♭</b>: the same key, different names. The name tells which letter was altered; which one to use depends on the scale.',
+      '<b>“A sharp is a black key”</b>: it is not. ♯ means “a half step above the letter”. E♯ lands on the white F key.',
+    ],
+    show: 'Find a group of 2 black keys and point to the C on its left. Play C, C♯, D counting “half step, half step”: C–D is a whole step. Then play E–F and show there is no black key there: it is only a half step.',
+  } as RecapText,
 };
 
 export const text: LessonText<typeof pt> = { pt, en };

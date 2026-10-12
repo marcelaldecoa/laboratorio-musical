@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   METERS, RHYTHMS, VALUES, bar16, barFraction, compareCounts, count16, fit, len16, meter, onsets, onsetsPerCount, perWhole,
   rhythm16, secondsPerCount, strength, tapsPerCount,
+  REXAMPLES, TQ, attacks, attacksPerBeat, nt, rest, startsT, syncopatedBeats, syncopatedStarts, ticks, totalTicks, trip, tripletTicks,
 } from './rhythm';
 
 describe('note values', () => {
@@ -55,5 +56,68 @@ describe('rhythms', () => {
     expect(tapsPerCount([9.95], 10, d, 4)).toEqual([1, 0, 0, 0]);
     expect(tapsPerCount([9.5], 10, d, 4)).toEqual([0, 0, 0, 0]);
     expect(compareCounts([1, 2, 1, 1], [1, 2, 0, 1])).toEqual([true, true, false, true]);
+  });
+});
+
+
+describe('reading rhythm (ticks: quarter = 12)', () => {
+  it('the dot adds half of the value', () => {
+    expect(ticks(4)).toBe(TQ);
+    expect(ticks(4, true)).toBe(18);
+    expect(ticks(2, true)).toBe(36);
+    expect(ticks(8, true)).toBe(9);
+    expect(ticks(1)).toBe(48);
+  });
+  it('a triplet puts 3 in the time of 2', () => {
+    expect(tripletTicks(8) * 3).toBe(ticks(8) * 2);
+    expect(tripletTicks(4) * 3).toBe(ticks(2));
+  });
+  it('a dotted quarter sounds like a quarter tied to an eighth', () => {
+    const a = attacks([nt(4, { tie: true }), nt(8)]);
+    const b = attacks([nt(4, { dot: true })]);
+    expect(a).toEqual(b);
+  });
+  it('ties merge, rests are silent', () => {
+    const r = [nt(4), nt(4, { tie: true }), nt(4), rest(4)];
+    expect(startsT(r)).toEqual([0, 12, 24, 36]);
+    expect(attacks(r).map((a) => [a.t, a.dur])).toEqual([[0, 12], [12, 24]]);
+    expect(attacksPerBeat(r)).toEqual([1, 1, 0, 0]);
+  });
+  it('syncopation: a note starting off the beat and held across the next one', () => {
+    expect(syncopatedBeats([nt(8), nt(4), nt(8), nt(4), nt(4)])).toEqual([1]);
+    expect(syncopatedBeats([nt(8), nt(8), nt(4), nt(4), nt(4)])).toEqual([]);
+    expect(syncopatedBeats([nt(4), nt(4, { tie: true }), nt(4), nt(4)])).toEqual([]);
+  });
+  it('triplets: 3 attacks in a beat', () => {
+    expect(attacksPerBeat([trip(8), trip(8), trip(8), nt(4)])).toEqual([3, 1]);
+  });
+  it('every example fills whole bars after its pickup, rows compare the same length', () => {
+    for (const ex of REXAMPLES) {
+      const bar = ex.beats * TQ;
+      for (const row of ex.rows) {
+        expect(totalTicks(row), ex.id).toBe(totalTicks(ex.rows[0]));
+        expect((totalTicks(row) - ex.pickup) % bar, ex.id).toBe(0);
+        expect(ex.pickup % TQ).toBe(0);
+      }
+    }
+  });
+  it('the examples show their concept', () => {
+    const ex = (id: string) => REXAMPLES.find((e) => e.id === id)!;
+    const [plain, dot] = ex('dot').rows;
+    expect(attacks(plain)).toEqual(attacks(dot));
+    expect(ex('tie').rows[1].some((n) => n.tie)).toBe(true);
+    expect(attacks(ex('tie').rows[1]).length).toBe(attacks(ex('tie').rows[0]).length - 1);
+    expect(ex('rest').rows[1].some((n) => n.rest)).toBe(true);
+    expect(syncopatedBeats(ex('sync').rows[1])).toEqual([1]);
+    expect(syncopatedBeats(ex('sync').rows[0])).toEqual([]);
+    expect(ex('pickup').pickup).toBe(TQ);
+    expect(attacksPerBeat(ex('tri').rows[1])).toEqual([2, 3, 2, 3]);
+  });
+});
+
+describe('syncopatedStarts', () => {
+  it('marks the attack that starts the syncopation', () => {
+    expect([...syncopatedStarts([nt(8), nt(4), nt(8), nt(4), nt(4)])]).toEqual([6]);
+    expect([...syncopatedStarts([nt(4), nt(8), nt(8), nt(2)])]).toEqual([]);
   });
 });

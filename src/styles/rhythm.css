@@ -18,3 +18,13 @@
 .rhy-pad.ready{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
 .rhy-pad.go{border-style:solid;border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
 .rhy-pad:active{transform:scale(.985)}
+/* rhythm2: reading rhythm on paper */
+.rhy2-lab{font:500 11px var(--f-mono)}
+.rhy2-acc{font:700 13px var(--f-mono)}
+.rhy2-tri{font:600 10px var(--f-mono)}
+.rhy2-cnt{font:500 10px var(--f-mono)}
+.rhy2-steps{list-style:none;counter-reset:r2;padding:0;margin:10px 0 14px;display:flex;flex-direction:column;gap:8px;max-width:70ch}
+.rhy2-steps li{counter-increment:r2;position:relative;padding-left:34px;font-size:.97rem;color:var(--fg);min-height:24px}
+.rhy2-steps li::before{content:counter(r2);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent-ink);font:500 .78rem var(--f-mono)}
+.rhy2-steps li b{font-weight:600}

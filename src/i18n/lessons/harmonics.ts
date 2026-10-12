@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 const pt = {
   meta: {
@@ -23,7 +24,7 @@ const pt = {
   viewRead: {
     all: 'Repare no desenho: no grave os harmônicos ficam longe (8ª, 5ª, 4ª) e no agudo vão se apertando até ficarem a um semitom.',
     oct: 'Harmônicos 1 e 2: a razão 2:1. A nota de cima tem o dobro da frequência. É a mesma nota uma volta acima: a 8ª.',
-    fifth: 'Harmônicos 2 e 3: a razão 3:2. É a 5ª justa, o primeiro intervalo com nome novo. Foi dela que Pitágoras construiu as 12 notas.',
+    fifth: 'Harmônicos 2 e 3: a razão 3:2. É a 5ª justa, o primeiro intervalo com nome novo. A tradição atribui a Pitágoras a ideia de construir as notas empilhando essa razão.',
     fourth: 'Harmônicos 3 e 4: a razão 4:3. É a 4ª justa, o que sobra da 8ª depois da 5ª (3:2 × 4:3 = 2:1).',
     triad: 'Harmônicos 4, 5 e 6: tônica, 3ª maior e 5ª justa. A tríade maior aparece sozinha na série, sem ninguém inventar.',
   },
@@ -66,11 +67,27 @@ const pt = {
   why: [
     '<b>Múltiplos inteiros</b>: uma corda presa nas duas pontas só consegue vibrar em 1, 2, 3, 4… partes iguais. Por isso os harmônicos são exatamente 1×, 2×, 3×, 4×… a frequência da fundamental, sem frações.',
     '<b>Oitava = 2:1</b>: o harmônico 2 é a mesma nota uma volta acima. Metade da corda, o dobro da frequência. A nota de cima não traz nenhum harmônico novo: todos os dela já estão na de baixo. Por isso as duas parecem “a mesma nota”.',
-    '<b>Quinta = 3:2</b>: o harmônico 3 é a primeira nota diferente da fundamental. É a mesma razão 3:2 que Pitágoras usou para empilhar quintas e chegar às 12 notas (veja a aula <a href="#/aula/origin">Origem</a>). O círculo das quintas começa aqui, dentro do som.',
-    '<b>Tríade maior = 4:5:6</b>: os harmônicos 4, 5 e 6 formam tônica, 3ª maior e 5ª. Todo som de corda já carrega um acorde maior “fraquinho” dentro dele. A 3ª menor (5:6) aparece logo depois, mas a tríade menor inteira só surge bem mais alto na série.',
+    '<b>Quinta = 3:2</b>: o harmônico 3 é a primeira nota diferente da fundamental. É a mesma razão 3:2 que, segundo a tradição, Pitágoras usou para empilhar quintas e chegar às notas (veja a aula <a href="#/aula/origin">Origem</a>). O círculo das quintas começa aqui, dentro do som.',
+    '<b>Tríade maior = 4:5:6</b>: os harmônicos 4, 5 e 6 formam tônica, 3ª maior e 5ª. Todo som de corda já carrega um acorde maior “fraquinho” dentro dele. A 3ª menor (5:6) aparece logo depois, mas a tríade menor inteira só surge mais alto, nos harmônicos 10, 12 e 15.',
     '<b>Por que o piano “desafina” um pouco</b>: a 3ª maior pura (5:4) é 14 cents mais baixa que a do piano. O temperamento igual divide a oitava em 12 partes iguais e aceita esse pequeno erro para poder tocar em todas as tonalidades.',
     '<b>Timbre</b>: um violino, uma flauta e um piano tocando a mesma nota têm a mesma fundamental. O que muda é a força de cada harmônico. É essa “receita” que o ouvido reconhece como timbre.',
   ],
+  more: [4, 5],
+  pH3: (f: string) => `A fundamental é ${f} (harmônico 1) e o harmônico 2 é a oitava. Antes de ver a série: qual nota é o harmônico 3, a corda vibrando em 3 partes? Toque.`,
+  pH3Rev: (n: string) => `${n}. Três vezes a frequência é uma 8ª mais uma 5ª acima da fundamental (dentro da oitava, 3:2). É a primeira nota nova da série, e por isso a 5ª é o intervalo mais forte depois da 8ª.`,
+  pCons: 'Toque a 5ª justa (3:2) e a 3ª maior (5:4). Qual das duas divide mais harmônicos entre as duas notas?',
+  pConsOpts: ['a 3ª maior', 'a 5ª justa', 'as duas, igual'],
+  pConsRev: 'A 5ª. Na razão p:q, a cada p harmônicos da nota de baixo um coincide com a de cima. Com 3:2, coincide o 3º, o 6º, o 9º… (5 dos 16 primeiros). Com 5:4, só o 5º, o 10º e o 15º (3 de 16). Números menores na razão, mais coincidências.',
+  transfer: (k: string) => `Em ${k}: quais notas são os harmônicos 4, 5 e 6? Elas formam a tríade maior de ${k}?`,
+  recap: {
+    oneLine: 'Uma tecla soa muitas notas ao mesmo tempo: a corda vibra inteira e em 2, 3, 4… partes, e esses harmônicos (2×, 3×, 4×… a frequência) se fundem numa nota só; os primeiros formam a 8ª (2:1), a 5ª (3:2), a 4ª (4:3) e a tríade maior (4:5:6).',
+    confusions: [
+      '<b>Harmônico × nota tocada</b>: você ouve uma nota só, a fundamental; os harmônicos se fundem nela e dão o timbre.',
+      '<b>Harmônico 3 × 3º grau</b>: o harmônico 3 é a 5ª (uma oitava acima), não a 3ª. A 3ª maior é o harmônico 5.',
+      '<b>Razão × semitons</b>: 3:2 é uma razão de frequências; 7 semitons é a medida no teclado. A 5ª do piano é quase, mas não exatamente, 3:2.',
+    ],
+    show: 'Abaixe sem fazer som a tecla Sol que fica uma 8ª e uma 5ª acima de um Dó grave e segure. Toque esse Dó forte e solte logo: o Sol continua soando sozinho, porque a corda dele vibra junto com o harmônico 3 do Dó.',
+  } as RecapText,
 };
 
 const en: typeof pt = {
@@ -96,7 +113,7 @@ const en: typeof pt = {
   viewRead: {
     all: 'Look at the shape: low down the harmonics are far apart (octave, fifth, fourth) and higher up they crowd together until they are a half step apart.',
     oct: 'Harmonics 1 and 2: the ratio 2:1. The upper note has twice the frequency. It is the same note one turn higher: the octave.',
-    fifth: 'Harmonics 2 and 3: the ratio 3:2. It is the perfect fifth, the first interval with a new note name. Pythagoras built the 12 notes from it.',
+    fifth: 'Harmonics 2 and 3: the ratio 3:2. It is the perfect fifth, the first interval with a new note name. Tradition credits Pythagoras with building the notes by stacking this ratio.',
     fourth: 'Harmonics 3 and 4: the ratio 4:3. It is the perfect fourth, what is left of the octave after the fifth (3:2 × 4:3 = 2:1).',
     triad: 'Harmonics 4, 5 and 6: tonic, major third and perfect fifth. The major triad shows up in the series by itself; nobody invented it.',
   },
@@ -139,11 +156,27 @@ const en: typeof pt = {
   why: [
     '<b>Whole multiples</b>: a string fixed at both ends can only vibrate in 1, 2, 3, 4… equal parts. That is why the harmonics are exactly 1×, 2×, 3×, 4×… the fundamental frequency, never fractions.',
     '<b>Octave = 2:1</b>: harmonic 2 is the same note one turn higher. Half the string, twice the frequency. The upper note brings no new harmonic: all of its harmonics are already in the lower one. That is why both feel like “the same note”.',
-    '<b>Fifth = 3:2</b>: harmonic 3 is the first note different from the fundamental. It is the same 3:2 ratio Pythagoras used to stack fifths and reach the 12 notes (see the <a href="#/aula/origin">Origin</a> lesson). The circle of fifths starts here, inside the sound.',
-    '<b>Major triad = 4:5:6</b>: harmonics 4, 5 and 6 form tonic, major third and fifth. Every string sound already carries a faint major chord inside it. The minor third (5:6) comes right after, but the whole minor triad only appears much higher in the series.',
+    '<b>Fifth = 3:2</b>: harmonic 3 is the first note different from the fundamental. It is the same 3:2 ratio that, as tradition has it, Pythagoras used to stack fifths and reach the notes (see the <a href="#/aula/origin">Origin</a> lesson). The circle of fifths starts here, inside the sound.',
+    '<b>Major triad = 4:5:6</b>: harmonics 4, 5 and 6 form tonic, major third and fifth. Every string sound already carries a faint major chord inside it. The minor third (5:6) comes right after, but the whole minor triad only appears higher up, in harmonics 10, 12 and 15.',
     '<b>Why the piano is slightly “out of tune”</b>: the pure major third (5:4) is 14 cents lower than the piano’s. Equal temperament splits the octave into 12 equal parts and accepts that small error so it can play in every key.',
     '<b>Timbre</b>: a violin, a flute and a piano playing the same note share the same fundamental. What changes is the strength of each harmonic. That “recipe” is what the ear recognizes as timbre.',
   ],
+  more: [4, 5],
+  pH3: (f: string) => `The fundamental is ${f} (harmonic 1) and harmonic 2 is the octave. Before seeing the series: which note is harmonic 3, the string vibrating in 3 parts? Tap it.`,
+  pH3Rev: (n: string) => `${n}. Three times the frequency is an octave plus a 5th above the fundamental (within the octave, 3:2). It is the first new note of the series, which is why the 5th is the strongest interval after the octave.`,
+  pCons: 'Play the perfect 5th (3:2) and the major 3rd (5:4). Which one shares more harmonics between its two notes?',
+  pConsOpts: ['the major 3rd', 'the perfect 5th', 'both the same'],
+  pConsRev: 'The 5th. In a ratio p:q, one in every p harmonics of the lower note coincides with the upper one. With 3:2 the 3rd, 6th, 9th… coincide (5 of the first 16). With 5:4 only the 5th, 10th and 15th (3 of 16). Smaller numbers in the ratio, more coincidences.',
+  transfer: (k: string) => `In ${k}: which notes are harmonics 4, 5 and 6? Do they form the major triad of ${k}?`,
+  recap: {
+    oneLine: 'One key sounds many notes at once: the string vibrates as a whole and in 2, 3, 4… parts, and these harmonics (2×, 3×, 4×… the frequency) fuse into a single note; the first ones form the octave (2:1), the 5th (3:2), the 4th (4:3) and the major triad (4:5:6).',
+    confusions: [
+      '<b>Harmonic vs note played</b>: you hear one note, the fundamental; the harmonics fuse into it and give it its timbre.',
+      '<b>Harmonic 3 vs degree 3</b>: harmonic 3 is the 5th (an octave up), not the 3rd. The major 3rd is harmonic 5.',
+      '<b>Ratio vs half steps</b>: 3:2 is a ratio of frequencies; 7 half steps is the measure on the keyboard. The piano’s 5th is almost, but not exactly, 3:2.',
+    ],
+    show: 'Silently press down the G an octave and a 5th above a low C and hold it. Strike that C hard and let go at once: the G keeps sounding by itself, because its string vibrates along with the C’s harmonic 3.',
+  } as RecapText,
 };
 
 export const text = {

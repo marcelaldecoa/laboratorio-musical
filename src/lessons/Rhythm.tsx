@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { type NoteEvent, playNotes } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
 import { text } from '../i18n/lessons/rhythm';
 import { useLessonText } from '../i18n/lessonText';
@@ -267,6 +268,9 @@ export function Rhythm() {
     { dash: 'var(--glow)', label: t.lgNow },
   ];
 
+  const eighths = fit(m, 8).count;
+  const p1opts = [eighths / 2, eighths, eighths * 2].map(String);
+
   const padText = phase === 'count' ? t.padCount(countIn) : phase === 'tap' ? t.padGo : t.pad;
 
   return (
@@ -275,6 +279,7 @@ export function Rhythm() {
 
       <h3 className="sub-h">{t.pulseTitle}</h3>
       <p className="hint">{t.pulseHint}</p>
+      <Predict mode="choice" prompt={t.p2} options={t.p2opts} answer={t.p2opts[0]} reveal={t.p2r} />
       <p className="rowlab">{t.meterPick}</p>
       <div className="chips" role="group" aria-label={t.meterPick}>
         {METERS.map((id) => (
@@ -296,6 +301,8 @@ export function Rhythm() {
       </div>
 
       <h3 className="sub-h">{t.treeTitle}</h3>
+      <Predict mode="choice" resetOn={mid} prompt={t.p1(mid)} options={p1opts} answer={String(eighths)}
+        reveal={t.p1r(mid, m.counts, m.unit, eighths)} />
       <p className="hint">{t.treeHint}</p>
       <div className="chips" role="group">
         {VALUES.map((v) => (
@@ -355,7 +362,8 @@ export function Rhythm() {
       )}
 
       <h3 className="sub-h">{t.whyTitle}</h3>
-      <Notes items={t.why.map((html) => ({ html }))} />
+      <Notes items={t.why.map((html) => ({ html }))} more={[4, 5]} />
+      <Recap {...t.recap} />
     </>
   );
 }
