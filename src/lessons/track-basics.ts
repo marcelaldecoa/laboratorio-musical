@@ -6,6 +6,6 @@ import { Keys } from './Keys';
 
 /** Fundamentals: the keyboard and the major scale formula, before anything else. */
 export const BASICS: LessonDef[] = [
-  { id: 'keys', Comp: Keys, icon: '♮', tone: 'accent', track: 'basics', text: keysText },
+  { id: 'keys', Comp: Keys, icon: '♮', tone: 'accent', track: 'basics', text: keysText, keyFree: true },
   { id: 'formula', Comp: Formula, icon: '𝄞', tone: 'accent', track: 'basics', text: formulaText },
 ];

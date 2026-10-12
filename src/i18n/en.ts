@@ -64,7 +64,7 @@ export const en: Dict = {
   },
 
   tracks: {
-    basics: 'Fundamentals', harmony: 'Scale chords and progressions',
+    basics: 'Fundamentals', harmony: 'Scale chords and progressions', minorharm: 'Harmony in minor', repertoire: 'Analyzed repertoire',
     circle: 'The circle of fifths', physics: 'The physics underneath', scales: 'Scales and modes', chords: 'Chords',
     motion: 'Harmony in motion', melody: 'Melody and form', piano: 'Piano in practice', rhythm: 'Rhythm', ref: 'Reference',
   },
@@ -266,6 +266,12 @@ export const en: Dict = {
     title: 'Your progress', streak: (n: number) => (n === 1 ? '1 day in a row' : `${n} days in a row`), noStreak: 'Start your streak today',
     lessons: (a: number, b: number) => `${a} of ${b} lessons done`, review: (n: number) => (n ? `${n} to review today` : 'review up to date'),
     markDone: 'Mark lesson as done', isDone: 'Lesson done ✓', week: 'Last 7 days',
+  },
+  learn: {
+    predict: 'Before you look: predict', tapKey: 'Tap the key on the keyboard below.', tryAgain: 'Not yet. Try again.', showAnswer: 'Show the answer', right: 'That’s it!', answerWas: 'The answer:', again: 'Try again',
+    recap: 'Summary to explain it', oneLine: 'In one sentence', confusions: 'Common confusions', show: 'How to show it at the piano',
+    more: 'Want to know more', transfer: 'Challenge: take the idea to another key', goKey: (k: string) => `Go to ${k}`,
+    startInC: 'First time in this lesson? Start in C major, with no sharps or flats.', goC: 'Go to C major',
   },
   stepper: {
     mode: 'Step by step', modeHint: 'Shows the explanations one at a time.', next: 'Next step →', all: 'Show all', of: (a: number, b: number) => `step ${a} of ${b}`,

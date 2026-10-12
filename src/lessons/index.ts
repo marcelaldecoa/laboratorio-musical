@@ -18,9 +18,9 @@ import { CURRICULUM } from './curriculum';
 import { EXTRA } from './extra';
 import { BASICS } from './track-basics';
 
-export type TrackId = 'basics' | 'physics' | 'circle' | 'harmony' | 'rhythm' | 'melody' | 'scales' | 'chords' | 'motion' | 'piano' | 'ref';
+export type TrackId = 'basics' | 'physics' | 'circle' | 'harmony' | 'rhythm' | 'melody' | 'scales' | 'minorharm' | 'chords' | 'motion' | 'piano' | 'repertoire' | 'ref';
 /** Track order follows the syllabus in curriculum.ts */
-export const TRACKS: TrackId[] = ['basics', 'physics', 'circle', 'harmony', 'rhythm', 'melody', 'scales', 'chords', 'motion', 'piano', 'ref'];
+export const TRACKS: TrackId[] = ['basics', 'physics', 'circle', 'harmony', 'rhythm', 'melody', 'scales', 'minorharm', 'chords', 'motion', 'piano', 'repertoire', 'ref'];
 
 export interface LessonDef {
   id: string;
@@ -28,6 +28,8 @@ export interface LessonDef {
   icon: string;
   tone: string;
   track: TrackId;
+  /** the lesson does not depend on the key (no "start in C" hint) */
+  keyFree?: boolean;
   /** lessons this one builds on (from curriculum.ts) */
   needs?: string[];
   /** glossary terms (English key) this lesson introduces (from curriculum.ts) */
@@ -66,4 +68,6 @@ export const LESSONS: LessonDef[] = CURRICULUM.map((c) => {
 
 /** Lessons registered but missing from the syllabus (should be empty; checked by tests). */
 export const UNLISTED = [...REGISTRY.keys()].filter((id) => !CURRICULUM.some((c) => c.id === id));
+// while a lesson is being written it can be registered before it enters the syllabus: show it at the end
+LESSONS.push(...UNLISTED.map((id) => REGISTRY.get(id)!).filter((L) => L.id !== 'gloss'));
 

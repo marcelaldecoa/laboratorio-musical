@@ -12,7 +12,7 @@ import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
 import { Practice } from './pages/Practice';
 import { href, useRoute, type Route } from './router';
-import { dueReviews, markStudied, setLang, setState, streak, today, toggleDone } from './state/store';
+import { dueReviews, goToKey, markStudied, setLang, setState, streak, today, toggleDone } from './state/store';
 import { useLab } from './state/useLab';
 import { sigShort } from './theory';
 
@@ -252,6 +252,9 @@ function LessonPage({ id }: { id: string }) {
             </details>
           )}
         </aside>
+      )}
+      {s.k !== 0 && !s.done.includes(L.id) && !L.keyFree && (
+        <p className="start-c">{t.learn.startInC} <button type="button" onClick={() => goToKey(0)}>{t.learn.goC}</button></p>
       )}
       <div className="lesson-body"><L.Comp /></div>
       {L.track !== 'ref' && (

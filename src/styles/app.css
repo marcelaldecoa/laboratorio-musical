@@ -452,3 +452,23 @@ dialog.sheet::backdrop{background:rgba(10,14,12,.45);backdrop-filter:blur(3px);-
 .terms dd{margin:2px 0 0;font-size:.92rem}
 .gl-lesson{font-size:.82rem;color:var(--muted)}
 .gl-lesson a{color:var(--accent-ink)}
+/* learning blocks: predict, recap, more, transfer */
+.predict,.transfer{border:2px solid var(--accent);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface);margin:8px 0}
+.predict.done{border-color:var(--line)}
+.predict-label{font:500 .74rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin:0}
+.predict-q{font-size:1.05rem;font-weight:500}
+.predict-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.predict-wrong{color:var(--change-ink);background:var(--change-soft);padding:4px 10px;border-radius:999px;font-size:.88rem}
+.transfer{border-style:dashed}
+.transfer .primary{align-self:flex-start}
+.recap{background:var(--accent-soft);color:var(--accent-ink);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;margin-top:18px}
+.recap h3{font-size:1.2rem}
+.recap-k{font:500 .74rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;margin:8px 0 0;opacity:.85}
+.recap-one{font-family:var(--f-display);font-size:1.15rem;line-height:1.35}
+.recap ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.more{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--surface);margin-top:10px}
+.more summary{cursor:pointer;color:var(--muted);font-weight:500;min-height:28px}
+.more[open] summary{margin-bottom:6px}
+.more .notes li{border:0;padding:6px 0;background:transparent}
+.start-c{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.88rem;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:8px 12px}
+.start-c button{min-height:36px;padding:6px 12px}

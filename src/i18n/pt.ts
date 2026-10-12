@@ -66,7 +66,7 @@ export const pt = {
   },
 
   tracks: {
-    basics: 'Fundamentos', harmony: 'Acordes da escala e progressões',
+    basics: 'Fundamentos', harmony: 'Acordes da escala e progressões', minorharm: 'Harmonia na menor', repertoire: 'Repertório analisado',
     circle: 'O círculo das quintas', physics: 'A física por baixo', scales: 'Escalas e modos', chords: 'Acordes',
     motion: 'Harmonia em movimento', melody: 'Melodia e forma', piano: 'Piano na prática', rhythm: 'Ritmo', ref: 'Referência',
   } as Record<string, S>,
@@ -285,6 +285,12 @@ export const pt = {
     title: 'Seu progresso', streak: (n: number) => (n === 1 ? '1 dia seguido' : `${n} dias seguidos`), noStreak: 'Comece hoje a sua sequência',
     lessons: (a: number, b: number) => `${a} de ${b} aulas concluídas`, review: (n: number) => (n ? `${n} para revisar hoje` : 'revisão em dia'),
     markDone: 'Marcar aula como concluída', isDone: 'Aula concluída ✓', week: 'Últimos 7 dias',
+  },
+  learn: {
+    predict: 'Antes de ver: preveja', tapKey: 'Toque a tecla no teclado abaixo.', tryAgain: 'Ainda não. Tente de novo.', showAnswer: 'Mostrar a resposta', right: 'Isso!', answerWas: 'A resposta:', again: 'Tentar de novo',
+    recap: 'Resumo para explicar', oneLine: 'Em uma frase', confusions: 'Confusões comuns', show: 'Como mostrar no piano',
+    more: 'Para saber mais', transfer: 'Desafio: leve a ideia para outra tonalidade', goKey: (k: string) => `Ir para ${k}`,
+    startInC: 'Primeira vez nesta aula? Comece em Dó maior, sem sustenidos nem bemóis.', goC: 'Ir para Dó maior',
   },
   stepper: {
     mode: 'Passo a passo', modeHint: 'Mostra as explicações uma de cada vez.', next: 'Próximo passo →', all: 'Mostrar tudo', of: (a: number, b: number) => `passo ${a} de ${b}`,
