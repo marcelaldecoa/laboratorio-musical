@@ -7,6 +7,7 @@ import { Sheet } from './components/Sheet';
 import { Seg } from './components/ui';
 import { DICTS } from './i18n';
 import { LESSONS, TRACKS } from './lessons';
+import { HOOKS } from './i18n/hooks';
 import { glossaryEntry } from './lessons/glossaryAll';
 import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
@@ -192,11 +193,42 @@ function Home() {
 
 function LessonsPage() {
   const { s, t } = useLab();
+  let n = 0;
   return (
     <div className="page">
-      <h1 className="page-title">{t.nav.lessons}</h1>
-      <p className="desc">{t.nav.chain}</p>
-      <LessonGrid activeId={s.last} />
+      <h1 className="page-title">{t.nav.journey}</h1>
+      <p className="desc">{t.nav.journeyIntro}</p>
+      <div className="journey">
+        {TRACKS.map((tr) => {
+          const items = LESSONS.filter((L) => L.track === tr);
+          if (!items.length) return null;
+          return (
+            <section key={tr} className="j-track">
+              <h2 className="j-track-title">{t.tracks[tr]}</h2>
+              <ol className="j-path">
+                {items.map((L) => {
+                  n++;
+                  const m = lessonMeta(L, t, s.lang);
+                  const done = s.done.includes(L.id);
+                  const needs = (L.needs ?? []).map((id) => LESSONS.find((x) => x.id === id)).filter((x): x is (typeof LESSONS)[number] => !!x);
+                  return (
+                    <li key={L.id} className={'j-stop tone-' + L.tone + (done ? ' done' : '') + (L.id === s.last ? ' current' : '')}>
+                      <span className="j-dot" aria-hidden="true">{done ? '✓' : n}</span>
+                      <a className="j-card" href={href({ page: 'lesson', id: L.id })}>
+                        <span className="j-title">{m.title}</span>
+                        <span className="j-hook">{HOOKS[L.id]?.[s.lang] ?? m.teaser}</span>
+                        {!!needs.length && (
+                          <span className="j-needs">{t.nav.builds}: {needs.map((x) => lessonMeta(x, t, s.lang).nav).join(' · ')}</span>
+                        )}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -220,6 +252,9 @@ function LessonPage({ id }: { id: string }) {
         <p className="eyebrow">{t.nav.lessonN(i + 1)} · {t.tracks[L.track]}</p>
         <h1>{m.title} <span className="sub">· {m.sub}</span></h1>
       </header>
+      {HOOKS[L.id] && (
+        <p className="hook"><span className="rowlab">{t.nav.question}</span>{HOOKS[L.id][s.lang]}</p>
+      )}
       {(!!L.needs?.length || !!L.terms?.length) && (
         <aside className="lesson-intro">
           {!!L.needs?.length && (

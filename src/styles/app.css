@@ -472,3 +472,20 @@ dialog.sheet::backdrop{background:rgba(10,14,12,.45);backdrop-filter:blur(3px);-
 .more .notes li{border:0;padding:6px 0;background:transparent}
 .start-c{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.88rem;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:8px 12px}
 .start-c button{min-height:36px;padding:6px 12px}
+/* hook question at the top of each lesson */
+.hook{font-family:var(--f-display);font-size:1.25rem;line-height:1.35;background:var(--tone-soft,var(--accent-soft));color:var(--tone-ink,var(--accent-ink));border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;margin:0}
+.hook .rowlab{margin:0;color:inherit;opacity:.8}
+/* journey path */
+.journey{display:flex;flex-direction:column;gap:22px;margin-top:6px}
+.j-track-title{font-size:1.2rem;margin-bottom:8px}
+.j-path{list-style:none;margin:0;padding:0;position:relative}
+.j-path::before{content:"";position:absolute;left:17px;top:18px;bottom:18px;width:3px;border-radius:2px;background:var(--line)}
+.j-stop{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:start;padding:6px 0}
+.j-dot{position:relative;z-index:1;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:500 .85rem var(--f-mono);background:var(--surface);border:3px solid var(--tone);color:var(--fg);margin-top:6px}
+.j-stop.done .j-dot{background:var(--tone);color:var(--bg)}
+.j-stop.current .j-card{border-color:var(--tone);border-width:2px}
+.j-card{display:flex;flex-direction:column;gap:4px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);min-width:0}
+.j-card:active{transform:scale(.99)}
+.j-title{font-family:var(--f-display);font-size:1.08rem}
+.j-hook{font-size:.94rem;color:var(--fg)}
+.j-needs{font-size:.78rem;color:var(--muted)}

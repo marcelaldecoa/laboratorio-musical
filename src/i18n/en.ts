@@ -18,6 +18,8 @@ export const en: Dict = {
     start: 'Start with the first lesson', continue: 'Continue', allLessons: 'All lessons',
     chain: 'The chain: formula → tetrachords → circle → window → intervals → diatonic chords → functions → progressions → composing.',
     lessonN: (n: number) => `Lesson ${n}`,
+    question: 'This lesson’s question', journey: 'The journey', builds: 'builds on',
+    journeyIntro: 'Every lesson opens with a question and answers it using only what came before. Nothing to memorize: every rule grows from a fact you have already seen. Follow the path from top to bottom.',
     before: 'Before this lesson', terms: (n: number) => (n === 1 ? 'New term in this lesson' : `${n} new terms in this lesson`), inLesson: 'explained in',
   },
   keyBar: {

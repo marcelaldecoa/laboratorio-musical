@@ -18,6 +18,8 @@ export const pt = {
     start: 'Começar pela primeira aula', continue: 'Continuar', allLessons: 'Todas as aulas',
     chain: 'A cadeia: fórmula → tetracordes → círculo → janela → intervalos → campo harmônico → funções → progressões → composição.',
     lessonN: (n: number) => `Aula ${n}`,
+    question: 'A pergunta desta aula', journey: 'A jornada', builds: 'parte de',
+    journeyIntro: 'Cada aula começa com uma pergunta e a responde usando só o que veio antes. Nada para decorar: cada regra nasce de um fato que você já viu. Siga o caminho de cima para baixo.',
     before: 'Antes desta aula', terms: (n: number) => (n === 1 ? 'Termo novo nesta aula' : `${n} termos novos nesta aula`), inLesson: 'explicado em',
   },
   keyBar: {
