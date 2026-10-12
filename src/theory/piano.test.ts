@@ -75,6 +75,19 @@ describe('scale fingering', () => {
     expect(s({ letter: 5, acc: -1 })).toBe('34123123/32143213');
     expect(s({ letter: 1, acc: -1 })).toBe('23123412/32143213');
   });
+  it('uses the C-major pattern for G, D, A and E, and the B pattern for C♭', () => {
+    for (const l of [4, 1, 5, 2]) expect(scaleFingering({ letter: l, acc: 0 })).toEqual(scaleFingering({ letter: 0, acc: 0 }));
+    expect(scaleFingering({ letter: 0, acc: -1 })).toEqual(scaleFingering({ letter: 6, acc: 0 }));
+    expect(scaleFingering({ letter: 0, acc: 1 })).toEqual(scaleFingering({ letter: 1, acc: -1 }));
+  });
+  it('gives every key a thumb-under going up (RH) and a 3 or 4 over the thumb going up (LH)', () => {
+    for (const t of keys) {
+      const f = scaleFingering(t);
+      expect(crossings(f.rh, 'rh', 'up').length).toBeGreaterThan(0);
+      const i = f.lh.findIndex((x, j) => x === 1 && j < 7);
+      expect([3, 4]).toContain(f.lh[i + 1]);
+    }
+  });
   it('groups the fingers in positions of 3 and 4 (C major)', () => {
     const f = scaleFingering({ letter: 0, acc: 0 });
     expect(handPositions(f.rh, 'rh').map((g) => g.length)).toEqual([3, 5]);

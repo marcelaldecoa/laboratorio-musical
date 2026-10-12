@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { later, playNotes, stopAll } from '../audio/audio';
 import { Bracket, Keyboard } from '../components/Keyboard';
 import { type KeyLayout, type Mark, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Legend, Notes, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/fingering';
 import { useLessonText } from '../i18n/lessonText';
@@ -102,9 +103,26 @@ export function Fingering() {
     return true;
   });
 
+  // predictions (always right hand / left hand going up, from the current key)
+  const ksR = scaleSemitones(pcOf(cur));
+  const crossR = crossings(fing.rh, 'rh', 'up');
+  const p1Marks: Record<number, Mark> = {};
+  ksR.forEach((k, i) => (p1Marks[k] = roleMark(k, i % 7 === 0 ? 'tonic' : 'scale', i === 0 ? fing.rh[0] : undefined, nm(sc[i % 7]))));
+  const lhThumb = fing.lh.findIndex((x, i) => x === 1 && i < 7);
+  const lhNext = fing.lh[lhThumb + 1];
+  const N = (letter: number, acc = 0) => nm({ letter, acc });
+  const recap = T.recap({ d: N(1), a: N(5), f: N(3), g: N(4), la: N(5), bb: N(6, -1), c: N(0) });
+
   return (
     <>
       <p className="desc">{T.desc}</p>
+      <Predict mode="key" resetOn={s.k + s.enh} lay={rangeAround(ksR[0], ksR[7])} marks={p1Marks}
+        answer={crossR.map((c) => ksR[c.to])}
+        prompt={T.p1(keyName(cur), nm(cur), fing.rh[0])}
+        reveal={T.p1Reveal(crossR.map((c) => T.via(nm(sc[c.to % 7]), fing.rh[c.from], nm(sc[c.from % 7]))).join(T.and))} />
+      <Predict mode="choice" resetOn={s.k + s.enh} options={['1', '2', '3', '4', '5']} answer={String(lhNext)}
+        prompt={T.p2(keyName(cur), nm(sc[lhThumb % 7]), nm(sc[(lhThumb + 1) % 7]))}
+        reveal={T.p2Reveal(lhNext)} />
       <div className="piano-ctrls">
         <Seg label={T.handLabel} value={hand} onChange={setHand}
           options={[{ v: 'rh', label: T.hands.rh }, { v: 'lh', label: T.hands.lh }]} />
@@ -174,10 +192,12 @@ export function Fingering() {
         { html: T.thumbs(T.hands[hand].toLowerCase(), thumbs[0], thumbs[1]) },
         { html: T.groups },
         { html: T.blacks },
-        { html: T.mirror },
         { color: 'var(--change)', html: T.exceptions },
+        { html: T.mirror },
         { html: T.history },
-      ]} />
+      ]} more={[4, 5]} />
+      <Transfer question={T.transfer} />
+      <Recap oneLine={recap.oneLine} confusions={recap.confusions} show={recap.show} />
     </>
   );
 }
