@@ -37,7 +37,7 @@ export const PERIODS: Period[] = [
       oneLine: "Porque as primeiras harmonias seguiam as razões mais simples da série harmônica (oitava, quinta e quarta), e a terça, na afinação da época, ainda soava áspera.",
       more: [
         "A história de que Pitágoras descobriu os intervalos ouvindo martelos de ferreiro é uma lenda: o peso de um martelo não produz essas razões. As razões valem, sim, para o comprimento de cordas.",
-        "O ♭ e o ♮ nasceram de duas formas da letra b: o “b redondo” (b molle, nosso Si♭) e o “b quadrado” (b durum, nosso Si). Daí vêm as palavras bemol e bequadro. O Si♭ era a única “tecla preta” da teoria medieval.",
+        "O ♭ e o ♮ nasceram de duas formas da letra b: o “b redondo” (b molle, nosso Si♭) e o “b quadrado” (b durum, nosso Si). Daí vêm as palavras bemol e bequadro. No sistema de Guido, o Si♭ era a única “tecla preta” oficial.",
         "As sílabas de Guido vêm do início de cada verso de um hino a São João, <i>Ut queant laxis</i>. O “si” foi acrescentado depois, e o “ut” foi trocado por “dó” em muitos países por ser mais fácil de cantar.",
         "O apelido do trítono, <i>diabolus in musica</i>, é bem posterior à Idade Média, e a ideia de que a Igreja o “proibia” é em boa parte exagero: os teóricos o evitavam por ser instável, não por superstição.",
       ],
@@ -65,7 +65,7 @@ export const PERIODS: Period[] = [
       oneLine: "Because the first harmonies followed the simplest ratios of the harmonic series (octave, fifth and fourth), and the third, in the tuning of the time, still sounded rough.",
       more: [
         "The story that Pythagoras discovered the intervals by listening to blacksmiths’ hammers is a legend: a hammer’s weight does not produce those ratios. The ratios do hold for string lengths.",
-        "The ♭ and ♮ signs come from two shapes of the letter b: the “round b” (b molle, our B♭) and the “square b” (b durum, our B). B♭ was the only “black key” of medieval theory.",
+        "The ♭ and ♮ signs come from two shapes of the letter b: the “round b” (b molle, our B♭) and the “square b” (b durum, our B). In Guido’s system, B♭ was the only official “black key”.",
         "Guido’s syllables come from the start of each line of a hymn to Saint John, <i>Ut queant laxis</i>. “Si” (ti) was added later, and “ut” was replaced by “do” in many countries because it is easier to sing.",
         "The tritone’s nickname, <i>diabolus in musica</i>, is much later than the Middle Ages, and the idea that the Church “banned” it is largely exaggerated: theorists avoided it because it is unstable, not out of superstition.",
       ],
@@ -228,7 +228,7 @@ export const PERIODS: Period[] = [
       },
       oneLine: "Porque a melodia ficou na frente sobre um acompanhamento simples, em frases de pergunta e resposta que terminam na dominante e na tônica, pensadas para um público amplo.",
       more: [
-        "O baixo de Alberti leva o nome de Domenico Alberti, que o usou muito no início do século XVIII, mas ele não foi o único nem provavelmente o primeiro.",
+        "O baixo de Alberti leva o nome de Domenico Alberti, que o usou muito na primeira metade do século XVIII, mas ele não foi o único nem provavelmente o primeiro.",
         "O nome “forma sonata” só foi dado no século XIX, por teóricos que descreveram a prática de Haydn, Mozart e Beethoven. Eles mesmos não usavam esse termo.",
         "O poeta e músico Domingos Caldas Barbosa, nascido no Rio de Janeiro, levou modinhas e lundus para os salões de Lisboa no fim do século XVIII. O lundu, de origem afro-brasileira, já trazia a síncope que vai marcar a música brasileira.",
         "No Rio, o padre José Maurício Nunes Garcia foi o principal compositor da corte quando a família real portuguesa chegou ao Brasil, em 1808.",
@@ -256,7 +256,7 @@ export const PERIODS: Period[] = [
       },
       oneLine: "Because the melody moved to the front over a simple accompaniment, in question-and-answer phrases ending on the dominant and the tonic, written for a wide public.",
       more: [
-        "The Alberti bass is named after Domenico Alberti, who used it a lot in the early 18th century, but he was not the only one and probably not the first.",
+        "The Alberti bass is named after Domenico Alberti, who used it a lot in the first half of the 18th century, but he was not the only one and probably not the first.",
         "The name “sonata form” was only given in the 19th century, by theorists describing the practice of Haydn, Mozart and Beethoven. They did not use the term themselves.",
         "The poet and musician Domingos Caldas Barbosa, born in Rio de Janeiro, took modinhas and lundus to the salons of Lisbon in the late 18th century. The lundu, of Afro-Brazilian origin, already carried the syncopation that would mark Brazilian music.",
         "In Rio, the priest José Maurício Nunes Garcia was the leading court composer when the Portuguese royal family arrived in Brazil in 1808.",
@@ -338,7 +338,7 @@ export const PERIODS: Period[] = [
       name: "Impressionismo e virada do século",
       years: "c. 1890–1920",
       question: "Por que Debussy soa como névoa?",
-      intro: "Em Paris, por volta de 1900, compositores como Debussy e Ravel procuram sons novos fora da harmonia alemã: modos antigos, escalas de outros povos, acordes que valem pela cor. Na mesma época, no Rio de Janeiro, nasce o choro, e pianistas como Chiquinha Gonzaga e Ernesto Nazareth misturam a polca e o lundu num jeito brasileiro de tocar.",
+      intro: "Em Paris, por volta de 1900, compositores como Debussy e Ravel procuram sons novos fora da harmonia alemã: modos antigos, escalas de outros povos, acordes que valem pela cor. Na mesma época, no Rio de Janeiro, o choro, nascido nas últimas décadas do século XIX, se firma, e pianistas como Chiquinha Gonzaga e Ernesto Nazareth misturam a polca e o lundu num jeito brasileiro de tocar.",
       steps: [
         "<b>O acorde vale pela cor, não pela função.</b> Sétimas e nonas aparecem sem precisar resolver. O ouvido deixa de esperar a tônica e passa a ouvir o timbre do acorde.",
         "<b>Acordes que deslizam juntos.</b> Em vez de conduzir as vozes, Debussy move o acorde inteiro em paralelo, como um bloco de cor. As quintas paralelas, evitadas por séculos, voltam de propósito.",
@@ -359,14 +359,14 @@ export const PERIODS: Period[] = [
         "Debussy ouviu um conjunto de gamelão javanês na Exposição Universal de Paris de 1889, e muitos historiadores ligam a isso seu interesse por escalas pentatônicas e texturas em camadas.",
         "Debussy não gostava do rótulo “impressionista”, emprestado da pintura. Em suas últimas obras, chegou a assinar como “Claude Debussy, músico francês”.",
         "Ernesto Nazareth chamava muitas de suas peças de “tangos brasileiros”. Nelas, a mão esquerda mantém um ritmo sincopado herdado do lundu e do maxixe, que hoje associamos ao choro.",
-        "Chiquinha Gonzaga é lembrada como uma das primeiras mulheres a reger uma orquestra no Brasil, e sua marcha “Ó Abre Alas” (1899) é considerada uma das primeiras marchinhas de carnaval.",
+        "Chiquinha Gonzaga costuma ser apontada como a primeira mulher a reger uma orquestra no Brasil (em 1885), e sua marcha “Ó Abre Alas” (1899) é considerada uma das primeiras marchinhas de carnaval.",
       ],
     },
     en: {
       name: "Impressionism and the turn of the century",
       years: "c. 1890–1920",
       question: "Why does Debussy sound like mist?",
-      intro: "In Paris around 1900, composers like Debussy and Ravel look for new sounds outside German harmony: old modes, scales from other cultures, chords valued for their color. At the same time in Rio de Janeiro, choro is born, and pianists like Chiquinha Gonzaga and Ernesto Nazareth blend the polka and the lundu into a Brazilian way of playing.",
+      intro: "In Paris around 1900, composers like Debussy and Ravel look for new sounds outside German harmony: old modes, scales from other cultures, chords valued for their color. At the same time in Rio de Janeiro, choro, born in the last decades of the 19th century, takes hold, and pianists like Chiquinha Gonzaga and Ernesto Nazareth blend the polka and the lundu into a Brazilian way of playing.",
       steps: [
         "<b>The chord counts for its color, not its function.</b> Sevenths and ninths appear without needing to resolve. The ear stops waiting for the tonic and starts hearing the chord’s color.",
         "<b>Chords that glide together.</b> Instead of leading the voices, Debussy moves the whole chord in parallel, like a block of color. Parallel fifths, avoided for centuries, come back on purpose.",
@@ -387,7 +387,7 @@ export const PERIODS: Period[] = [
         "Debussy heard a Javanese gamelan ensemble at the 1889 Paris World’s Fair, and many historians link this to his interest in pentatonic scales and layered textures.",
         "Debussy disliked the label “Impressionist”, borrowed from painting. On some of his last works he signed himself “Claude Debussy, French musician”.",
         "Ernesto Nazareth called many of his pieces “Brazilian tangos”. In them the left hand keeps a syncopated rhythm inherited from the lundu and the maxixe, which we now associate with choro.",
-        "Chiquinha Gonzaga is remembered as one of the first women to conduct an orchestra in Brazil, and her march “Ó Abre Alas” (1899) is considered one of the first Carnival marchinhas.",
+        "Chiquinha Gonzaga is often named as the first woman to conduct an orchestra in Brazil (in 1885), and her march “Ó Abre Alas” (1899) is considered one of the first Carnival marchinhas.",
       ],
     },
   },
@@ -458,7 +458,7 @@ export const PERIODS: Period[] = [
   {
     id: 'jazz',
     from: 1900,
-    to: 2025,
+    to: 2026,
     range: [-39, 48],
     sketch: SKETCHES.jazz,
     lessons: ['rhythm2', 'penta', 'seventh', 'v7', 'extensions', 'symbols', 'tritsub', 'form', 'prog'],
@@ -522,7 +522,7 @@ export const PERIODS: Period[] = [
   {
     id: 'contemporary',
     from: 1945,
-    to: 2025,
+    to: 2026,
     range: [-39, 48],
     sketch: SKETCHES.contemporary,
     lessons: ['rhythm', 'modes', 'comp', 'harmonics', 'origin'],
