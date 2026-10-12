@@ -5,7 +5,7 @@ export const pt = {
   langName: 'Português',
   appName: 'Laboratório Musical',
   title: 'Laboratório do Círculo das Quintas',
-  eyebrow: 'Teoria para piano · aula 2',
+  eyebrow: 'Teoria musical para piano, pela lógica',
   lede: 'Gire o círculo e veja no teclado de onde vem cada sustenido e cada bemol. Uma fórmula, T T S T T T S, e nada mais para decorar.',
   staffAria: 'Armadura de clave',
   secAria: 'Círculo das quintas',
@@ -18,6 +18,7 @@ export const pt = {
     start: 'Começar pela primeira aula', continue: 'Continuar', allLessons: 'Todas as aulas',
     chain: 'A cadeia: fórmula → tetracordes → círculo → janela → intervalos → campo harmônico → funções → progressões → composição.',
     lessonN: (n: number) => `Aula ${n}`,
+    before: 'Antes desta aula', terms: (n: number) => (n === 1 ? 'Termo novo nesta aula' : `${n} termos novos nesta aula`), inLesson: 'explicado em',
   },
   keyBar: {
     key: 'Tonalidade', change: 'Trocar tonalidade', close: 'Fechar', notation: 'Notação', direction: 'Sentido',
@@ -61,15 +62,16 @@ export const pt = {
     field: { nav: 'Campo harmônico', title: 'Campo harmônico', sub: 'tríades por terças empilhadas', teaser: 'Cada tipo de acorde é uma forma fixa.' },
     prog: { nav: 'Progressões', title: 'Progressões', sub: 'funções, movimento e condução de vozes', teaser: 'Casa, afastamento, tensão, volta.' },
     comp: { nav: 'Compor', title: 'Compor na prática', sub: 'da melodia ao acorde', teaser: 'Cada nota cabe em três acordes.' },
-    gloss: { nav: 'Glossário', title: 'Glossário', sub: 'os termos da aula', teaser: 'Todos os termos, em pt e en.' },
+    gloss: { nav: 'Glossário', title: 'Glossário', sub: 'todos os termos, com a aula onde aparecem', teaser: 'Todos os termos, em pt e en.' },
   },
 
   tracks: {
+    basics: 'Fundamentos', harmony: 'Acordes da escala e progressões',
     circle: 'O círculo das quintas', physics: 'A física por baixo', scales: 'Escalas e modos', chords: 'Acordes',
     motion: 'Harmonia em movimento', melody: 'Melodia e forma', piano: 'Piano na prática', rhythm: 'Ritmo', ref: 'Referência',
   } as Record<string, S>,
   /* jump */
-  jumpDesc: 'Os semitons contados da tonalidade anterior até a atual: 7 no sentido horário (quinta justa), 5 no anti-horário (quarta justa).',
+  jumpDesc: 'O círculo das quintas põe as 12 tonalidades maiores em roda. Cada vizinha no sentido horário começa uma quinta justa acima, exatamente o salto da corrente de tetracordes; no sentido anti-horário, uma quarta justa acima. Use o círculo do topo (botão da tonalidade) para andar por ele. Aqui você vê o salto no teclado: os semitons contados da tonalidade anterior até a atual: 7 no sentido horário (quinta justa), 5 no anti-horário (quarta justa).',
   playJump: 'Ouvir o salto', lgStart: 'partida', lgPath: 'semitons contados', lgDest: 'nova tônica', lgChg: 'a nota que muda',
   /* scale */
   scaleDesc: 'A escala maior da tonalidade atual, com os graus nas teclas e os passos T (tom) e S (semitom) embaixo. Compare com a anterior: só uma nota muda a cada passo.',
@@ -82,14 +84,14 @@ export const pt = {
   fDom: (n: S, k: S) => `<b>Dominante · ${n}</b>: uma quinta acima da tônica, a nota mais forte depois dela. No círculo, é o vizinho horário: ${k}.`,
   fLt: (n: S, t: S) => `<b>Sensível · ${n}</b>: um semitom abaixo de ${t}. A seta mostra para onde ela puxa. Ouça e repare que o ouvido pede a tônica.`,
   /* hinges */
-  hingeDesc: 'Cada uma participa de um dos dois semitons da escala (3–4 e 7–8), e juntas formam o único trítono dela. Andar uma casa no círculo é mover uma dessas dobradiças meio tom. As teclas tracejadas mostram para onde cada uma vai.',
+  hingeDesc: 'Cada uma participa de um dos dois semitons da escala (3–4 e 7–8), e juntas formam o único trítono dela (um intervalo de 6 semitons, tema da próxima aula). Andar uma casa no círculo é mover uma dessas dobradiças meio tom. As teclas tracejadas mostram para onde cada uma vai.',
   playHinge: 'Ouvir o trítono resolvendo', tritone: 'trítono · 6 semitons',
   hUp: (a: S, b: S, k: S) => `<b>↑ ${a} → ${b}</b>: no sentido horário você vai para ${k}, e a subdominante sobe meio tom para virar a sensível.`,
   hDown: (a: S, b: S, k: S) => `<b>↓ ${a} → ${b}</b>: no sentido anti-horário você vai para ${k}, e a sensível desce meio tom para virar a subdominante.`,
   hRes: (a: S, b: S, c: S, d: S) => `<b>Resolução</b>: o trítono ${a}–${b} é instável. Cada nota anda meio tom: ${a} desce para ${c} e ${b} sobe para ${d}, a tônica.`,
   lgSub: 'subdominante (4)', lgLt: 'sensível (7)', lgGhost: 'tracejado: para onde a nota vai, na cor da nova função',
   /* origin */
-  originDesc: 'Pitágoras mediu cordas: metade da corda soa uma oitava acima (2:1), dois terços soam uma quinta acima (3:2). Cada linha do desenho liga uma nota à quinta seguinte. Na afinação pura, 12 quintas não voltam exatamente ao Dó: o desenho vira uma espiral e sobra a coma pitagórica. O piano usa o temperamento igual, que encolhe cada quinta um pouquinho para o círculo fechar.',
+  originDesc: 'Na série harmônica, a quinta (3:2) é a primeira nota nova dentro de um som. Pitágoras chegou a ela medindo cordas: metade da corda soa uma oitava acima (2:1), dois terços soam uma quinta acima (3:2). Cada linha do desenho liga uma nota à quinta seguinte. Na afinação pura, 12 quintas não voltam exatamente ao Dó: o desenho vira uma espiral e sobra a coma pitagórica. O piano usa o temperamento igual, que encolhe cada quinta um pouquinho para o círculo fechar.',
   tunePure: 'Quintas puras (3:2)', tuneEq: 'Temperamento igual', playFifth: 'Ouvir a quinta', playComma: 'Ouvir a coma',
   readPure: '12 quintas puras = 8423,46 cents · 7 oitavas = 8400 cents · sobram 23,46 cents: a coma pitagórica. Ouça: Dó e Si♯ juntos “batem”, um tremor de cerca de 3,6 vezes por segundo.',
   readEq: '12 quintas de 700 cents = 8400 cents = exatamente 7 oitavas. O círculo fecha e Si♯ vira a mesma tecla que Dó.',
@@ -109,9 +111,15 @@ export const pt = {
   tMaj: 'Maior: 3ª maior (+4) e 5ª justa (+1)', tMin: 'Menor: 3ª menor (−3) e 5ª justa (+1)', tDim: 'Diminuto: 3ª menor (−3) e 5ª diminuta (−6)',
   fits: (n: S) => `cabe: ${n}`, outside: (n: S) => `${n} fica fora da janela`, and: ' e ',
   chordRead: (l: S, ns: S[], a: number, b: number) => `${l} = ${ns.join(' ')} · ${a} + ${b} semitons`,
+  fieldWhy: [
+    '<b>Fundamental</b>: a nota de baixo da pilha de terças, a que dá nome ao acorde. Em Rém, a fundamental é Ré.',
+    '<b>Algarismos romanos</b>: cada acorde ganha o número do grau em que nasce, em algarismo romano. Maiúsculo (I, IV, V) é acorde maior; minúsculo (ii, iii, vi) é menor; ° (vii°) é diminuto. Assim a mesma receita vale em qualquer tonalidade: I–IV–V é Dó–Fá–Sol em Dó maior e Sol–Dó–Ré em Sol maior.',
+    '<b>Por que só três tipos</b>: cada acorde precisa de uma 3ª e de uma 5ª dentro da janela de 7 quintas. A forma maior só cabe a partir das três casas da esquerda (IV, I, V); a menor, das três seguintes (ii, vi, iii); e a casa da ponta direita (vii) só aceita a forma diminuta. Por isso toda tonalidade maior tem 3 acordes maiores, 3 menores e 1 diminuto, sempre nos mesmos graus.',
+    '<b>Maior × menor</b>: as duas tríades têm as mesmas peças, uma 3ª maior (4) e uma 3ª menor (3), em ordem trocada. Com a maior embaixo (4 + 3) o acorde soa claro; com a menor embaixo (3 + 4), escuro. A 5ª justa (7) é igual nas duas.',
+  ],
   lgMaj: 'maior (4 + 3)', lgMin: 'menor (3 + 4)', lgDim: 'diminuto (3 + 3)', window: 'janela',
   /* intervals */
-  intDesc: 'Escolha um número. A lista mostra os 7 intervalos desse número dentro da escala atual, um a partir de cada grau, com o tamanho em semitons. Repare que cada número aparece em exatamente dois tamanhos (a 8ª é a exceção, com um só). Toque numa linha para ver no teclado: os números dentro das teclas contam os nomes de nota, e o colchete conta os semitons.',
+  intDesc: 'Intervalo é a distância entre duas notas. Escolha um número. A lista mostra os 7 intervalos desse número dentro da escala atual, um a partir de cada grau, com o tamanho em semitons. Repare que cada número aparece em exatamente dois tamanhos (a 8ª é a exceção, com um só). Toque numa linha para ver no teclado: os números dentro das teclas contam os nomes de nota, e o colchete conta os semitons.',
   intPick: 'Número do intervalo', playInt: 'Ouvir o intervalo', intWhyTitle: 'Por que esses nomes',
   ord: (n: number) => n + 'ª',
   q: { P: 'justa', M: 'maior', m: 'menor', A: 'aumentada', d: 'diminuta' } as Record<string, S>,
@@ -133,7 +141,7 @@ export const pt = {
     '<b>Em outras línguas</b>: justa em português e espanhol, juste em francês, rein (“pura”) em alemão, perfect em inglês. Todas dizem a mesma coisa: exata, sem variação.',
   ],
   /* tetrachords */
-  tetraDesc: 'Tetracorde vem do grego: tetra (quatro) + chordé (corda). A lira grega era afinada em blocos de quatro cordas, com as duas das pontas a uma quarta justa. A escala maior são dois blocos com o mesmo formato, T T S, ligados por um tom. O bloco de cima de uma tonalidade é o bloco de baixo da próxima no círculo.',
+  tetraDesc: 'Tetracorde vem do grego: tetra (quatro) + chordé (corda). A lira grega era afinada em blocos de quatro cordas, com as duas das pontas a uma quarta justa. A escala maior são dois blocos com o mesmo formato, T T S, ligados por um tom. O bloco de cima de uma tonalidade é o bloco de baixo de outra, uma quinta acima. Seguir essa corrente leva ao círculo das quintas, o tema das próximas aulas.',
   playTetra: 'Ouvir os três blocos', lgT1: 'tetracorde inferior', lgT2: 'tetracorde superior', lgT3: 'próximo tetracorde', lgTch: 'acidente novo',
   tetN1: (k: S, lo: S, up: S) => `<b>${k}</b> = ${lo} + tom + ${up}. Os dois blocos têm o mesmo formato: T T S.`,
   tetN2: (up: S, k2: S, nw: S, ch: S) => `<b>A corrente</b>: o bloco ${up} vira o de baixo de ${k2}. O bloco seguinte, ${nw}, só fica com o formato T T S se usar ${ch}. É daí que vem o acidente novo.`,
@@ -179,6 +187,7 @@ export const pt = {
   feel: ['repetição', 'contraste: empurra', 'suave: troca de cor', 'forte: movimento de cadência', 'forte, mas se afastando de casa', 'suave: troca de cor', 'contraste'],
   logicTitle: 'A lógica por baixo',
   pLogic: [
+    '<b>Cadência</b>: o final de uma frase, como a pontuação de um texto. V → I é a cadência perfeita (ou autêntica), o ponto final. Parar no V é a cadência suspensiva (ou meia cadência), uma vírgula. IV → I é a cadência plagal, e V → vi a cadência de engano.',
     '<b>Quinta descendente é o movimento mais forte</b>: a fundamental cai uma quinta (V → I, ii → V). Só uma nota fica e as outras andam por tom ou semitom. No círculo, é andar no sentido anti-horário, em direção à tônica.',
     '<b>Terça é o movimento mais suave</b>: duas notas ficam e só uma anda. Por isso I → vi ou IV → ii soam como troca de cor, não de lugar.',
     '<b>Grau é o movimento de contraste</b>: nenhuma nota em comum (IV → V). O ouvido sente um empurrão.',
@@ -215,7 +224,7 @@ export const pt = {
   /* glossary */
   search: 'sensível, enarmônico, quinta…',
   count: (a: number, b: number) => `${a} de ${b} termos`, empty: 'Nenhum termo encontrado. Tente “quinta” ou “sustenido”.',
-  footer: 'Próxima aula: escalas menores e tonalidades relativas, o anel interno do círculo.',
+  footer: 'Toque no nome da aula ao lado de um termo para ir até onde ele é explicado.',
 
   /* ---------- free piano ---------- */
   piano: {

@@ -41,7 +41,7 @@ const pt = {
     `<b>Na linha de quintas:</b> a tônica menor está três quintas à direita da maior (${line}). Ela fica dentro da mesma janela de 7 quintas, só que perto da outra ponta.`,
     `<b>Por que soa mais escura:</b> a partir de ${mt}, o 3º grau fica a 3 semitons da tônica (3ª menor) em vez de 4. O acorde de tônica vira um acorde menor, e é ele que dá o “clima” da escala.`,
     `<b>De onde vem o nome:</b> no século XVI, o teórico suíço Glarean chamou essa escala de modo eólio. A escala maior era o modo jônio. Os dois acabaram vencendo os outros modos e viraram a base da música tonal.`,
-    `<b>Na partitura:</b> como a armadura é a mesma, olhe para a primeira e a última nota (ou acorde) do baixo. Se a peça termina em ${mt}, está em ${min}. Outra pista é um acidente ocorrente no 7º grau, que é o assunto da próxima aula.`,
+    `<b>Na partitura:</b> como a armadura é a mesma, olhe para a primeira e a última nota (ou acorde) do baixo. Se a peça termina em ${mt}, está em ${min}. Outra pista é um acidente ocorrente (um ♯ ou ♭ escrito ao lado da nota, fora da armadura) no 7º grau, que é o assunto da próxima aula.`,
   ],
 };
 
@@ -84,7 +84,7 @@ const en: typeof pt = {
     `<b>On the line of fifths:</b> the minor tonic is three fifths to the right of the major one (${line}). It is inside the same window of 7 fifths, just near the other end.`,
     `<b>Why it sounds darker:</b> from ${mt}, the 3rd degree is 3 half steps above the tonic (a minor 3rd) instead of 4. The tonic chord becomes a minor chord, and that chord sets the mood of the scale.`,
     `<b>Where the name comes from:</b> in the 16th century the Swiss theorist Glarean called this scale the Aeolian mode. The major scale was the Ionian mode. These two outlived the other modes and became the basis of tonal music.`,
-    `<b>On the page:</b> since the key signature is the same, look at the first and last bass note (or chord). If the piece ends on ${mt}, it is in ${min}. Another clue is an accidental on degree 7, which is the topic of the next lesson.`,
+    `<b>On the page:</b> since the key signature is the same, look at the first and last bass note (or chord). If the piece ends on ${mt}, it is in ${min}. Another clue is an accidental (a ♯ or ♭ written next to a note, outside the key signature) on degree 7, which is the topic of the next lesson.`,
   ],
 };
 

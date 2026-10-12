@@ -9,7 +9,7 @@ const pt = {
     sub: 'iv, ♭VI, ♭VII: acordes da menor paralela dentro da maior',
     teaser: 'A mesma casa com outra luz: acordes pegos da tonalidade menor com a mesma tônica.',
   },
-  desc: 'A menor paralela tem a mesma tônica que a sua tonalidade maior, mas três notas abaixadas meio tom: o 3º, o 6º e o 7º graus. Como a casa é a mesma, dá para pegar acordes dela emprestados sem mudar de tonalidade. O resultado é uma sombra rápida, um toque de melancolia ou de força.',
+  desc: 'A menor paralela (também chamada de homônima) tem a mesma tônica que a sua tonalidade maior, mas três notas abaixadas meio tom: o 3º, o 6º e o 7º graus. Como a casa é a mesma, dá para pegar acordes dela emprestados sem mudar de tonalidade. O resultado é uma sombra rápida, um toque de melancolia ou de força.',
   stepsTitle: 'Passo a passo',
   step1: (maj: S, min: S) => `<b>Mesma tônica, outra escala:</b> ${maj} e ${min} começam na mesma nota.`,
   step2: (b3: S, b6: S, b7: S) => `<b>Três notas descem meio tom:</b> 3º, 6º e 7º graus viram ${b3}, ${b6} e ${b7}. Na linha de quintas, a janela anda 3 passos para a esquerda (3 bemóis a mais).`,

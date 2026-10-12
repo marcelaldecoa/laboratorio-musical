@@ -436,3 +436,19 @@ dialog.sheet::backdrop{background:rgba(10,14,12,.45);backdrop-filter:blur(3px);-
 .rec.on{background:var(--change-soft);color:var(--change-ink);border-color:var(--change);animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.75}}
 @media (prefers-reduced-motion:reduce){.rec.on{animation:none}}
+.formula-steps{font-family:var(--f-mono);font-size:.88rem}
+.formula-sig .staff{max-width:320px;margin:0 auto}
+/* lesson intro: prerequisites and new terms */
+.lesson-intro{display:flex;flex-direction:column;gap:8px;margin:-2px 0 6px}
+.needs{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.needs .rowlab{margin:0 4px 0 0}
+.need{font-size:.84rem;text-decoration:none;color:var(--tone-ink,var(--accent-ink));background:var(--tone-soft,var(--accent-soft));padding:5px 11px;border-radius:999px;min-height:32px;display:inline-flex;align-items:center}
+.terms{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.terms summary{cursor:pointer;font-size:.9rem;color:var(--muted);min-height:28px}
+.terms summary::marker{color:var(--accent)}
+.terms dl{margin:10px 0 0;display:grid;gap:10px}
+.terms dt{font-weight:600}
+.terms dt .alt{font-weight:400;font-size:.85rem;color:var(--muted);font-style:italic}
+.terms dd{margin:2px 0 0;font-size:.92rem}
+.gl-lesson{font-size:.82rem;color:var(--muted)}
+.gl-lesson a{color:var(--accent-ink)}

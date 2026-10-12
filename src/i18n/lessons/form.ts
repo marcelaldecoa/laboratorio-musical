@@ -16,8 +16,8 @@ const pt = {
   stepsTitle: 'Passo a passo',
   steps: [
     'Uma frase é uma ideia musical de cerca de 4 compassos, que dá para cantar num fôlego só.',
-    'A primeira frase, a pergunta, termina no V: uma meia cadência. O V é a dominante, que puxa para casa; parar nele soa como uma vírgula.',
-    'A segunda frase, a resposta, começa igual à pergunta. Só o final muda: V → I, a cadência autêntica, com a melodia na tônica. Soa como ponto final.',
+    'A primeira frase, a pergunta, termina no V: uma meia cadência (ou cadência suspensiva). O V é a dominante, que puxa para casa; parar nele soa como uma vírgula.',
+    'A segunda frase, a resposta, começa igual à pergunta. Só o final muda: V → I, a cadência autêntica (ou perfeita), com a melodia na tônica. Soa como ponto final.',
     'Pergunta + resposta = um período de 4 + 4 compassos. Troque o final da resposta abaixo e ouça a diferença.',
   ],
   endLabel: 'Final da resposta',
