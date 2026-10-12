@@ -140,3 +140,4 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible,input:focus-visibl
 .c-lessons{display:flex;flex-wrap:wrap;gap:6px}
 .back{display:inline-block;color:var(--brand-ink);text-decoration:none;font-family:var(--f-label);min-height:32px}
 .born-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0;font-size:.88rem;color:var(--muted)}
+.hist-axis.muted{fill:var(--muted)}

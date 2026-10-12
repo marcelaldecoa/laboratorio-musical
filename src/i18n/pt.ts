@@ -292,7 +292,7 @@ export const pt = {
     tab: 'História', title: 'História da música', sub: 'por que a música soa como soa',
     intro: 'Cada período da música resolveu um problema do seu tempo, e muitas regras da teoria nasceram assim. Aqui a história não é uma lista de datas: cada época abre com uma pergunta e mostra o instrumento, o som e a teoria que nasceram ali.',
     growTitle: 'O teclado cresce', growDesc: 'O tamanho do teclado de cada época, aproximado. Mais teclas significam mais registro grave e agudo para os compositores explorarem.',
-    keys: (n: number) => `${n} teclas`, noKeyboard: 'sem teclado em uso comum',
+    keysCol: 'teclas', keys: (n: number) => `${n} teclas`, noKeyboard: 'sem teclado em uso comum',
     timeline: 'Linha do tempo', question: 'A pergunta da época', instrument: 'O instrumento', sketch: 'Ouça o som da época',
     sketchHint: 'Um esboço original, não uma obra: só os traços característicos do período.',
     theory: 'A teoria que nasceu aqui', composers: 'Compositores', listen: 'Para ouvir', play: 'Para tocar', fact: 'Curiosidade',

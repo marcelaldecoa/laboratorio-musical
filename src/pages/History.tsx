@@ -27,7 +27,8 @@ function KeyboardGrowth() {
     <section className="hist-grow">
       <h2>{H.growTitle}</h2>
       <p className="desc">{H.growDesc}</p>
-      <svg viewBox={`0 0 ${W + 120} ${rows.length * 26 + 20}`} role="img" aria-label={H.growTitle}>
+      <svg viewBox={`0 -16 ${W + 175} ${rows.length * 26 + 36}`} role="img" aria-label={H.growTitle}>
+        <text x={W + 172} y={-4} textAnchor="end" className="hist-axis muted">{H.keysCol}</text>
         <line x1={x(0)} x2={x(0)} y1={0} y2={rows.length * 26 + 4} className="hist-c" />
         <text x={x(0)} y={rows.length * 26 + 16} textAnchor="middle" className="hist-axis">{H.middleC}</text>
         {rows.map((p, i) => {
@@ -40,7 +41,8 @@ function KeyboardGrowth() {
               ) : (
                 <rect x={x(-12)} y={y} width={x(12) - x(-12)} height={16} rx={3} className="hist-bar none" />
               )}
-              <text x={W + 6} y={y + 12} className="hist-axis">{txt.name.split(' ')[0]} · {p.range ? H.keys(keyCount(p.range)) : '—'}</text>
+              <text x={W + 8} y={y + 12} className="hist-axis">{txt.name.split(' ')[0]}</text>
+              <text x={W + 172} y={y + 12} textAnchor="end" className="hist-axis muted">{p.range ? keyCount(p.range) : '—'}</text>
             </g>
           );
         })}

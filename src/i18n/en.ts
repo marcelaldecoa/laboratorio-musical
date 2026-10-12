@@ -273,7 +273,7 @@ export const en: Dict = {
     tab: 'History', title: 'History of music', sub: 'why music sounds the way it does',
     intro: 'Each period of music solved a problem of its own time, and many rules of theory were born that way. Here history is not a list of dates: every era opens with a question and shows the instrument, the sound and the theory born there.',
     growTitle: 'The keyboard grows', growDesc: 'The approximate size of each era’s keyboard. More keys mean more low and high register for composers to explore.',
-    keys: (n: number) => `${n} keys`, noKeyboard: 'no keyboard in common use',
+    keysCol: 'keys', keys: (n: number) => `${n} keys`, noKeyboard: 'no keyboard in common use',
     timeline: 'Timeline', question: 'The question of the era', instrument: 'The instrument', sketch: 'Hear the sound of the era',
     sketchHint: 'An original sketch, not a real piece: just the period’s characteristic traits.',
     theory: 'The theory born here', composers: 'Composers', listen: 'To listen', play: 'To play', fact: 'Curiosity',
