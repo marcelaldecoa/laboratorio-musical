@@ -35,7 +35,7 @@ export const CURRICULUM: Step[] = [
   { id: 'field', track: 'harmony', needs: ['win', 'int'], terms: ['Root', 'Triad', 'Major, minor, diminished', 'Diatonic chords', 'Roman numerals'] },
   { id: 'prog', track: 'harmony', needs: ['field', 'func'], terms: ['Harmonic function', 'Progression', 'Cadence', 'Authentic cadence', 'Plagal cadence', 'Half cadence', 'Deceptive cadence', 'Voice leading', 'Common tone'] },
   // 5. Time
-  { id: 'rhythm', track: 'rhythm', needs: ['keys'], terms: ['Beat', 'Time signature', 'Strong beat', 'Note value', 'Compound meter', 'Tempo'] },
+  { id: 'rhythm', track: 'rhythm', needs: ['keys'], terms: ['Beat', 'Time signature', 'Downbeat', 'Note value', 'Compound meter', 'Tempo'] },
   // 6. Melody over chords, phrases, composing
   { id: 'chordtones', track: 'melody', needs: ['prog', 'rhythm'], terms: ['Step (conjunct motion)', 'Chord tone', 'Passing tone', 'Neighbor tone', 'Appoggiatura'] },
   { id: 'form', track: 'melody', needs: ['chordtones'], terms: ['Phrase', 'Period', 'Form', 'Bridge', 'Chorus'] },
