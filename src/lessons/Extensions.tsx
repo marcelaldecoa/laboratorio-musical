@@ -3,6 +3,7 @@ import { playNotes } from '../audio/audio';
 import { ColorBracket } from '../components/ChordsKit';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/extensions';
 import { useLessonText } from '../i18n/lessonText';
@@ -70,9 +71,18 @@ export function Extensions() {
     else brackets.push({ a: R, b: p, label: `${t.sum(e.num, simple)} · ${e.semis}`, color: 'var(--muted)' });
   });
 
+  // predict: over I (a major chord) which extension is avoided?
+  const pI = diatonicSeventhInfo(sc, 0);
+  const pR = pcOf(pI.notes[0]);
+  const pMarks: Record<number, Mark> = {};
+  SEVENTH_SEMIS[pI.quality].forEach((x, i) => (pMarks[pR + x] = roleMark(pR + x, i === 0 ? 'tonic' : 'scale', undefined, nm(pI.notes[i]))));
+  const pSym = letterName(pI.notes[0]) + seventhSuffix(pI.quality, st);
+
   return (
     <>
       <p className="desc">{t.desc}</p>
+      <Predict mode="key" resetOn={`${s.k}${s.enh}`} lay={layout(0, 23)} marks={pMarks} answer={[pR + 17 <= 23 ? pR + 17 : pR + 5]} anyOctave
+        prompt={t.p1(pSym, pI.notes.map(nm).join(' '))} reveal={t.p1r(nm(sc[3]), nm(sc[2]))} />
       <p className="rowlab">{t.pick(keyName(cur))}</p>
       <div className="chips" role="group">
         {[0, 1, 2, 3, 4, 5, 6].map((k) => {
@@ -123,7 +133,9 @@ export function Extensions() {
         <p key={e.num} className="hint">{t.clashRead(toneLabel(e), nm(e.note), nm(e.clash!))}</p>
       ))}
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic.map((html) => ({ html }))} />
+      <Notes items={t.logic.map((html) => ({ html }))} more={[4]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

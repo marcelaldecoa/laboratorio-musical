@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -32,13 +33,25 @@ const pt = {
   lgAvoid: 'nota evitada',
   lgFold: 'onde a nota estava na pilha',
   stepsNote: 'Embaixo das teclas: os semitons de cada terça da pilha.',
+  p1: (sym: S, names: S) => `Sobre ${sym} (<b>${names}</b>), as extensões vêm da escala: a 9ª, a 11ª e a 13ª. Uma delas fica meio tom acima de uma nota do acorde e briga com ela. Qual? Toque-a.`,
+  p1r: (ext: S, third: S) => `${ext}, a 11ª. Ela fica meio tom acima de ${third}, a 3ª do acorde; com a 11ª uma oitava acima, as duas formam uma 9ª menor, um choque áspero que apaga a cor maior. Por isso, sobre acordes maiores, a 11 natural é evitada e se usa a ♯11.`,
+  transfer: (k: S) => `Em ${k}: sobre o V7, qual extensão é evitada? Procure a nota da escala que fica meio tom acima de uma nota do acorde.`,
+  recap: {
+    oneLine: 'Porque a pilha de terças, depois da 7ª, só traz notas novas nas posições ímpares: 9, 11 e 13 são a 2ª, a 4ª e a 6ª uma oitava acima, enquanto 10, 12 e 14 repetiriam a 3ª, a 5ª e a 7ª que o acorde já tem.',
+    confusions: [
+      '<b>9 × 2 (e C9 × Cadd9):</b> é a mesma letra, uma oitava acima. Na cifra, C9 já traz a 7ª; sem a 7ª se escreve Cadd9.',
+      '<b>11 × ♯11:</b> sobre acorde maior, a 11 natural (Fá sobre Dó) fica meio tom acima da 3ª (Mi) e choca; a ♯11 (Fá♯) fica um tom acima e soa bem.',
+      '<b>Extensão × nota do acorde:</b> 10, 12 e 14 não são extensões porque são a 3ª, a 5ª e a 7ª de novo, uma oitava acima.',
+    ],
+    show: 'Toque Dó Mi Sol Si (C7M) e acrescente Ré lá em cima: soa aberto, é a 9ª. Troque o Ré por Fá: ele fica meio tom acima do Mi e o acorde perde a cor maior. Troque por Fá♯: a cor volta.',
+  } satisfies RecapText,
   logicTitle: 'A lógica por baixo',
   logic: [
+    '<b>Por que só números ímpares (e nunca 10 ou 12):</b> cada terça soma 2 ao número da nota: 1, 3, 5, 7, 9, 11, 13. Por isso a pilha nunca cai num número par. E um 10, 12 ou 14 não traria nada novo: seriam a 3ª, a 5ª e a 7ª uma oitava acima, notas que o acorde já tem. Depois do 13 vem o 15, a fundamental duas oitavas acima: as sete letras já foram usadas e a pilha acaba.',
     '<b>Por que 9 = 2 + 8 − 1:</b> contar intervalos inclui as duas pontas. Subir uma oitava soma 7 nomes de nota, não 8, porque a oitava compartilha a nota de partida. Então 2 + 7 = 9, 4 + 7 = 11 e 6 + 7 = 13.',
-    '<b>Por que não existe 10, 12 ou 14:</b> os números pares acima da oitava repetem notas do acorde: 10 = 3, 12 = 5, 14 = 7, e 15 é a fundamental de novo. Só os ímpares que caem fora da tríade (9, 11, 13) trazem cor nova.',
-    '<b>Por que algumas são evitadas:</b> uma extensão meio tom acima de uma nota do acorde forma com ela uma 9ª menor, o choque mais áspero que existe. Sobre um acorde maior (I7M, V7) a 11ª fica meio tom acima da 3ª e apaga o caráter maior. Por isso, sobre acordes maiores, a 11 aparece como ♯11.',
-    '<b>Por acorde:</b> 7M aceita 9, ♯11 e 13; 7 (dominante) aceita 9 e 13, e as alteradas (subidas ou abaixadas meio tom) ♭9, ♯9, ♯11 e ♭13; m7 aceita 9 e 11 (a 13 depende do grau); m7(♭5) aceita 11 e ♭13. Toque cada grau acima e veja a regra do meio tom funcionando.',
+    '<b>Por que algumas são evitadas:</b> uma extensão meio tom acima de uma nota do acorde forma com ela uma 9ª menor, um dos choques mais ásperos. Sobre um acorde maior (I7M, V7) a 11ª fica meio tom acima da 3ª e apaga o caráter maior. Por isso, sobre acordes maiores, a 11 aparece como ♯11.',
     '<b>Na prática:</b> no piano raramente se tocam as sete notas. Em geral se tira a 5ª (e às vezes a fundamental, que o baixo já toca) e se mantêm 3ª, 7ª e as tensões, que são as notas que dão cor.',
+    '<b>Por acorde:</b> 7M aceita 9, ♯11 e 13; 7 (dominante) aceita 9 e 13, e as alteradas (subidas ou abaixadas meio tom) ♭9, ♯9, ♯11 e ♭13; m7 aceita 11, e a 9 e a 13 dependem do grau (no iii a 9 cai meio tom acima da fundamental e é evitada); m7(♭5) aceita 11 e ♭13. Toque cada grau acima e veja a regra do meio tom funcionando.',
   ],
 };
 
@@ -72,13 +85,25 @@ const en: typeof pt = {
   lgAvoid: 'avoid note',
   lgFold: 'where the note was in the stack',
   stepsNote: 'Under the keys: the half steps of each third in the stack.',
+  p1: (sym: S, names: S) => `Over ${sym} (<b>${names}</b>), the extensions come from the scale: the 9th, 11th and 13th. One of them sits a half step above a chord tone and clashes with it. Which one? Tap it.`,
+  p1r: (ext: S, third: S) => `${ext}, the 11th. It sits a half step above ${third}, the chord’s 3rd; with the 11th an octave up, the two make a minor 9th, a harsh clash that blurs the major color. That is why, over major chords, the natural 11 is avoided and ♯11 is used instead.`,
+  transfer: (k: S) => `In ${k}: over V7, which extension is avoided? Look for the scale note a half step above a chord tone.`,
+  recap: {
+    oneLine: 'Because after the 7th the stack of thirds only brings new notes on odd numbers: 9, 11 and 13 are the 2nd, 4th and 6th an octave up, while 10, 12 and 14 would repeat the 3rd, 5th and 7th the chord already has.',
+    confusions: [
+      '<b>9 vs 2 (and C9 vs Cadd9):</b> same letter, an octave up. In a symbol, C9 already includes the 7th; without the 7th you write Cadd9.',
+      '<b>11 vs ♯11:</b> over a major chord, the natural 11 (F over C) sits a half step above the 3rd (E) and clashes; ♯11 (F♯) is a whole step above it and sounds fine.',
+      '<b>Extension vs chord tone:</b> 10, 12 and 14 are not extensions because they are the 3rd, 5th and 7th again, an octave up.',
+    ],
+    show: 'Play C E G B (Cmaj7) and add D on top: it sounds open, that is the 9th. Swap D for F: it sits a half step above E and the chord loses its major color. Swap it for F♯: the color comes back.',
+  } satisfies RecapText,
   logicTitle: 'The logic underneath',
   logic: [
+    '<b>Why only odd numbers (and never 10 or 12):</b> each third adds 2 to the note’s number: 1, 3, 5, 7, 9, 11, 13. So the stack never lands on an even number. And a 10, 12 or 14 would bring nothing new: they would be the 3rd, 5th and 7th an octave up, notes the chord already has. After 13 comes 15, the root two octaves up: all seven letters are used and the stack ends.',
     '<b>Why 9 = 2 + 8 − 1:</b> counting intervals includes both ends. Going up an octave adds 7 letter names, not 8, because the octave shares its starting note. So 2 + 7 = 9, 4 + 7 = 11 and 6 + 7 = 13.',
-    '<b>Why there is no 10, 12 or 14:</b> the even numbers above the octave repeat chord tones: 10 = 3, 12 = 5, 14 = 7, and 15 is the root again. Only the odd ones outside the triad (9, 11, 13) bring new color.',
-    '<b>Why some are avoided:</b> an extension a half step above a chord tone makes a minor 9th with it, the harshest clash there is. Over a major chord (Imaj7, V7) the 11th sits a half step above the 3rd and blurs the major sound. That is why, over major chords, the 11 shows up as ♯11.',
-    '<b>Chord by chord:</b> maj7 takes 9, ♯11 and 13; 7 (dominant) takes 9 and 13, plus the altered ones (raised or lowered a half step) ♭9, ♯9, ♯11 and ♭13; m7 takes 9 and 11 (the 13 depends on the degree); m7♭5 takes 11 and ♭13. Tap each degree above and watch the half-step rule at work.',
+    '<b>Why some are avoided:</b> an extension a half step above a chord tone makes a minor 9th with it, one of the harshest clashes. Over a major chord (Imaj7, V7) the 11th sits a half step above the 3rd and blurs the major sound. That is why, over major chords, the 11 shows up as ♯11.',
     '<b>In practice:</b> pianists rarely play all seven notes. Usually the 5th is dropped (and sometimes the root, which the bass already plays), keeping the 3rd, the 7th and the tensions, the notes that give the color.',
+    '<b>Chord by chord:</b> maj7 takes 9, ♯11 and 13; 7 (dominant) takes 9 and 13, plus the altered ones (raised or lowered a half step) ♭9, ♯9, ♯11 and ♭13; m7 takes 11, while the 9 and 13 depend on the degree (on iii the 9 sits a half step above the root and is avoided); m7♭5 takes 11 and ♭13. Tap each degree above and watch the half-step rule at work.',
   ],
 };
 

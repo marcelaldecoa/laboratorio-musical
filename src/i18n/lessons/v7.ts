@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -34,6 +35,21 @@ const pt = {
   lgGo: 'para onde a voz vai',
   lgWas: 'onde a voz estava',
   numNote: 'Os números dentro das teclas são os graus da escala.',
+  p1: (v7: S, key: S, tonic: S) => `Estas são as quatro notas do ${v7}. Uma delas é a sensível de ${key}: o 7º grau, meio tom abaixo de ${tonic}. Qual? Toque-a.`,
+  p1r: (lt: S, tonic: S, v7: S) => `${lt}, a 3ª do ${v7}. Ela é o 7º grau da escala, meio tom abaixo de ${tonic}: a distância mais curta até a tônica. Por isso o ouvido espera que ela suba.`,
+  p2: 'O trítono do V7 tem 6 semitons. Se a sensível sobe meio tom e a 7ª do acorde desce meio tom, em que intervalo ele se fecha?',
+  p2opts: ['uma 3ª maior (4 semitons)', 'uma 5ª justa (7 semitons)', 'uma oitava (12 semitons)'],
+  p2r: (lt: S, tonic: S, sub: S, third: S) => `Uma 3ª maior. As duas notas andam meio tom, uma em direção à outra: ${lt} sobe para ${tonic} e ${sub} desce para ${third}. 6 − 1 − 1 = 4, e as duas notas de chegada são do acorde da tônica.`,
+  transfer: (k: S) => `Em ${k}: quais são as duas notas do trítono do V7, e para onde cada uma vai?`,
+  recap: {
+    oneLine: 'O G7 guarda o trítono Si–Fá: Si é a sensível e quer subir meio tom para Dó, Fá é a 7ª e quer descer meio tom para Mi; as duas saídas mais curtas chegam juntas no acorde de Dó.',
+    confusions: [
+      '<b>7ª do acorde × 7º grau:</b> a 7ª do G7 é Fá (o 4º grau de Dó); o 7º grau da escala, Si, é a 3ª do G7. Conte a partir da fundamental do acorde, não da tônica.',
+      '<b>V × V7:</b> os dois resolvem no I, mas só o V7 tem o trítono completo. O V já tem a sensível; a 7ª acrescenta a subdominante, que desce.',
+      '<b>Trítono × 5ª:</b> o trítono tem 6 semitons, meio tom a menos que a 5ª justa (7). Sol–Ré é 5ª justa; Si–Fá é trítono.',
+    ],
+    show: 'Com a mão direita, toque Si e Fá juntos: o trítono. Agora mova cada dedo meio tom para dentro: Si sobe para Dó, Fá desce para Mi. Acrescente Sol no baixo antes e Dó depois: G7 → C.',
+  } satisfies RecapText,
   logicTitle: 'A lógica por baixo',
   logic: [
     '<b>Por que a 7ª do V é a subdominante:</b> é só contar terças na escala. A partir do 5º grau: 5, 7, 2, 4. O 4º grau entra como 7ª do acorde, e a sensível (7º grau) já estava lá como 3ª.',
@@ -76,6 +92,21 @@ const en: typeof pt = {
   lgGo: 'where the voice goes',
   lgWas: 'where the voice was',
   numNote: 'The numbers inside the keys are scale degrees.',
+  p1: (v7: S, key: S, tonic: S) => `These are the four notes of ${v7}. One of them is the leading tone of ${key}: degree 7, a half step below ${tonic}. Which one? Tap it.`,
+  p1r: (lt: S, tonic: S, v7: S) => `${lt}, the 3rd of ${v7}. It is the scale’s 7th degree, a half step below ${tonic}: the shortest distance to the tonic. That is why the ear expects it to rise.`,
+  p2: 'The tritone in V7 is 6 half steps. If the leading tone rises a half step and the chord’s 7th falls a half step, what interval does it close into?',
+  p2opts: ['a major 3rd (4 half steps)', 'a perfect 5th (7 half steps)', 'an octave (12 half steps)'],
+  p2r: (lt: S, tonic: S, sub: S, third: S) => `A major 3rd. The two notes move a half step toward each other: ${lt} rises to ${tonic} and ${sub} falls to ${third}. 6 − 1 − 1 = 4, and both arrival notes belong to the tonic chord.`,
+  transfer: (k: S) => `In ${k}: which two notes form the tritone of V7, and where does each one go?`,
+  recap: {
+    oneLine: 'G7 holds the tritone B–F: B is the leading tone and wants to rise a half step to C, F is the 7th and wants to fall a half step to E; the two shortest moves land together on the C chord.',
+    confusions: [
+      '<b>The chord’s 7th vs the 7th degree:</b> the 7th of G7 is F (degree 4 of C); the scale’s 7th degree, B, is the 3rd of G7. Count from the chord’s root, not from the tonic.',
+      '<b>V vs V7:</b> both resolve to I, but only V7 has the whole tritone. V already has the leading tone; the 7th adds the subdominant, which falls.',
+      '<b>Tritone vs 5th:</b> the tritone is 6 half steps, one less than a perfect 5th (7). G–D is a perfect 5th; B–F is a tritone.',
+    ],
+    show: 'With the right hand, play B and F together: the tritone. Now move each finger a half step inward: B up to C, F down to E. Add G in the bass before and C after: G7 → C.',
+  } satisfies RecapText,
   logicTitle: 'The logic underneath',
   logic: [
     '<b>Why the 7th of V is the subdominant:</b> just count thirds in the scale. From degree 5: 5, 7, 2, 4. Degree 4 enters as the chord’s 7th, and the leading tone (degree 7) was already there as its 3rd.',

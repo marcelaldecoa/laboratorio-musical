@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -35,15 +36,31 @@ const pt = {
   ivName: (n: number, q: S) => `${n}ª ${q}`,
   q: { P: 'justa', M: 'maior', m: 'menor', A: 'aumentada', d: 'diminuta' } as Record<string, S>,
   letters: 'A = Lá · B = Si · C = Dó · D = Ré · E = Mi · F = Fá · G = Sol',
+  p1: (sym: S) => `Leia a cifra <b>${sym}</b> e toque as quatro notas dela, em qualquer ordem e em qualquer oitava.`,
+  p1found: (n: number, total: number) => `(${n} de ${total})`,
+  p1play: 'Ouvir',
+  p1r: (names: S, L: S, root: S, third: S, fifth: S, sev: S, key: S) => `${names}. Em partes: ${L} = fundamental (${root}); “m” = 3ª menor (${third}); “(♭5)” = 5ª meio tom abaixo da justa (${fifth}); “7” sozinho = 7ª menor (${sev}). São as terças da pilha, uma por sinal. É a tétrade do vii de ${key}, toda dentro da escala.`,
+  p2: (sym: S) => `Na cifra ${sym}, o “7” sozinho pede qual 7ª?`,
+  p2opts: ['a 7ª maior (11 semitons)', 'a 7ª menor (10 semitons)'],
+  p2r: (sym: S, sev: S) => `A 7ª menor: em ${sym}, ${sev}. O “7” sozinho nasceu no acorde do V, a tétrade mais usada, e o V tem 7ª menor. O acorde mais comum ficou com o símbolo mais curto; a 7ª maior precisa ser avisada: 7M.`,
+  transfer: (k: S) => `Em ${k}: escreva as cifras do ii, do V e do vii (tétrades) e toque as notas de cada uma.`,
+  recap: {
+    oneLine: 'Leia por partes, porque cada sinal é uma terça da pilha: em Bm7(♭5), B é a fundamental (Si), m pede 3ª menor (Ré), ♭5 abaixa a 5ª (Fá) e 7 sozinho pede 7ª menor (Lá).',
+    confusions: [
+      '<b>C7 × C7M:</b> o 7 sozinho é a 7ª menor (Si♭); 7M, maj7 ou Δ é a 7ª maior (Si).',
+      '<b>m7(♭5) × °7:</b> ø ou m7(♭5) tem 7ª menor; °7 tem 7ª diminuta, meio tom abaixo. Bm7(♭5) = Si Ré Fá Lá; B°7 = Si Ré Fá Lá♭.',
+      '<b>C9 × Cadd9:</b> C9 tem a 7ª (Si♭) e a 9ª (Ré); Cadd9 só acrescenta a 9ª à tríade.',
+    ],
+    show: 'Escreva G/B num papel. Toque Si com a mão esquerda e Sol Si Ré com a direita. Depois leia Am7(♭5) em voz alta, sinal por sinal: Lá; 3ª menor, Dó; 5ª diminuta, Mi♭; 7ª menor, Sol.',
+  } satisfies RecapText,
   logicTitle: 'Como ler, passo a passo',
   logic: [
-    '<b>1. A letra:</b> A B C D E F G são Lá Si Dó Ré Mi Fá Sol. As letras são o sistema mais antigo: na Idade Média o A era a nota mais grave da escala usada nos mosteiros. O Dó Ré Mi veio depois, das sílabas de um hino que Guido d’Arezzo usava para ensinar canto.',
-    '<b>2. Nada depois da letra:</b> acorde maior (3ª maior + 5ª justa). Um <b>m</b> abaixa a 3ª meio tom: acorde menor.',
-    '<b>3. O 7 sozinho é a 7ª menor</b> (10 semitons), a que aparece no V e por isso é a mais comum. A 7ª maior precisa ser avisada: <b>7M</b> na cifra brasileira, <b>maj7</b> ou <b>Δ</b> na americana.',
-    '<b>4. ° e ø:</b> ° é o diminuto (terças menores empilhadas: °7 = 3 + 3 + 3). ø, ou m7(♭5), é o meio-diminuto: tríade diminuta com 7ª menor.',
-    '<b>5. Números acima de 7 incluem a 7ª:</b> C9 é C7 com a 9ª. Sem a 7ª, escreve-se <b>add9</b>. Na cifra brasileira as tensões vão entre parênteses: C7(9), C7M(9), G7(♭9).',
-    '<b>6. sus troca a 3ª:</b> sus4 usa a 4ª no lugar da 3ª, sus2 usa a 2ª. Sem 3ª, o acorde não é nem maior nem menor.',
-    '<b>7. A barra é o baixo:</b> G/B é Sol maior com Si embaixo. A letra depois da barra pode até estar fora do acorde.',
+    '<b>1. A letra é a fundamental:</b> A B C D E F G = Lá Si Dó Ré Mi Fá Sol. Um ♯ ou ♭ logo depois da letra faz parte dela: F♯m7 começa em Fá♯, B♭7M em Si♭.',
+    '<b>2. Depois vem a tríade:</b> nada = maior (3ª maior + 5ª justa); <b>m</b> = menor (3ª abaixada); <b>°</b> = diminuto (3ª e 5ª abaixadas); <b>+</b> = aumentado (5ª subida); <b>sus4</b> ou <b>sus2</b> troca a 3ª pela 4ª ou pela 2ª, e sem 3ª o acorde não é maior nem menor.',
+    '<b>3. Os números empilham mais terças:</b> <b>7</b> sozinho = 7ª menor; <b>7M</b> (maj7, Δ) = 7ª maior; <b>m7(♭5)</b> ou ø = tríade diminuta com 7ª menor; <b>°7</b> = três terças menores. Números acima de 7 já incluem a 7ª (C9 = C7 + 9ª); sem a 7ª, escreve-se <b>add9</b>. Na cifra brasileira as tensões vão entre parênteses: C7(9), G7(♭9). Um ♭ ou ♯ antes de um número muda só aquela nota: (♭5) abaixa a 5ª.',
+    '<b>4. A barra é o baixo:</b> G/B é Sol maior com Si embaixo. A nota depois da barra pode até estar fora do acorde (C/B♭).',
+    '<b>Por que o 7 sozinho é a 7ª menor:</b> a tétrade mais usada é o V7, e o V tem 7ª menor. A cifra deu o símbolo mais curto ao acorde mais comum e pediu aviso (7M) para a 7ª maior.',
+    '<b>De onde vêm as letras:</b> tratados medievais já nomeavam as notas com letras a partir do A, e por isso a sequência começa em Lá. As sílabas Ut Ré Mi Fá Sol Lá vêm de um hino que Guido d’Arezzo (século XI) usava para ensinar canto; mais tarde o Ut virou Dó e o Si foi acrescentado.',
   ],
 };
 
@@ -80,15 +97,31 @@ const en: typeof pt = {
   ivName: (n: number, q: S) => `${q} ${n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th'}`,
   q: { P: 'perfect', M: 'major', m: 'minor', A: 'augmented', d: 'diminished' },
   letters: 'In Portuguese: A = Lá · B = Si · C = Dó · D = Ré · E = Mi · F = Fá · G = Sol',
+  p1: (sym: S) => `Read the symbol <b>${sym}</b> and tap its four notes, in any order and any octave.`,
+  p1found: (n: number, total: number) => `(${n} of ${total})`,
+  p1play: 'Listen',
+  p1r: (names: S, L: S, root: S, third: S, fifth: S, sev: S, key: S) => `${names}. In parts: ${L} = root (${root}); “m” = minor 3rd (${third}); “♭5” = a 5th a half step below perfect (${fifth}); a plain “7” = minor 7th (${sev}). They are the thirds of the stack, one per sign. It is the seventh chord on vii of ${key}, entirely inside the scale.`,
+  p2: (sym: S) => `In the symbol ${sym}, which 7th does a plain “7” ask for?`,
+  p2opts: ['the major 7th (11 half steps)', 'the minor 7th (10 half steps)'],
+  p2r: (sym: S, sev: S) => `The minor 7th: in ${sym}, ${sev}. The plain “7” was born on the V chord, the most used seventh chord, and V has a minor 7th. The most common chord got the shortest symbol; the major 7th has to be announced: maj7.`,
+  transfer: (k: S) => `In ${k}: write the symbols for ii, V and vii (seventh chords) and play the notes of each.`,
+  recap: {
+    oneLine: 'Read it in parts, because each sign is one third of the stack: in Bm7♭5, B is the root, m asks for a minor 3rd (D), ♭5 lowers the 5th (F) and a plain 7 asks for a minor 7th (A).',
+    confusions: [
+      '<b>C7 vs Cmaj7:</b> a plain 7 is the minor 7th (B♭); maj7 or Δ (7M in Brazil) is the major 7th (B).',
+      '<b>m7♭5 vs °7:</b> ø or m7♭5 has a minor 7th; °7 has a diminished 7th, a half step lower. Bm7♭5 = B D F A; B°7 = B D F A♭.',
+      '<b>C9 vs Cadd9:</b> C9 has the 7th (B♭) and the 9th (D); Cadd9 only adds the 9th to the triad.',
+    ],
+    show: 'Write G/B on paper. Play B with the left hand and G B D with the right. Then read Am7♭5 aloud, sign by sign: A; minor 3rd, C; diminished 5th, E♭; minor 7th, G.',
+  } satisfies RecapText,
   logicTitle: 'How to read it, step by step',
   logic: [
-    '<b>1. The letter:</b> A B C D E F G are the note names. Letters are the oldest system: in the Middle Ages A was the lowest note of the scale used in monasteries. Do Re Mi came later, from the syllables of a hymn Guido d’Arezzo used to teach singing.',
-    '<b>2. Nothing after the letter:</b> a major chord (major 3rd + perfect 5th). An <b>m</b> lowers the 3rd a half step: a minor chord.',
-    '<b>3. A plain 7 is the minor 7th</b> (10 half steps), the one found on V and therefore the most common. The major 7th has to be announced: <b>maj7</b> or <b>Δ</b> (Brazilian charts write <b>7M</b>).',
-    '<b>4. ° and ø:</b> ° is diminished (stacked minor thirds: °7 = 3 + 3 + 3). ø, or m7♭5, is half-diminished: a diminished triad with a minor 7th.',
-    '<b>5. Numbers above 7 include the 7th:</b> C9 is C7 plus the 9th. Without the 7th you write <b>add9</b>. Altered tensions are added after the number: C7♭9, Cmaj7♯11.',
-    '<b>6. sus replaces the 3rd:</b> sus4 uses the 4th instead of the 3rd, sus2 uses the 2nd. With no 3rd, the chord is neither major nor minor.',
-    '<b>7. The slash is the bass:</b> G/B is G major with B at the bottom. The letter after the slash may even be outside the chord.',
+    '<b>1. The letter is the root:</b> A B C D E F G are the note names. A ♯ or ♭ right after the letter belongs to it: F♯m7 starts on F♯, B♭maj7 on B♭.',
+    '<b>2. Then comes the triad:</b> nothing = major (major 3rd + perfect 5th); <b>m</b> = minor (lowered 3rd); <b>°</b> = diminished (lowered 3rd and 5th); <b>+</b> = augmented (raised 5th); <b>sus4</b> or <b>sus2</b> replaces the 3rd with the 4th or the 2nd, and with no 3rd the chord is neither major nor minor.',
+    '<b>3. Numbers stack more thirds:</b> a plain <b>7</b> = minor 7th; <b>maj7</b> (Δ, 7M in Brazil) = major 7th; <b>m7♭5</b> or ø = diminished triad with a minor 7th; <b>°7</b> = three minor thirds. Numbers above 7 already include the 7th (C9 = C7 + 9th); without the 7th you write <b>add9</b>. Altered tensions come after the number: C7♭9, Cmaj7♯11. A ♭ or ♯ before a number changes only that note: ♭5 lowers the 5th.',
+    '<b>4. The slash is the bass:</b> G/B is G major with B at the bottom. The note after the slash may even be outside the chord (C/B♭).',
+    '<b>Why a plain 7 is the minor 7th:</b> the most used seventh chord is V7, and V has a minor 7th. The symbol gave the shortest name to the most common chord and asked for a warning (maj7) for the major 7th.',
+    '<b>Where the letters come from:</b> medieval treatises already named the notes with letters starting from A, which is why the sequence starts on A rather than C. The syllables Ut Re Mi Fa Sol La come from a hymn Guido of Arezzo (11th century) used to teach singing; later Ut became Do and Si (Ti) was added.',
   ],
 };
 

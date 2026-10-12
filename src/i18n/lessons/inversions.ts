@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -38,12 +39,27 @@ const pt = {
   playLine: 'Tocar a progressão',
   lgBass2: 'baixo',
   lgUpper: 'mão direita',
+  p1: (sym: S, names: S, root: S) => `${sym} em posição fundamental: <b>${names}</b>, com ${root} no baixo. Para a 1ª inversão, ${root} sobe uma oitava. Qual nota fica no baixo? Toque-a.`,
+  p1r: (third: S, root: S) => `${third}, a 3ª do acorde. Quando ${root} sai de baixo, a próxima nota da pilha de terças vira a mais grave. Por isso 1ª inversão = 3ª no baixo, 2ª = 5ª e 3ª = 7ª: a ordem das inversões é a ordem da pilha.`,
+  p2: (a: S, v: S, c: S, from: S, to: S, vNotes: S) => `A progressão ${a} – ${v} – ${c}. O baixo começa em ${from} e termina em ${to}. Qual nota de ${v} (${vNotes}) você põe no baixo para ele descer por grau, sem saltar? Toque-a.`,
+  p2r: (lt: S, v: S, from: S, to: S, slash: S) => `${lt}, a 3ª de ${v}. Ela fica entre ${from} e ${to}, então o baixo desce nota a nota. O acorde continua sendo ${v}, só que em 1ª inversão: ${slash}.`,
+  transfer: (k: S) => `Em ${k}: qual é o baixo do V na 1ª inversão? Escreva a cifra com barra.`,
+  recap: {
+    oneLine: 'Sim: com as mesmas notas o acorde é o mesmo e mantém o nome; trocar a nota de baixo muda só a cor dele e permite que a linha do baixo ande por grau, como uma melodia.',
+    confusions: [
+      '<b>Inversão × outro acorde:</b> C/E ainda é Dó maior (Dó Mi Sol), só que com Mi embaixo. Já Em é outro acorde (Mi Sol Si).',
+      '<b>Inversão de acorde × inversão de intervalo:</b> inverter um intervalo troca as duas notas de lugar (a 3ª vira 6ª); inverter um acorde muda só qual nota vai no baixo.',
+      '<b>Só o baixo conta:</b> a inversão depende apenas da nota mais grave. Dó Sol Mi, com Dó embaixo, continua em posição fundamental.',
+    ],
+    show: 'Toque Dó Mi Sol. Tire o Dó de baixo e coloque-o uma oitava acima: Mi Sol Dó, 1ª inversão. Repita: Sol Dó Mi, 2ª inversão. Toque as três e mostre que as notas não mudaram, só a de baixo.',
+  } satisfies RecapText,
   logicTitle: 'A lógica por baixo',
   logic: [
-    '<b>Por que o nome não muda:</b> o nome do acorde vem da pilha de terças, e a fundamental é a base dessa pilha. Inverter só reorganiza as alturas: as letras continuam as mesmas, então o acorde é o mesmo.',
-    '<b>Por que a cor muda:</b> o ouvido escuta tudo a partir do baixo. Na 1ª inversão as outras notas ficam a uma 3ª e a uma 6ª do baixo; na 2ª, a uma 4ª e a uma 6ª. A 4ª sobre o baixo soa instável, por isso a 2ª inversão costuma aparecer de passagem.',
-    '<b>Os números do baixo cifrado:</b> no Barroco o tecladista lia só a linha do baixo com números em cima. Esses números eram justamente os intervalos acima do baixo: “6” para a 1ª inversão, “6/4” para a 2ª, “6/5”, “4/3” e “4/2” para as tétrades. É daí que vêm os nomes de hoje.',
+    '<b>Por que o nome não muda:</b> o nome do acorde vem da pilha de terças, e a fundamental é a base dessa pilha. Inverter só leva algumas notas para outra oitava: as letras continuam as mesmas, então o acorde é o mesmo.',
+    '<b>Por que a cor muda:</b> o ouvido escuta tudo a partir do baixo. Na 1ª inversão as outras notas ficam a uma 3ª e a uma 6ª do baixo; na 2ª, a uma 4ª e a uma 6ª. A 4ª sobre o baixo soa instável, por isso a 2ª inversão costuma aparecer em lugares específicos: de passagem ou na cadência, antes do V.',
+    '<b>Os números da inversão:</b> os intervalos acima do baixo dão nome a cada inversão. Tríade: 1ª inversão = “6” (3ª e 6ª), 2ª = “6/4”. Tétrade: “6/5”, “4/3” e “4/2”. É o que aparece na linha “Intervalos acima do baixo”.',
     '<b>Por que a linha fica suave:</b> cada acorde tem 3 ou 4 notas, então quase sempre existe uma inversão cujo baixo fica a um grau do baixo anterior. Escolher essa inversão é condução de vozes aplicada ao baixo.',
+    '<b>Baixo cifrado:</b> no Barroco o tecladista do contínuo lia só a linha do baixo, com esses números em cima, e completava os acordes na hora. Os nomes de hoje (acorde de sexta, de sexta e quarta) vêm daí.',
     '<b>A cifra com barra:</b> na música popular, “G/B” diz ao baixista ou à mão esquerda qual nota tocar embaixo. A barra também serve para baixos fora do acorde, como C/B♭.',
   ],
 };
@@ -84,12 +100,27 @@ const en: typeof pt = {
   playLine: 'Play the progression',
   lgBass2: 'bass',
   lgUpper: 'right hand',
+  p1: (sym: S, names: S, root: S) => `${sym} in root position: <b>${names}</b>, with ${root} in the bass. For 1st inversion, ${root} moves up an octave. Which note is now in the bass? Tap it.`,
+  p1r: (third: S, root: S) => `${third}, the chord’s 3rd. When ${root} leaves the bottom, the next note of the stack of thirds becomes the lowest. That is why 1st inversion = 3rd in the bass, 2nd = 5th and 3rd = 7th: the order of inversions is the order of the stack.`,
+  p2: (a: S, v: S, c: S, from: S, to: S, vNotes: S) => `The progression ${a} – ${v} – ${c}. The bass starts on ${from} and ends on ${to}. Which note of ${v} (${vNotes}) do you put in the bass so it walks down by step, without leaping? Tap it.`,
+  p2r: (lt: S, v: S, from: S, to: S, slash: S) => `${lt}, the 3rd of ${v}. It lies between ${from} and ${to}, so the bass walks down note by note. The chord is still ${v}, just in 1st inversion: ${slash}.`,
+  transfer: (k: S) => `In ${k}: what is the bass of V in 1st inversion? Write the slash symbol.`,
+  recap: {
+    oneLine: 'Yes: with the same notes it is the same chord and keeps its name; changing the bottom note only changes its color, and it lets the bass line move by step, like a melody.',
+    confusions: [
+      '<b>Inversion vs another chord:</b> C/E is still C major (C E G), just with E at the bottom. Em is a different chord (E G B).',
+      '<b>Chord inversion vs interval inversion:</b> inverting an interval swaps its two notes (a 3rd becomes a 6th); inverting a chord only changes which note is in the bass.',
+      '<b>Only the bass counts:</b> the inversion depends only on the lowest note. C G E, with C at the bottom, is still root position.',
+    ],
+    show: 'Play C E G. Take the C from the bottom and put it an octave up: E G C, 1st inversion. Again: G C E, 2nd inversion. Play all three and show that the notes did not change, only the bottom one.',
+  } satisfies RecapText,
   logicTitle: 'The logic underneath',
   logic: [
-    '<b>Why the name stays:</b> a chord’s name comes from its stack of thirds, and the root is the base of that stack. Inverting only rearranges the octaves: the letters stay the same, so the chord is the same.',
-    '<b>Why the color changes:</b> the ear hears everything from the bass up. In 1st inversion the other notes are a 3rd and a 6th above the bass; in 2nd inversion, a 4th and a 6th. A 4th over the bass sounds unstable, which is why 2nd inversion usually appears in passing.',
-    '<b>The figured-bass numbers:</b> in the Baroque, keyboard players read only the bass line with numbers above it. Those numbers were exactly the intervals above the bass: “6” for 1st inversion, “6/4” for 2nd, “6/5”, “4/3” and “4/2” for seventh chords. That is where today’s names come from.',
+    '<b>Why the name stays:</b> a chord’s name comes from its stack of thirds, and the root is the base of that stack. Inverting only moves some notes to another octave: the letters stay the same, so the chord is the same.',
+    '<b>Why the color changes:</b> the ear hears everything from the bass up. In 1st inversion the other notes are a 3rd and a 6th above the bass; in 2nd inversion, a 4th and a 6th. A 4th over the bass sounds unstable, which is why 2nd inversion usually shows up in specific places: in passing, or at the cadence before V.',
+    '<b>The inversion numbers:</b> the intervals above the bass name each inversion. Triad: 1st inversion = “6” (3rd and 6th), 2nd = “6/4”. Seventh chord: “6/5”, “4/3” and “4/2”. That is what the line “Intervals above the bass” shows.',
     '<b>Why the line gets smooth:</b> each chord has 3 or 4 notes, so there is almost always an inversion whose bass is one step from the previous bass. Choosing that inversion is voice leading applied to the bass.',
+    '<b>Figured bass:</b> in the Baroque the continuo keyboard player read only the bass line, with these numbers above it, and filled in the chords on the spot. Today’s names (sixth chord, six-four chord) come from there.',
     '<b>The slash symbol:</b> in popular music, “G/B” tells the bass player or the left hand which note to play at the bottom. The slash also works for basses outside the chord, like C/B♭.',
   ],
 };
