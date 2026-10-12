@@ -37,6 +37,11 @@ Outras regras visuais:
 - Legenda sempre visível abaixo de cada teclado colorido.
 - Animações só quando mostram movimento real (uma voz andando, a janela deslizando).
 
+## Identidade visual e História
+
+- **Visual de método clássico de piano** (`src/styles/brand.css`): papel creme, tinta escura, vinho para a interface (`--brand`, `--cover`), títulos em Playfair Display e texto em Source Serif 4, quadros didáticos com faixa de título. As cores do teclado (`--k-*`, verde tônica etc.) mantêm o significado musical e não usam o vinho.
+- **História** (`src/history/`, `src/pages/History.tsx`): 9 períodos e compositores, cada época abrindo com uma pergunta e ligada às aulas cuja teoria nasceu ali. Fatos históricos exigem cautela: datas aproximadas com "c.", lendas apresentadas como lendas, nada de citações inventadas.
+
 ## Stack
 
 - Vite + React + TypeScript
