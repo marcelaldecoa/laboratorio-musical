@@ -1,0 +1,26 @@
+/* Repertoire track (analyzed pieces) */
+.board.rep-board{padding:10px 8px 6px}
+.board svg.rep-roll{width:auto;min-width:0;max-width:none;height:auto;touch-action:pan-x pan-y;cursor:pointer}
+.rep-roll .rep-roman{font:600 11px var(--f-mono)}
+.rep-roll .rep-sym{font:500 10px var(--f-mono)}
+.rep-roll .rep-barn{font:500 10px var(--f-mono);fill:var(--muted)}
+.rep-roll .rep-barn.on{font-weight:700;fill:var(--fg)}
+.rep-piece{display:flex;flex-direction:column;gap:8px;margin:10px 0;scroll-margin-top:80px}
+.rep-ctrls{display:flex;flex-direction:column;gap:8px}
+.rep-segs{display:flex;flex-wrap:wrap;gap:8px}
+.rep-segs .seg{flex:1 1 260px}
+.rep-step{min-width:48px;min-height:44px}
+.rep-nct{min-height:1.2em}
+.rep-findings{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:10px}
+.rep-findings li{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface);min-width:0}
+.rep-n{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);font:600 .85rem var(--f-mono)}
+.rep-fbody{display:flex;flex-direction:column;gap:6px;min-width:0;max-width:70ch}
+.rep-fbody p{margin:0}
+.rep-link{color:var(--accent-ink);font-weight:500;text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}
+.rep-see{min-height:44px}
+.rep-src{font-size:.85rem;color:var(--muted)}
+.rep-badge{display:inline-block;font:500 .72rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--change-soft);color:var(--change-ink);vertical-align:middle}
+.rep-compare{display:flex;flex-wrap:wrap;gap:8px}
+.rep-diag{display:block;width:100%;max-width:560px;height:auto;margin:0 auto}
+.rep-diag .rep-dl{font:500 11px var(--f-mono);fill:var(--fg)}
+.rep-diag .rep-dm{font:500 10px var(--f-mono);fill:var(--muted)}

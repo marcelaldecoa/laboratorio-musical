@@ -69,6 +69,11 @@ export const CURRICULUM: Step[] = [
   { id: 'reading', track: 'piano', needs: ['formula', 'int'], terms: ['Treble clef', 'Bass clef', 'Grand staff', 'Ledger line', 'Middle C'] },
   { id: 'fingering', track: 'piano', needs: ['formula'], terms: ['Fingering', 'Finger numbers', 'Thumb under', 'Finger crossing', 'Hand position'] },
   { id: 'lefthand', track: 'piano', needs: ['prog', 'reading'], terms: ['Alberti bass', 'Broken chord', 'Oom-pah'] },
+  // 11. Real pieces, analyzed with everything above
+  { id: 'repminuet', track: 'repertoire', needs: ['form', 'lefthand'], terms: ['Minuet', 'Binary form'] },
+  { id: 'repode', track: 'repertoire', needs: ['form', 'rhythm2'], terms: ['Anticipation'] },
+  { id: 'repelise', track: 'repertoire', needs: ['minorvar', 'chordtones', 'lefthand'], terms: ['Motif'] },
+  { id: 'repbach', track: 'repertoire', needs: ['secdom', 'inversions', 'lefthand'], terms: [] },
   // Reference
   { id: 'gloss', track: 'ref', needs: [], terms: [] },
 ];
