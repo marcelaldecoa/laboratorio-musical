@@ -3,6 +3,7 @@ import { type NoteEvent, later, playNotes, stopAll } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { MelodyRoll, type RollBar, type RollNote } from '../components/MelodyRoll';
 import { type Mark, layout, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Legend, Notes, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/chordtones';
 import { useLessonText } from '../i18n/lessonText';
@@ -30,7 +31,7 @@ const ROLE_FILL: Record<ToneRole, [string, string]> = {
 const Q = 0.42;
 
 export function ChordTones() {
-  const { nm, sc, cur } = useLab();
+  const { s: st, nm, sc, cur } = useLab();
   const L = useLessonText(text);
   const [mode, setMode] = useState<'full' | 'skel'>('full');
   const [sel, setSel] = useState(0);
@@ -110,11 +111,28 @@ export function ChordTones() {
   const weaks = roles.filter((x) => !x.strong);
   const present = new Set(roles.map((x) => x.role));
 
+  // prediction: which note of bar 2 is outside the IV chord (always taken from the full melody)
+  const allSemis = melodySemis(base, ROLE_TUNE.notes);
+  const allNames = melodyNotes(sc, ROLE_TUNE.notes).map(nm);
+  const inBar2 = full.map((_, j) => j).filter((j) => full[j].bar === 1);
+  const outs = inBar2.filter((j) => !full[j].chordTone);
+  const out = outs[0];
+  const ivTri = triad(sc, ROLE_TUNE.chords[1]).map(nm).join(' ');
+  const predMarks: Record<number, Mark> = {};
+  inBar2.forEach((j) => (predMarks[allSemis[j]] = roleMark(allSemis[j], 'scale', undefined, allNames[j])));
+  const reset = `${st.k}${st.enh}${st.nt}`;
+
   return (
     <>
       <p className="desc">{L.desc}</p>
       <h3 className="sub-h">{L.stepsTitle}</h3>
       <ol className="mel-steps">{L.steps.map((s, i) => <li key={i}>{s}</li>)}</ol>
+
+      <Predict mode="key" resetOn={reset} lay={layout(...groupRange([base, base + 11]))} marks={predMarks}
+        answer={outs.map((j) => allSemis[j])} anyOctave
+        prompt={L.predOut(chordLab(ROLE_TUNE.chords[1]), ivTri, inBar2.map((j) => allNames[j]).join(' – '))}
+        reveal={L.predOutReveal(allNames[out], ivTri, allNames[out - 1], allNames[out + 1])} />
+      <Predict mode="choice" resetOn={st.lang} prompt={L.predBeat} options={L.predBeatOpts} answer={L.predBeatOpts[0]} reveal={L.predBeatReveal} />
 
       <div className="mel-tools">
         <Seg value={mode} label={L.full} onChange={(v) => { stop(); setMode(v); setSel(0); }}
@@ -154,7 +172,9 @@ export function ChordTones() {
       </p>}
       {mode === 'skel' && <p className="hint mt">{L.skelHint}</p>}
       <h3 className="sub-h">{L.logicTitle}</h3>
-      <Notes items={L.logic.map((html) => ({ html }))} />
+      <Notes items={L.logic.map((html) => ({ html }))} more={[4, 5]} />
+      <Transfer question={L.transfer} />
+      <Recap {...L.recap} />
     </>
   );
 }

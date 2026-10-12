@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { type NoteEvent, later, playNotes, stopAll } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Legend, Notes } from '../components/ui';
 import { text } from '../i18n/lessons/harmonize';
 import { useLessonText } from '../i18n/lessonText';
@@ -14,7 +15,7 @@ import '../styles/melody.css';
 const BAR = 1.25;
 
 export function Harmonize() {
-  const { nm, sc, cur } = useLab();
+  const { s: st, nm, sc, cur } = useLab();
   const L = useLessonText(text);
   const N = HARM_MELODY.length;
   const [choice, setChoice] = useState<(number | null)[]>(() => Array(N).fill(null));
@@ -87,11 +88,18 @@ export function Harmonize() {
   const tips = harmTips(choice);
   const opts = harmonizations(HARM_MELODY[bar]);
 
+  // prediction: the closing pair of chords
+  const rom = (dd: number) => `${ci(dd).roman} (${lab(dd)})`;
+  const endPairs = [[1, 0], [4, 0], [6, 5], [4, 5]].map(([x, y]) => `${rom(x)} → ${rom(y)}`);
+
   return (
     <>
       <p className="desc">{L.desc}</p>
       <h3 className="sub-h">{L.stepsTitle}</h3>
       <ol className="mel-steps">{L.steps.map((s, i) => <li key={i}>{s}</li>)}</ol>
+      <Predict mode="choice" resetOn={`${st.k}${st.enh}${st.nt}${st.lang}`} options={endPairs} answer={endPairs[1]}
+        prompt={L.predEnd(melName(N - 2), melName(N - 1))}
+        reveal={L.predEndReveal(melName(N - 2), rom(4), nm(sc[6]), nm(sc[0]))} />
 
       <p className="rowlab">{L.melLabel}</p>
       <div className="mel-cells" role="group" aria-label={L.progLabel}>
@@ -163,7 +171,9 @@ export function Harmonize() {
       </div>
 
       <h3 className="sub-h">{L.logicTitle}</h3>
-      <Notes items={L.logic.map((html) => ({ html }))} />
+      <Notes items={L.logic.map((html) => ({ html }))} more={[4]} />
+      <Transfer question={L.transfer} />
+      <Recap {...L.recap} />
     </>
   );
 }

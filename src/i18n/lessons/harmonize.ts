@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 type Tip = 'pick' | 'start' | 'end' | 'cadence' | 'dim' | 'back' | 'ok';
@@ -16,11 +17,15 @@ const pt = {
   stepsTitle: 'Como fazer, em cinco passos',
   steps: [
     'Olhe a nota da melodia do compasso.',
-    'Ela pode ser a fundamental, a terça ou a quinta de um acorde: são só três candidatos (é a mesma conta da lição Compor).',
+    'Ela pode ser a fundamental, a terça ou a quinta de um acorde: são só três candidatos (é a mesma conta da aula Compor).',
     'Escolha pensando no caminho das funções: tônica (casa) → subdominante (sair) → dominante (tensão) → tônica (voltar).',
-    'Comece no I e termine com V → I: é a cadência autêntica, o ponto final.',
+    'Comece no I, que mostra onde é a casa, e planeje o final antes do resto: os dois últimos compassos fazem a cadência.',
     'Toque o resultado, leia as dicas e troque o que soar estranho.',
   ],
+  predEnd: (d: S, t: S) =>
+    `Os dois últimos compassos têm <b>${d}</b> e <b>${t}</b> na melodia. Qual par de acordes fecha a música com ponto final?`,
+  predEndReveal: (d: S, v: S, lt: S, t: S) =>
+    `${v} → I. ${d} é a quinta do ${v}, então o acorde cabe na melodia. E o V traz a sensível ${lt}, que sobe meio tom até ${t}: é a cadência perfeita (ou autêntica). V → vi também cabe, mas é a cadência de engano: chega sem fechar.`,
   melLabel: 'A melodia · toque num compasso',
   barLabel: (k: number) => `Compasso ${k}`,
   none: '?',
@@ -46,9 +51,9 @@ const pt = {
   tipsTitle: 'Dicas',
   tip: {
     pick: (bar: number) => `Ainda falta escolher o acorde do compasso ${bar}.`,
-    start: () => 'Começar no I deixa claro, logo de cara, onde é a casa.',
+    start: () => 'O primeiro acorde não é o I. Começar no I deixa claro, logo de cara, onde é a casa.',
     end: () => 'O último acorde não é o I: a música termina sem chegar em casa. Experimente o I no último compasso.',
-    cadence: (bar: number) => `Antes do I final, o V (compasso ${bar}) faz a cadência autêntica, o final mais forte que existe.`,
+    cadence: (bar: number) => `No compasso ${bar}, experimente o V: V → I é a cadência perfeita (ou autêntica), o final mais forte, porque a sensível sobe para a tônica.`,
     dim: (bar: number) =>
       `O vii° do compasso ${bar} não vai para o I. Ele é um V sem a fundamental: sozinho soa instável. Resolva no I ou troque pelo V.`,
     back: (bar: number) =>
@@ -57,12 +62,24 @@ const pt = {
   } as Record<Tip, (bar: number) => S>,
   logicTitle: 'A lógica por baixo',
   logic: [
-    '<b>Por que três acordes</b>: um acorde são graus empilhados de dois em dois (1-3-5). Uma nota é fundamental do acorde dela, terça do acorde dois graus abaixo e quinta do acorde quatro graus abaixo. Três acordes, nem mais nem menos.',
+    '<b>Por que três acordes</b>: como na aula Compor, um acorde pula de dois em dois graus (1-3-5), então cada nota é a fundamental de um acorde, a terça de outro e a quinta de um terceiro.',
     '<b>Por que a função importa</b>: acordes da mesma função dividem notas (I, iii e vi são todos “tônica”). Trocar um pelo outro muda a cor, não a direção; trocar de função muda a direção.',
-    '<b>Por que V → I no final</b>: o V tem a sensível, que sobe meio tom para a tônica, e o trítono, que resolve para dentro. Nenhum outro par de acordes fecha com tanta força.',
-    '<b>Por que evitar o vii° sozinho</b>: o vii° é o V7 sem a fundamental (Si-Ré-Fá em Dó, dentro de Sol-Si-Ré-Fá). Tem toda a tensão e nenhum chão; pede resolução imediata no I.',
-    '<b>Origem</b>: é assim que se aprendia harmonia desde o século XVIII, com os corais de Bach: uma melodia dada no soprano e o aluno escolhendo um acorde por nota.',
+    '<b>Por que V → I no final</b>: o V tem a sensível, que sobe meio tom para a tônica, e o baixo cai uma quinta (Sol → Dó em Dó maior), o movimento de baixo mais decidido. Nenhum outro par de acordes fecha com tanta força.',
+    '<b>Por que evitar o vii° sozinho</b>: o vii° (Si-Ré-Fá em Dó) tem duas notas do V (Si e Ré), mas não tem a fundamental Sol, que daria o chão. E Si-Fá é o trítono, que pede resolução: por isso ele precisa ir logo para o I.',
+    '<b>Origem</b>: harmonizar uma melodia dada é um exercício clássico do ensino de harmonia. Os corais a quatro vozes de Bach, reunidos e publicados depois da morte dele, viraram o modelo mais estudado: uma melodia conhecida no soprano e um acorde para cada nota.',
   ],
+  transfer: (k: S) => `Em ${k}, a melodia muda de nome mas não de graus. Qual acorde vai no compasso 7, e que nota da melodia é a quinta dele?`,
+  recap: {
+    oneLine:
+      'Sem adivinhar: para cada nota, liste os três acordes que a contêm (como 1, 3 ou 5) e escolha entre eles pelo caminho das funções, T → SD → D → T, começando no I e fechando com V → I.',
+    confusions: [
+      '<b>vii° × V</b>: os dois são dominantes e dividem duas notas, mas o vii° não tem a fundamental do V e soa instável sozinho.',
+      '<b>iii × I</b>: dividem duas notas e os dois são tônica, mas o iii é uma tônica fraca: bom para variar, ruim para começar ou terminar.',
+      '<b>Cadência de engano × erro</b>: V → vi no fim é uma escolha de propósito (pede mais música), não um acorde errado.',
+    ],
+    show:
+      'Em Dó, toque a melodia Mi Fá Sol Lá Sol Mi Ré Dó na mão direita, uma nota por compasso. Na esquerda, toque I IV I ii V vi V I. Depois troque o último I por vi e ouça a música ficar no ar.',
+  } as RecapText,
 };
 
 const en: typeof pt = {
@@ -77,11 +94,15 @@ const en: typeof pt = {
   stepsTitle: 'How to do it, in five steps',
   steps: [
     'Look at the bar’s melody note.',
-    'It can be the root, third or fifth of a chord: only three candidates (the same count as in the Composing lesson).',
+    'It can be the root, third or fifth of a chord: only three candidates (the same count as in the Compose lesson).',
     'Choose with the path of functions in mind: tonic (home) → subdominant (leave) → dominant (tension) → tonic (return).',
-    'Start on I and end with V → I: the authentic cadence, the period at the end of the sentence.',
+    'Start on I, which shows where home is, and plan the ending before the rest: the last two bars make the cadence.',
     'Play the result, read the tips and change whatever sounds odd.',
   ],
+  predEnd: (d: S, t: S) =>
+    `The last two bars have <b>${d}</b> and <b>${t}</b> in the melody. Which pair of chords closes the piece with a period?`,
+  predEndReveal: (d: S, v: S, lt: S, t: S) =>
+    `${v} → I. ${d} is the fifth of ${v}, so the chord fits the melody. And V carries the leading tone ${lt}, which rises a half step to ${t}: the authentic (perfect) cadence. V → vi also fits, but it is the deceptive cadence: it arrives without closing.`,
   melLabel: 'The melody · tap a bar',
   barLabel: (k: number) => `Bar ${k}`,
   none: '?',
@@ -107,9 +128,9 @@ const en: typeof pt = {
   tipsTitle: 'Tips',
   tip: {
     pick: (bar: number) => `You still need to choose the chord for bar ${bar}.`,
-    start: () => 'Starting on I makes it clear, right away, where home is.',
+    start: () => 'The first chord is not I. Starting on I makes it clear, right away, where home is.',
     end: () => 'The last chord is not I: the piece ends without getting home. Try I in the last bar.',
-    cadence: (bar: number) => `Before the final I, V (bar ${bar}) makes the authentic cadence, the strongest ending there is.`,
+    cadence: (bar: number) => `In bar ${bar}, try V: V → I is the authentic (perfect) cadence, the strongest ending, because the leading tone rises to the tonic.`,
     dim: (bar: number) =>
       `The vii° in bar ${bar} does not go to I. It is a V without its root: on its own it sounds unstable. Resolve it to I or swap it for V.`,
     back: (bar: number) =>
@@ -118,12 +139,24 @@ const en: typeof pt = {
   } as Record<Tip, (bar: number) => S>,
   logicTitle: 'The logic underneath',
   logic: [
-    '<b>Why three chords</b>: a chord is scale degrees stacked every other one (1-3-5). A note is the root of its own chord, the third of the chord two degrees below and the fifth of the chord four degrees below. Three chords, no more, no less.',
+    '<b>Why three chords</b>: as in the Compose lesson, a chord skips every other degree (1-3-5), so each note is the root of one chord, the third of another and the fifth of a third one.',
     '<b>Why function matters</b>: chords with the same function share notes (I, iii and vi are all “tonic”). Swapping one for another changes the color, not the direction; changing function changes the direction.',
-    '<b>Why V → I at the end</b>: V holds the leading tone, which rises a half step to the tonic, and the tritone, which resolves inward. No other pair of chords closes as strongly.',
-    '<b>Why avoid vii° alone</b>: vii° is V7 without its root (B-D-F in C, inside G-B-D-F). It has all the tension and no floor; it asks to resolve to I right away.',
-    '<b>Origin</b>: this is how harmony has been taught since the 18th century, with Bach’s chorales: a given melody in the soprano and the student choosing one chord per note.',
+    '<b>Why V → I at the end</b>: V holds the leading tone, which rises a half step to the tonic, and the bass falls a fifth (G → C in C major), the most decisive bass move. No other pair of chords closes as strongly.',
+    '<b>Why avoid vii° alone</b>: vii° (B-D-F in C) has two notes of V (B and D) but lacks the root G, which would give it a floor. And B-F is the tritone, which asks to resolve: that is why it needs to go to I right away.',
+    '<b>Origin</b>: harmonizing a given melody is a classic exercise in harmony teaching. Bach’s four-part chorales, collected and published after his death, became the most studied model: a familiar tune in the soprano and one chord for each note.',
   ],
+  transfer: (k: S) => `In ${k}, the melody changes names but not degrees. Which chord goes in bar 7, and which melody note is its fifth?`,
+  recap: {
+    oneLine:
+      'No guessing: for each note, list the three chords that contain it (as 1, 3 or 5) and choose among them by the path of functions, T → SD → D → T, starting on I and closing with V → I.',
+    confusions: [
+      '<b>vii° × V</b>: both are dominants and share two notes, but vii° lacks the root of V and sounds unstable on its own.',
+      '<b>iii × I</b>: they share two notes and both are tonic, but iii is a weak tonic: good for variety, poor for starting or ending.',
+      '<b>Deceptive cadence × mistake</b>: V → vi at the end is a deliberate choice (it asks for more music), not a wrong chord.',
+    ],
+    show:
+      'In C, play the melody E F G A G E D C in the right hand, one note per bar. In the left, play I IV I ii V vi V I. Then swap the last I for vi and hear the music stay in the air.',
+  } as RecapText,
 };
 
 export const text = {

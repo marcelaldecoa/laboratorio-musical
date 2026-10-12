@@ -6,6 +6,7 @@ import { Func } from './Func';
 import { Glossary } from './Glossary';
 import { Hinge } from './Hinge';
 import { Intervals } from './Intervals';
+import { text as intText } from '../i18n/lessons/int';
 import { Jump } from './Jump';
 import { Names } from './Names';
 import { Origin } from './Origin';
@@ -45,14 +46,14 @@ const CIRCLE: LessonDef[] = [
   { id: 'tetra', Comp: Tetra, icon: '⊞', tone: 'dom', track: 'circle' },
   { id: 'func', Comp: Func, icon: '⌂', tone: 'flat', track: 'circle' },
   { id: 'names', Comp: Names, icon: '⇋', tone: 'flat', track: 'circle' },
-  { id: 'int', Comp: Intervals, icon: '↔', tone: 'accent', track: 'circle' },
+  { id: 'int', Comp: Intervals, icon: '↔', tone: 'accent', track: 'circle', text: intText },
   { id: 'hinge', Comp: Hinge, icon: '↕', tone: 'change', track: 'circle' },
   { id: 'tri', Comp: Tritone, icon: '◐', tone: 'change', track: 'circle' },
   { id: 'origin', Comp: Origin, icon: '◎', tone: 'accent', track: 'circle' },
   { id: 'win', Comp: Window, icon: '▭', tone: 'dom', track: 'circle' },
   { id: 'field', Comp: Field, icon: '△', tone: 'accent', track: 'circle' },
   { id: 'prog', Comp: Progressions, icon: '→', tone: 'dom', track: 'circle' },
-  { id: 'comp', Comp: Compose, icon: '♪', tone: 'flat', track: 'circle' },
+  { id: 'comp', Comp: Compose, icon: '♪', tone: 'flat', track: 'melody' },
 ];
 
 const GLOSS: LessonDef = { id: 'gloss', Comp: Glossary, icon: 'Aa', tone: 'neutral', track: 'ref' };
