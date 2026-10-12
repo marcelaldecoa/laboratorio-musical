@@ -24,9 +24,9 @@ export const CURRICULUM: Step[] = [
   { id: 'harmonics', track: 'physics', needs: ['int'], terms: ['Harmonic series', 'Harmonic', 'Node', 'Timbre', 'Cent'] },
   { id: 'origin', track: 'physics', needs: ['harmonics'], terms: ['Pythagorean comma', 'Equal temperament'] },
   // 3. The circle of fifths, deduced from the formula
-  { id: 'tetra', track: 'circle', needs: ['formula', 'int'], terms: ['Tetrachord'] },
+  { id: 'tetra', track: 'circle', needs: ['formula', 'int'], terms: ['Tetrachord', 'Order of sharps'] },
   { id: 'jump', track: 'circle', needs: ['tetra', 'origin'], terms: ['Circle of fifths', 'Circle of fourths', 'Clockwise'] },
-  { id: 'scale', track: 'circle', needs: ['jump'], terms: ['Order of sharps', 'Order of flats'] },
+  { id: 'scale', track: 'circle', needs: ['jump'], terms: ['Order of flats'] },
   { id: 'hinge', track: 'circle', needs: ['scale', 'names'], terms: [] },
   { id: 'tri', track: 'circle', needs: ['hinge'], terms: ['Tritone'] },
   { id: 'win', track: 'circle', needs: ['tri'], terms: ['Line of fifths'] },

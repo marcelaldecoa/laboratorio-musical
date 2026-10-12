@@ -55,7 +55,7 @@ export const en: Dict = {
     func: { nav: 'Functions', title: 'The functions', sub: 'tonic, subdominant, dominant, leading tone', teaser: 'A fifth below, a fifth above.' },
     names: { nav: 'Names', title: 'Where the names come from', sub: 'degrees and intervals', teaser: 'The mirror around the tonic.' },
     int: { nav: 'Intervals', title: 'Intervals', sub: 'number and quality', teaser: 'Two rulers: letter names and half steps.' },
-    hinge: { nav: 'Hinges', title: 'The hinges', sub: 'degrees 4 and 7', teaser: 'The two notes that move on the circle.' },
+    hinge: { nav: 'Hinges', title: 'The hinges', sub: 'the two notes that turn', teaser: 'The two notes that move on the circle.' },
     tri: { nav: 'Tritone', title: 'The tritone', sub: 'three whole steps, half an octave', teaser: 'The only interval that is its own mirror.' },
     origin: { nav: 'Origin', title: 'The origin', sub: 'why the fifth', teaser: 'Pythagoras, the spiral and the comma.' },
     win: { nav: 'Window', title: 'The window', sub: 'a key is 7 consecutive fifths', teaser: 'Slide the window along the line of fifths.' },

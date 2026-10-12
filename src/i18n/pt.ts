@@ -57,7 +57,7 @@ export const pt = {
     func: { nav: 'Funções', title: 'As funções', sub: 'tônica, subdominante, dominante e sensível', teaser: 'Uma quinta abaixo, uma quinta acima.' },
     names: { nav: 'Nomes', title: 'De onde vêm os nomes', sub: 'graus e intervalos', teaser: 'O espelho em volta da tônica.' },
     int: { nav: 'Intervalos', title: 'Intervalos', sub: 'número e qualidade', teaser: 'Duas réguas: nomes de nota e semitons.' },
-    hinge: { nav: 'Dobradiças', title: 'As dobradiças', sub: 'o 4º e o 7º graus', teaser: 'As duas notas que se movem no círculo.' },
+    hinge: { nav: 'Dobradiças', title: 'As dobradiças', sub: 'as duas notas que giram', teaser: 'As duas notas que se movem no círculo.' },
     tri: { nav: 'Trítono', title: 'O trítono', sub: 'três tons, meia oitava', teaser: 'O único intervalo que é seu próprio espelho.' },
     origin: { nav: 'Origem', title: 'A origem', sub: 'por que a quinta', teaser: 'Pitágoras, a espiral e a coma.' },
     win: { nav: 'Janela', title: 'A janela', sub: 'uma tonalidade são 7 quintas seguidas', teaser: 'Deslize a janela na linha de quintas.' },
