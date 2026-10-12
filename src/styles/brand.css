@@ -1,52 +1,54 @@
 /* Brand: a classic piano-method look. Cream paper, ink, burgundy for the interface,
    engraved serif type. The keyboard role colours (--k-*, --accent green = tonic, purple, blue, coral)
    keep their musical meaning and are not changed here. */
+/* Brand: modern indigo and coral. Indigo drives the interface; coral is only decorative
+   (heading rules, streak, emblem) so it never competes with the keyboard's coral = tension.
+   The keyboard role colours (--k-*, --accent green = tonic, purple, blue, coral) keep their musical meaning. */
 :root{
-  --bg:#F7F1E5; --surface:#FFFCF5; --surface-2:#F0E8D8; --fg:#1F1A15; --muted:#5C5247; --line:#DCCFBA;
-  --brand:#8A1C2B; --brand-soft:#F3E0DC; --brand-ink:#5A0F1B; --on-brand:#FFF8EE; --brand-rule:#B9898F;
-  --cover:#8A1C2B; --on-cover:#FFF8EE;
-  --paper-shadow:0 1px 0 rgba(90,60,30,.06),0 6px 18px rgba(90,60,30,.08);
+  --bg:#F7F8FC; --surface:#FFFFFF; --surface-2:#EEF0F8; --fg:#1B1E2B; --muted:#565B70; --line:#DDE0EC;
+  --brand:#4F46E5; --brand-soft:#E6E5FD; --brand-ink:#2E2899; --on-brand:#FFFFFF; --brand-rule:#C7C9F0;
+  --cover:#4F46E5; --on-cover:#FFFFFF; --spark:#F26B5B;
+  --paper-shadow:0 1px 2px rgba(27,30,43,.05),0 8px 24px rgba(27,30,43,.07);
   --shadow:var(--paper-shadow);
-  --f-display:"Playfair Display", "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --f-body:"Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --f-label:"Source Serif 4", Georgia, serif;
-  --p-medieval:#7A5A1F; --p-renaissance:#566826; --p-baroque:#8A1C2B; --p-classical:#2F5D8A; --p-romantic:#6B3F7D;
+  --f-display:"Fraunces", "Iowan Old Style", Georgia, serif;
+  --f-body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-label:"DM Sans", system-ui, sans-serif;
+  --p-medieval:#7A5A1F; --p-renaissance:#566826; --p-baroque:#9F1D3A; --p-classical:#2F5D8A; --p-romantic:#6B3F7D;
   --p-impressionism:#2E7C79; --p-modern:#4F5660; --p-jazz:#8F4C0E; --p-contemporary:#2B2B2B;
   --br:#1E6B35; --br-soft:#E1EFE4;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#16120E; --surface:#201A15; --surface-2:#2A221B; --fg:#F0E7D8; --muted:#B8A994; --line:#3D3229;
-  --brand:#E6939C; --brand-soft:#3E1C21; --brand-ink:#F8DADD; --on-brand:#2A0A10; --brand-rule:#7A4A50;
-  --cover:#4A1019; --on-cover:#F6E7D6;
-  --paper-shadow:0 1px 0 rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
-  --p-medieval:#C9A35E; --p-renaissance:#9DB062; --p-baroque:#E6939C; --p-classical:#7FAEDB; --p-romantic:#B993CC;
+  --bg:#0F1222; --surface:#171B30; --surface-2:#1F2440; --fg:#E8EAF6; --muted:#A3A8C3; --line:#2C3252;
+  --brand:#8B85FF; --brand-soft:#262A5C; --brand-ink:#DCDBFF; --on-brand:#12103A; --brand-rule:#3B3F78;
+  --cover:#2A2580; --on-cover:#EEF0FF; --spark:#FF8A7A;
+  --paper-shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+  --p-medieval:#C9A35E; --p-renaissance:#9DB062; --p-baroque:#F08AA0; --p-classical:#7FAEDB; --p-romantic:#B993CC;
   --p-impressionism:#6CC2BE; --p-modern:#A3ABB6; --p-jazz:#E5A35E; --p-contemporary:#D9D2C6;
   --br:#6CC48A; --br-soft:#1B3324;
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#16120E; --surface:#201A15; --surface-2:#2A221B; --fg:#F0E7D8; --muted:#B8A994; --line:#3D3229;
-  --brand:#E6939C; --brand-soft:#3E1C21; --brand-ink:#F8DADD; --on-brand:#2A0A10; --brand-rule:#7A4A50;
-  --cover:#4A1019; --on-cover:#F6E7D6;
-  --paper-shadow:0 1px 0 rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
-  --p-medieval:#C9A35E; --p-renaissance:#9DB062; --p-baroque:#E6939C; --p-classical:#7FAEDB; --p-romantic:#B993CC;
+  --bg:#0F1222; --surface:#171B30; --surface-2:#1F2440; --fg:#E8EAF6; --muted:#A3A8C3; --line:#2C3252;
+  --brand:#8B85FF; --brand-soft:#262A5C; --brand-ink:#DCDBFF; --on-brand:#12103A; --brand-rule:#3B3F78;
+  --cover:#2A2580; --on-cover:#EEF0FF; --spark:#FF8A7A;
+  --paper-shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+  --p-medieval:#C9A35E; --p-renaissance:#9DB062; --p-baroque:#F08AA0; --p-classical:#7FAEDB; --p-romantic:#B993CC;
   --p-impressionism:#6CC2BE; --p-modern:#A3ABB6; --p-jazz:#E5A35E; --p-contemporary:#D9D2C6;
   --br:#6CC48A; --br-soft:#1B3324;
   color-scheme:dark}
 
 /* paper and type */
-body{font-family:var(--f-body);font-size:17px;line-height:1.62;background:var(--bg);
-  background-image:radial-gradient(circle at 20% 0%,color-mix(in srgb,var(--surface) 60%,transparent),transparent 60%)}
-h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:0}
+body{font-family:var(--f-body);font-size:16.5px;line-height:1.6;background:var(--bg)}
+h1,h2,h3{font-family:var(--f-display);font-weight:650;letter-spacing:-.01em;font-optical-sizing:auto}
 h1{font-size:clamp(2rem,6.4vw,3rem)}
-h2{font-weight:700}
-.sub{font-family:var(--f-body);font-style:italic}
-.eyebrow,.rowlab,.predict-label,.recap-k,.hook .rowlab{font-family:var(--f-label);font-variant-caps:all-small-caps;letter-spacing:.12em;font-size:.9rem;text-transform:none}
+h2{font-weight:650}
+.sub{font-family:var(--f-body);font-style:normal}
+.eyebrow,.rowlab,.predict-label,.recap-k,.hook .rowlab{font-family:var(--f-label);font-weight:600;letter-spacing:.08em;font-size:.72rem;text-transform:uppercase}
 .eyebrow{color:var(--brand)}
-button{font-family:var(--f-body);font-size:.98rem;border-radius:8px}
-.seg{border-radius:8px}
-.chip{font-family:var(--f-body);border-radius:6px}
-.btn{border-radius:8px}
+button{font-family:var(--f-body);font-size:.95rem;border-radius:12px}
+.seg{border-radius:12px}
+.chip{font-family:var(--f-body);border-radius:10px}
+.btn{border-radius:12px}
 
 /* interface accent: burgundy instead of the tonic green */
 .seg button[aria-pressed="true"],.chip.neutral[aria-pressed="true"],.btn.primary,button.primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
@@ -57,71 +59,72 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible,input:focus-visibl
 .toggle input{accent-color:var(--brand)}
 
 /* the cover band: burgundy app bar like a method book cover */
-.appbar{background:var(--cover);color:var(--on-cover);border-bottom:3px double color-mix(in srgb,var(--on-cover) 55%,var(--cover));
+.appbar{background:var(--cover);color:var(--on-cover);border-bottom:0;box-shadow:0 2px 12px rgba(27,30,43,.12);
   backdrop-filter:none;-webkit-backdrop-filter:none}
 .appbar .brand{color:var(--on-cover)}
-.brand{font-family:var(--f-display);font-weight:700;font-style:italic;font-size:1.18rem}
+.brand{font-family:var(--f-display);font-weight:650;font-size:1.15rem}
 .keychip{background:var(--on-cover);color:var(--cover)}
 .kc-sig{background:color-mix(in srgb,var(--cover) 14%,var(--on-cover));color:var(--cover)}
 .appbar .icon-btn{background:transparent;color:var(--on-cover);border-color:color-mix(in srgb,var(--on-cover) 40%,transparent)}
-.tabs{background:var(--surface);backdrop-filter:none;-webkit-backdrop-filter:none;border-top:3px double var(--line)}
+.tabs{background:color-mix(in srgb,var(--surface) 92%,transparent);border-top:1px solid var(--line)}
 .tabs a{font-family:var(--f-label)}
 .tabs a[aria-current="page"]{color:var(--brand-ink);background:var(--brand-soft)}
 @media (min-width:1024px){
-  .side{background:var(--surface);border-right:3px double var(--line)}
+  .side{background:var(--surface);border-right:1px solid var(--line)}
   .side .brand{color:var(--brand)}
   .side-nav a[aria-current="page"]{background:var(--brand-soft);color:var(--brand-ink)}
 }
 
 /* headings with an engraved double rule */
-.sec-head h1,.page-title,.hero h1{padding-bottom:10px;border-bottom:3px double var(--brand-rule)}
+.sec-head h1,.page-title,.hero h1{padding-bottom:12px;position:relative}
+.sec-head h1::after,.page-title::after,.hero h1::after{content:"";position:absolute;left:0;bottom:0;width:64px;height:4px;border-radius:2px;background:var(--spark)}
 .lesson .sec-head{border-left:0;padding-left:0}
 .lesson .sec-head .eyebrow{display:inline-flex;align-items:center;gap:8px}
 .sub-h,.track-title,.j-track-title,.sec-title{color:var(--fg)}
-.sub-h::after,.j-track-title::after{content:"";display:block;width:56px;height:2px;background:var(--brand);margin-top:6px}
+.sub-h::after,.j-track-title::after{content:"";display:block;width:40px;height:3px;border-radius:2px;background:var(--spark);margin-top:6px}
 
 /* cards look like printed boxes */
-.card,.board,.notes li,.fcard,.lcard,.j-card,.pg,.mode-card,.terms,.more,.composer{border-radius:6px;box-shadow:var(--paper-shadow)}
+.card,.board,.notes li,.fcard,.lcard,.j-card,.pg,.mode-card,.terms,.more,.composer{border-radius:14px;box-shadow:var(--paper-shadow)}
 .board{background:var(--surface)}
 .lcard::after{opacity:.55}
-.ltitle,.j-title,.tl-name{font-family:var(--f-display);font-weight:700}
+.ltitle,.j-title,.tl-name{font-family:var(--f-display);font-weight:650}
 
 /* method-book callouts: a title band on top */
-.hook{border-radius:6px;background:var(--surface);color:var(--fg);border:2px solid var(--tone,var(--brand));padding:0;overflow:hidden;font-family:var(--f-display);font-style:italic;font-weight:400}
+.hook{border-radius:14px;background:var(--surface);color:var(--fg);border:2px solid var(--tone,var(--brand));padding:0;overflow:hidden;font-family:var(--f-display);font-style:normal;font-weight:500}
 .hook .rowlab{display:block;background:var(--tone,var(--brand));color:var(--surface);padding:4px 14px;font-style:normal}
 .hook{gap:0}
 .hook{line-height:1.4}
 .hook .hook-q{display:block;padding:10px 14px 0}
 .hook{padding-bottom:12px}
-.predict,.transfer{border-radius:6px;border:2px solid var(--brand);padding:0 14px 14px;overflow:hidden}
+.predict,.transfer{border-radius:14px;border:2px solid var(--brand);padding:0 14px 14px;overflow:hidden}
 .predict-label{margin:0 -14px 4px;padding:5px 14px;background:var(--brand);color:var(--on-brand)}
 .transfer{border-style:solid;border-color:var(--line)}
 .transfer .predict-label{background:var(--surface-2);color:var(--brand-ink)}
-.recap{background:var(--surface);color:var(--fg);border:2px solid var(--brand);border-radius:6px;box-shadow:var(--paper-shadow)}
+.recap{background:var(--brand-soft);color:var(--fg);border:0;border-radius:14px;box-shadow:none}
 .recap h3{color:var(--brand-ink)}
 .recap-one{color:var(--brand-ink)}
-.recap-k{color:var(--brand)}
+.recap-k{color:var(--brand-ink)}
 .need{border-radius:999px}
-.start-c{border-radius:6px}
+.start-c{border-radius:12px}
 .lesson-intro .terms summary::marker{color:var(--brand)}
 
 /* journey dots and progress in the brand colour */
-.prog-big{color:var(--brand)}
+.prog-big{color:var(--spark)}
 .prog-week i.on,.prog-bar i{background:var(--brand);border-color:var(--brand)}
 
 /* the history area */
 .timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;position:relative}
 .tl-item a{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;text-decoration:none;background:var(--surface);border:1px solid var(--line);
-  border-left:8px solid var(--pc);border-radius:6px;padding:12px 14px;box-shadow:var(--paper-shadow)}
-.tl-years{font-family:var(--f-label);font-variant-caps:all-small-caps;letter-spacing:.1em;color:var(--muted)}
+  border-left:6px solid var(--pc);border-radius:14px;padding:12px 14px;box-shadow:var(--paper-shadow)}
+.tl-years{font-family:var(--f-label);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .tl-name{font-size:1.2rem}
-.tl-q{font-style:italic}
+.tl-q{color:var(--muted)}
 .tl-n{font-size:.82rem;color:var(--muted)}
 .p-medieval{--pc:var(--p-medieval)}.p-renaissance{--pc:var(--p-renaissance)}.p-baroque{--pc:var(--p-baroque)}.p-classical{--pc:var(--p-classical)}
 .p-romantic{--pc:var(--p-romantic)}.p-impressionism{--pc:var(--p-impressionism)}.p-modern{--pc:var(--p-modern)}.p-jazz{--pc:var(--p-jazz)}.p-contemporary{--pc:var(--p-contemporary)}
 .period{--tone:var(--pc)}
 .period-head .eyebrow{color:var(--pc)}
-.br-card{display:flex;flex-direction:column;gap:4px;text-decoration:none;margin-top:12px;padding:14px;border-radius:6px;border:2px solid var(--br);
+.br-card{display:flex;flex-direction:column;gap:4px;text-decoration:none;margin-top:12px;padding:14px;border-radius:14px;border:2px solid var(--br);
   background:linear-gradient(90deg,var(--br-soft),var(--surface));box-shadow:var(--paper-shadow)}
 .hist-grow svg{width:100%;max-width:560px;height:auto;display:block}
 .hist-bar{fill:var(--pc)}
@@ -134,10 +137,10 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible,input:focus-visibl
 .composer{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--pc,var(--brand));padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .composer header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 10px}
 .composer h3{font-size:1.15rem}
-.composer .years{font-family:var(--f-label);font-variant-caps:all-small-caps;letter-spacing:.08em;color:var(--muted)}
+.composer .years{font-family:var(--f-label);font-size:.8rem;color:var(--muted)}
 .br-tag{margin-left:8px;font-variant-caps:normal;letter-spacing:0;font-size:.75rem;padding:1px 8px;border-radius:999px;background:var(--br-soft);color:var(--fg)}
 .c-row{font-size:.94rem}
 .c-lessons{display:flex;flex-wrap:wrap;gap:6px}
-.back{display:inline-block;color:var(--brand-ink);text-decoration:none;font-family:var(--f-label);min-height:32px}
+.back{display:inline-block;color:var(--brand);text-decoration:none;font-weight:600;min-height:32px}
 .born-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0;font-size:.88rem;color:var(--muted)}
 .hist-axis.muted{fill:var(--muted)}

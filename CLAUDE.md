@@ -39,7 +39,7 @@ Outras regras visuais:
 
 ## Identidade visual e História
 
-- **Visual de método clássico de piano** (`src/styles/brand.css`): papel creme, tinta escura, vinho para a interface (`--brand`, `--cover`), títulos em Playfair Display e texto em Source Serif 4, quadros didáticos com faixa de título. As cores do teclado (`--k-*`, verde tônica etc.) mantêm o significado musical e não usam o vinho.
+- **Visual moderno com estrutura de método de piano** (`src/styles/brand.css`): fundo branco-gelo, tinta grafite, índigo na interface (`--brand`, `--cover`) e coral só como detalhe decorativo (`--spark`: filetes dos títulos, sequência, emblema), nunca em botões ou estados perto dos teclados, porque no teclado coral significa tensão. Títulos em Fraunces (serifada) e texto em DM Sans. Quadros didáticos com faixa de título. As cores do teclado (`--k-*`, verde tônica etc.) mantêm o significado musical.
 - **História** (`src/history/`, `src/pages/History.tsx`): 9 períodos e compositores, cada época abrindo com uma pergunta e ligada às aulas cuja teoria nasceu ali. Fatos históricos exigem cautela: datas aproximadas com "c.", lendas apresentadas como lendas, nada de citações inventadas.
 
 ## Stack

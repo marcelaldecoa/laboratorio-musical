@@ -29,13 +29,13 @@ function Flag({ lang }: { lang: 'pt' | 'en' }) {
 function Logo() {
   return (
     <svg className="logo" viewBox="0 0 64 64" aria-hidden="true">
-      <circle cx="32" cy="32" r="30" fill="var(--on-brand)" stroke="var(--brand)" strokeWidth="2" />
-      <circle cx="32" cy="32" r="25.5" fill="none" stroke="var(--brand)" strokeWidth="1" />
-      <g fill="var(--brand)">
-        {[0, 1, 2, 3, 4].map((k) => <rect key={k} x={15 + k * 7} y="38" width="6" height="12" rx="1" />)}
+      <rect x="2" y="2" width="60" height="60" rx="16" fill="var(--on-cover)" />
+      <g fill="var(--cover)">
+        {[0, 1, 2, 3, 4].map((k) => <rect key={k} x={13 + k * 7.6} y="38" width="6.4" height="14" rx="1.5" />)}
       </g>
-      <g fill="var(--on-brand)">{[1, 2, 4].map((k) => <rect key={k} x={13.5 + k * 7} y="38" width="3.5" height="7" />)}</g>
-      <text x="32" y="38" textAnchor="middle" style={{ font: '30px var(--f-music)', fill: 'var(--brand)' }}>𝄞</text>
+      <g fill="var(--on-cover)">{[1, 2, 4].map((k) => <rect key={k} x={11.2 + k * 7.6} y="38" width="3.6" height="8" />)}</g>
+      <circle cx="49" cy="15" r="4" fill="var(--spark)" />
+      <text x="31" y="39" textAnchor="middle" style={{ font: '30px var(--f-music)', fill: 'var(--cover)' }}>𝄞</text>
     </svg>
   );
 }
@@ -352,7 +352,7 @@ export function App() {
     if (s.theme === 'auto') el.removeAttribute('data-theme');
     else el.setAttribute('data-theme', s.theme);
     const dark = s.theme === 'dark' || (s.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#16120E' : '#8A1C2B');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#2A2580' : '#4F46E5');
   }, [s.lang, s.theme]);
 
   useEffect(() => {
