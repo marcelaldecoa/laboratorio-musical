@@ -47,8 +47,11 @@ export const CURRICULUM: Step[] = [
   { id: 'modes', track: 'scales', needs: ['minor', 'win'], terms: ['Mode', 'Characteristic note', 'Drone'] },
   { id: 'penta', track: 'scales', needs: ['modes', 'hinge'], terms: ['Pentatonic scale', 'Blues scale', 'Blue note'] },
   { id: 'sym', track: 'scales', needs: ['penta'], terms: ['Chromatic', 'Whole-tone scale', 'Diminished scale', 'Symmetric scale'] },
+  // 7b. Harmony in minor
+  { id: 'minorfield', track: 'minorharm', needs: ['minorvar', 'prog'], terms: ['Subtonic', 'Augmented triad'] },
+  { id: 'minorcad', track: 'minorharm', needs: ['minorfield'], terms: ['Andalusian cadence', 'Picardy third'] },
   // 8. Bigger chords
-  { id: 'seventh', track: 'chords', needs: ['field', 'minorvar'], terms: ['Seventh chord', 'Half-diminished chord', 'Diminished seventh chord'] },
+  { id: 'seventh', track: 'chords', needs: ['field', 'minorfield'], terms: ['Seventh chord', 'Half-diminished chord', 'Diminished seventh chord'] },
   { id: 'v7', track: 'chords', needs: ['seventh', 'tri'], terms: ['Dominant seventh chord'] },
   { id: 'inversions', track: 'chords', needs: ['seventh'], terms: ['Chord inversion', 'Slash chord', 'Figured bass'] },
   { id: 'extensions', track: 'chords', needs: ['inversions'], terms: ['Extension', 'Avoid note', 'Altered tension'] },

@@ -3,6 +3,7 @@ import { chord, playNotes, seq } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark } from '../components/layout';
 import { ScalesBracket, scaleSemis, stepsAny, upDown } from '../components/ScalesKit';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Html, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { useLessonText } from '../i18n/lessonText';
 import { text } from '../i18n/lessons/minorvar';
@@ -14,7 +15,7 @@ import {
 import '../styles/scales.css';
 
 export function MinorVar() {
-  const { t, nm, cur } = useLab();
+  const { s, t, nm, cur } = useLab();
   const tx = useLessonText(text);
   const [form, setForm] = useState<MinorForm>('harmonic');
   const [dir, setDir] = useState<'up' | 'down'>('up');
@@ -63,10 +64,15 @@ export function MinorVar() {
     ...(shownForm !== 'natural' ? [{ dash: 'var(--k-lt-line)', label: tx.lgGhost }] : []),
   ];
   const h = harmonicMinor(m);
+  // predict: the natural minor with its degrees; where must degree 7 go?
+  const pMarks: Record<number, Mark> = {};
+  scaleSemis(base, NATURAL_MINOR).forEach((x, i) => (pMarks[x] = roleMark(x, i % 7 === 0 ? 'tonic' : 'scale', (i % 7) + 1, nm(nat[i % 7]))));
   const mel = melodicMinor(m);
   return (
     <>
       <p className="desc">{tx.desc}</p>
+      <Predict mode="key" prompt={tx.predict(minName, nm(nat[6]), nm(m))} reveal={tx.predictReveal(nm(h[6]), nm(nat[6]), nm(m))}
+        lay={lay} marks={pMarks} answer={[base + 11]} anyOctave top={30} resetOn={s.k + s.enh} />
       <p className="rowlab">{tx.form}</p>
       <Seg value={form} label={tx.form} onChange={setForm}
         options={(['natural', 'harmonic', 'melodic'] as const).map((v) => ({ v, label: tx[v] }))} />
@@ -88,7 +94,9 @@ export function MinorVar() {
       <Html as="p" className="readout" html={tx.read[shownForm](nm(shown[6]), nm(m), nm(shown[5]))} />
       <p className="hint">{tx.cadNote(vName, nm(m) + tx.m)}</p>
       <h3 className="sub-h">{tx.whyTitle}</h3>
-      <Notes items={tx.why(minName, nm(nat[6]), nm(h[6]), nm(nat[5]), nm(mel[5]), nm(m), `${nm(m)} ${t.major}`).map((html) => ({ html }))} />
+      <Notes items={tx.why(minName, nm(nat[6]), nm(h[6]), nm(nat[5]), nm(mel[5]), nm(m), `${nm(m)} ${t.major}`).map((html) => ({ html }))} more={[2, 5, 6]} />
+      <Transfer question={tx.transfer} />
+      <Recap {...tx.recap} />
     </>
   );
 }

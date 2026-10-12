@@ -3,6 +3,7 @@ import { playNotes, seq } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark } from '../components/layout';
 import { type FormulaToken, ScalesBracket, ScalesFormulaRow, scaleSemis, stepsAny } from '../components/ScalesKit';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Html, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { useLessonText } from '../i18n/lessonText';
 import { text } from '../i18n/lessons/minor';
@@ -61,11 +62,17 @@ export function Minor() {
   majSteps[5].mv = true;
   majSteps[6].mv = true;
   const f = fifthIndex(cur);
+  // predict: the major scale's keys, tonic marked; find degree 6
+  const pMarks: Record<number, Mark> = {};
+  for (const x of majSemis) pMarks[x] = roleMark(x, m12(x - base) === 0 ? 'tonic' : 'scale', m12(x - base) === 0 ? 1 : undefined, names[x]);
+  for (const x of minSemis) if (!pMarks[x]) pMarks[x] = roleMark(x, 'scale', undefined, names[x]);
   const line = [0, 1, 2, 3].map((j) => nm(fromFifthIndex(f + j))).join(' → ');
 
   return (
     <>
       <p className="desc">{tx.desc}</p>
+      <Predict mode="key" prompt={tx.predict(keyName(cur))} reveal={tx.predictReveal(nm(mt), keyName(cur), minName)}
+        lay={lay} marks={pMarks} answer={[mBase, mBase + 12]} anyOctave resetOn={s.k + s.enh} />
       <h3 className="sub-h">{tx.step1}</h3>
       <p className="rowlab">{tx.view}</p>
       <Seg value={view} label={tx.view} onChange={setView}
@@ -130,7 +137,9 @@ export function Minor() {
       </Board>
       <p className="hint mt">{tx.circleTap}</p>
       <h3 className="sub-h">{tx.whyTitle}</h3>
-      <Notes items={tx.why(keyName(cur), minName, nm(mt), line).map((html) => ({ html }))} />
+      <Notes items={tx.why(keyName(cur), minName, nm(mt), line).map((html) => ({ html }))} more={[2, 4]} />
+      <Transfer question={tx.transfer} />
+      <Recap {...tx.recap} />
     </>
   );
 }

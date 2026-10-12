@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -34,6 +35,18 @@ const pt = {
   circleLabel: 'Círculo das quintas com as relativas menores no anel interno',
   circleTap: 'Toque em qualquer par para mudar a tonalidade do app inteiro.',
   pair: (a: S, b: S) => `${a} e ${b}: mesma armadura`,
+  predict: (key: S) => `Estas são as sete teclas de ${key}. Qual delas é a tônica da relativa menor? Toque-a no teclado.`,
+  predictReveal: (mt: S, key: S, min: S) => `${mt} é o 6º grau de ${key}, 3 semitons abaixo da tônica. As mesmas sete teclas, lidas a partir de ${mt}, formam ${min}.`,
+  transfer: (k: S) => `Em ${k}, qual é a relativa menor? Ache o 6º grau (ou desça 3 semitons a partir da tônica) e confira no anel de dentro do círculo.`,
+  recap: {
+    oneLine: 'As teclas são as mesmas, mas a tônica passa para o 6º grau; dali, a 3ª acima da tônica tem 3 semitons em vez de 4, o acorde de casa vira menor, e é isso que escurece o som.',
+    confusions: [
+      '<b>Relativa × homônima:</b> a relativa tem as mesmas notas e outra tônica (Dó maior e Lá menor); a homônima, ou menor paralela, tem a mesma tônica e outras notas (Dó maior e Dó menor).',
+      '<b>Mesma armadura não quer dizer mesma tonalidade:</b> quem decide é a nota de repouso, em geral o último baixo da peça.',
+      '<b>Abaixo × acima:</b> a relativa menor fica 3 semitons abaixo da tônica maior; a relativa maior fica 3 semitons acima da tônica menor.',
+    ],
+    show: 'Toque Dó a Dó só nas teclas brancas, depois Lá a Lá nas mesmas teclas. Mesmas teclas, outro ponto de repouso, outro clima.',
+  } satisfies RecapText,
   whyTitle: 'Por que funciona assim',
   why: (maj: S, min: S, mt: S, line: S) => [
     `<b>Mesma armadura:</b> ${min} usa exatamente as sete teclas de ${maj}. Por isso a armadura de clave é a mesma e elas se chamam relativas: são parentes, não vizinhas.`,
@@ -77,6 +90,18 @@ const en: typeof pt = {
   circleLabel: 'Circle of fifths with the relative minors on the inner ring',
   circleTap: 'Tap any pair to change the key of the whole app.',
   pair: (a: S, b: S) => `${a} and ${b}: same key signature`,
+  predict: (key: S) => `These are the seven keys of ${key}. Which one is the tonic of the relative minor? Tap it on the keyboard.`,
+  predictReveal: (mt: S, key: S, min: S) => `${mt} is degree 6 of ${key}, 3 half steps below the tonic. The same seven keys, read from ${mt}, make ${min}.`,
+  transfer: (k: S) => `In ${k}, what is the relative minor? Find degree 6 (or go down 3 half steps from the tonic) and check it on the inner ring of the circle.`,
+  recap: {
+    oneLine: 'The keys are the same, but the tonic moves to degree 6; from there the 3rd above the tonic has 3 half steps instead of 4, the home chord becomes minor, and that is what darkens the sound.',
+    confusions: [
+      '<b>Relative vs parallel:</b> the relative has the same notes and another tonic (C major and A minor); the parallel minor has the same tonic and other notes (C major and C minor).',
+      '<b>Same key signature does not mean same key:</b> the note of rest decides, usually the last bass note of the piece.',
+      '<b>Below vs above:</b> the relative minor is 3 half steps below the major tonic; the relative major is 3 half steps above the minor tonic.',
+    ],
+    show: 'Play C to C on the white keys only, then A to A on the same keys. Same keys, another place of rest, another mood.',
+  } satisfies RecapText,
   whyTitle: 'Why it works this way',
   why: (maj: S, min: S, mt: S, line: S) => [
     `<b>Same key signature:</b> ${min} uses exactly the seven keys of ${maj}. That is why the key signature is the same and they are called relatives: family, not neighbors.`,

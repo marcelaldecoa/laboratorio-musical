@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -10,9 +11,9 @@ const pt = {
     teaser: 'Tire as duas dobradiças e nada mais soa errado.',
   },
   minor: 'menor',
-  desc: 'A pentatônica tem só cinco notas. Ela aparece no mundo inteiro, em canções infantis, no folclore e no rock, porque não tem nenhum semitom: qualquer combinação das suas notas soa bem. A escala de blues é a pentatônica menor com uma nota de tensão a mais.',
+  desc: 'A pentatônica tem só cinco notas. Ela aparece no mundo inteiro, em canções infantis, no folclore e no rock, porque não tem nenhum semitom nem trítono: quase qualquer combinação das suas notas soa bem. A escala de blues é a pentatônica menor com uma nota de tensão a mais.',
   blackTitle: '1 · As cinco teclas pretas',
-  blackDesc: 'Toque só as teclas pretas, em qualquer ordem: soa bem, sempre. Elas formam a pentatônica maior de Fá♯.',
+  blackDesc: 'Toque só as teclas pretas, em qualquer ordem: soa bem. Elas formam a pentatônica maior de Fá♯. A seção 2 mostra o porquê na tonalidade atual: faltam justamente as duas notas que criariam choque.',
   blackLabel: 'As teclas pretas: pentatônica maior de Fá sustenido',
   playBlack: 'Só as teclas pretas',
   lgTonicBlack: 'Fá♯, tônica',
@@ -42,6 +43,18 @@ const pt = {
   lineBr: 'pentatônica · 5 quintas',
   lgLineIn: 'as cinco quintas',
   lgLineOut: 'tracejado: as pontas da janela (4º e 7º graus)',
+  predict: (key: S) => `Estas são as sete notas de ${key}. A pentatônica tira as duas dobradiças, as pontas da janela de quintas: as notas que formam os semitons e o trítono. Toque uma delas.`,
+  predictReveal: (four: S, seven: S) => `${four} (4º grau) e ${seven} (7º grau). Cada uma fica meio tom de uma nota da escala, e juntas formam o trítono. Tirando as duas, sobram cinco notas sem nenhum semitom: nada choca.`,
+  transfer: (k: S) => `Em ${k}: quais duas notas saem para formar a pentatônica maior? (as pontas da janela: 4º e 7º graus) E qual é a pentatônica menor com as mesmas teclas?`,
+  recap: {
+    oneLine: 'As teclas pretas são cinco quintas seguidas, a pentatônica: sem o 4º e o 7º graus não sobra nenhum semitom nem trítono, então nenhuma nota choca com outra.',
+    confusions: [
+      '<b>Pentatônica maior × menor:</b> as mesmas cinco notas com outra tônica (Dó maior e Lá menor), como as relativas.',
+      '<b>Pentatônica menor × blues:</b> o blues acrescenta o ♭5 entre o 4 e o 5 (Mi♭ em Lá), uma tensão de propósito.',
+      '<b>Sem semitom × sem tensão nenhuma:</b> a pentatônica não tem choque, mas também não tem sensível; por isso ela soa aberta e não “resolve” sozinha.',
+    ],
+    show: 'Toque só as teclas pretas, em qualquer ordem: é a pentatônica de Fá♯. Depois faça o mesmo em Dó com Dó Ré Mi Sol Lá e mostre que Fá e Si ficaram de fora.',
+  } satisfies RecapText,
   whyTitle: 'Por que funciona',
   why: (key: S, five: S, four: S, seven: S, min: S, blue: S) => [
     `<b>Cinco quintas seguidas:</b> comece na tônica e suba quintas: ${five}. Coloque em ordem dentro da oitava e você tem a pentatônica maior de ${key}. É a janela de 7 quintas sem as duas pontas.`,
@@ -60,9 +73,9 @@ const en: typeof pt = {
     teaser: 'Remove the two hinges and nothing sounds wrong anymore.',
   },
   minor: 'minor',
-  desc: 'The pentatonic scale has only five notes. It shows up all over the world, in children’s songs, folk music and rock, because it has no half steps: any combination of its notes sounds good. The blues scale is the minor pentatonic with one extra tension note.',
+  desc: 'The pentatonic scale has only five notes. It shows up all over the world, in children’s songs, folk music and rock, because it has no half steps and no tritone: almost any combination of its notes sounds good. The blues scale is the minor pentatonic with one extra tension note.',
   blackTitle: '1 · The five black keys',
-  blackDesc: 'Play only the black keys, in any order: it always sounds good. They form the F♯ major pentatonic.',
+  blackDesc: 'Play only the black keys, in any order: it sounds good. They form the F♯ major pentatonic. Section 2 shows why in the current key: the two notes that would clash are exactly the ones missing.',
   blackLabel: 'The black keys: F sharp major pentatonic',
   playBlack: 'Black keys only',
   lgTonicBlack: 'F♯, tonic',
@@ -92,6 +105,18 @@ const en: typeof pt = {
   lineBr: 'pentatonic · 5 fifths',
   lgLineIn: 'the five fifths',
   lgLineOut: 'dashed: the ends of the window (degrees 4 and 7)',
+  predict: (key: S) => `These are the seven notes of ${key}. The pentatonic removes the two hinges, the ends of the window of fifths: the notes that make the half steps and the tritone. Tap one of them.`,
+  predictReveal: (four: S, seven: S) => `${four} (degree 4) and ${seven} (degree 7). Each one sits a half step from a scale note, and together they form the tritone. Without them, five notes remain with no half step at all: nothing clashes.`,
+  transfer: (k: S) => `In ${k}: which two notes leave to make the major pentatonic? (the ends of the window: degrees 4 and 7) And what is the minor pentatonic on the same keys?`,
+  recap: {
+    oneLine: 'The black keys are five fifths in a row, the pentatonic: without degrees 4 and 7 there is no half step and no tritone left, so no note clashes with another.',
+    confusions: [
+      '<b>Major vs minor pentatonic:</b> the same five notes with another tonic (C major and A minor), like relative keys.',
+      '<b>Minor pentatonic vs blues:</b> the blues adds ♭5 between 4 and 5 (E♭ in A), tension on purpose.',
+      '<b>No half step vs no tension at all:</b> the pentatonic has no clash, but no leading tone either; that is why it sounds open and does not “resolve” on its own.',
+    ],
+    show: 'Play only the black keys, in any order: that is the F♯ pentatonic. Then do the same in C with C D E G A and show that F and B were left out.',
+  } satisfies RecapText,
   whyTitle: 'Why it works',
   why: (key: S, five: S, four: S, seven: S, min: S, blue: S) => [
     `<b>Five fifths in a row:</b> start on the tonic and go up in fifths: ${five}. Put them in order within the octave and you have the ${key} major pentatonic. It is the window of 7 fifths without its two ends.`,
