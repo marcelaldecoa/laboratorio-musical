@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -49,12 +50,30 @@ const pt = {
   lgIn: 'notas da tonalidade',
   minorOf: (n: S) => `${n} menor`,
   logicTitle: 'A lógica por baixo',
+  p1: (deg: S, names: S, fifth: S) => `A tríade do grau ${deg} é <b>${names}</b>. Continue a pilha de terças: a partir da 5ª (${fifth}), pule uma nota da escala e toque a 7ª.`,
+  p1r: (fifth: S, skip: S, sev: S, semis: number, size: S, sym: S) => `${sev}. De ${fifth} você pula ${skip} e cai em ${sev}. Ela fica a ${semis} semitons da fundamental, uma 7ª ${size}, e por isso o acorde se chama ${sym}. A letra vem do “pula uma”; o tamanho vem da escala.`,
+  sizeM: 'maior',
+  sizem: 'menor',
+  p2: 'Na menor harmônica o 7º grau sobe meio tom e vira sensível. Empilhando terças a partir dele saem três terças menores: 3 + 3 + 3. Quantos acordes °7 com som diferente existem nas 12 notas?',
+  p2opts: ['12', '4', '3'],
+  p2ans: '3',
+  p2r: 'Três. Mais uma terça menor fecha a oitava (3 + 3 + 3 + 3 = 12), então o °7 divide a oitava em quatro partes iguais. Comece a pilha em qualquer nota do acorde e você cai nas mesmas quatro teclas: cada °7 serve para quatro fundamentais, e 12 ÷ 4 = 3.',
+  transfer: (k: S) => `Em ${k}: qual é a tétrade do IV, e qual nota é a 7ª dela? Monte a pilha pulando uma nota da escala de cada vez.`,
+  recap: {
+    oneLine: 'A tríade ganha uma 7ª e vira tétrade; como a escala decide se cada terça é maior ou menor, saem só quatro tipos na escala maior: 7M, m7, 7 e m7(♭5).',
+    confusions: [
+      '<b>7 × 7M:</b> o “7” sozinho é a 7ª menor (10 semitons, um tom abaixo da oitava); 7M é a 7ª maior (11 semitons, meio tom abaixo da oitava). C7 tem Si♭; C7M tem Si.',
+      '<b>m7(♭5) × °7:</b> os dois começam com a tríade diminuta. O meio-diminuto termina com uma 3ª maior (3 + 3 + 4); o diminuto, com outra 3ª menor (3 + 3 + 3). Na escala maior só existe o m7(♭5).',
+      '<b>Número × tamanho:</b> “7ª” diz qual nota da pilha (a quarta); “maior” ou “menor” diz a distância. Toda tétrade da escala tem 7ª, mas o tamanho muda conforme o grau.',
+    ],
+    show: 'Toque Dó Mi Sol e acrescente Si, pulando o Lá: C7M. Abaixe o Si para Si♭: C7. Depois faça a pilha a partir de Ré (Ré Fá Lá Dó) e mostre que, só com teclas brancas, sai um m7.',
+  } satisfies RecapText,
   logic: [
-    '<b>Por que só pular notas:</b> uma terça é ‘uma nota sim, uma não’ na escala. 1 3 5 7 são quatro letras alternadas, por isso a 7ª tem sempre a letra certa e o acorde nunca precisa de acidente fora da armadura.',
-    '<b>Por que 7M no I e no IV:</b> a 7ª do I é a sensível, meio tom abaixo da tônica. A 7ª do IV é a 3ª da tônica, também meio tom abaixo da fundamental. 7M = 11 semitons, uma oitava menos um semitom.',
-    '<b>Por que um só acorde “7”:</b> 4 + 3 + 3 é a única tétrade maior com 7ª menor. Ela nasce no V porque é ali que a tríade maior encontra o 4º grau da escala, que fica 10 semitons acima. Esse acorde junta a sensível e a subdominante, o trítono.',
-    '<b>O °7 e a menor harmônica:</b> na menor harmônica o 7º grau sobe meio tom para virar sensível. Empilhando terças a partir dele saem três terças menores (3 + 3 + 3). Como 3 × 4 = 12, o °7 divide a oitava em quatro partes iguais: só existem três acordes °7 diferentes.',
-    '<b>De onde veio:</b> no Barroco a 7ª era uma dissonância de passagem, anotada como “7” no baixo cifrado. No jazz e na bossa nova as tétrades viraram o som normal do acorde, e a cifra brasileira escreve 7M onde a americana escreve maj7.',
+    '<b>Por que só pular notas:</b> uma terça é “uma nota sim, uma não” na escala. 1 3 5 7 são quatro letras alternadas, por isso a 7ª tem sempre a letra certa e o acorde nunca precisa de acidente fora da armadura.',
+    '<b>Por que 7M no I e no IV:</b> a 7ª do I é a sensível, meio tom abaixo da tônica. A 7ª do IV é a 3ª da tônica, também meio tom abaixo da fundamental do IV. 7M = 11 semitons, uma oitava menos um semitom.',
+    '<b>Por que só o V tem o “7”:</b> I, IV e V são as três tríades maiores da escala. No I e no IV a 7ª cai meio tom abaixo da oitava (7M). No V ela cai no 4º grau da escala, um tom abaixo da oitava: 7ª menor. Só ali se forma 4 + 3 + 3, e esse acorde junta a sensível e a subdominante, o trítono.',
+    '<b>O °7 e a menor harmônica:</b> na menor harmônica o 7º grau sobe meio tom para virar sensível. Empilhando terças a partir dele saem três terças menores (3 + 3 + 3). Como 3 × 4 = 12, o °7 divide a oitava em quatro partes iguais: em som, só existem três acordes °7 diferentes.',
+    '<b>De onde veio:</b> no Barroco a 7ª era tratada como dissonância: em geral já soava no acorde anterior (preparação) e depois descia por grau (resolução). No baixo cifrado ela aparecia como “7”. No jazz e na bossa nova a tétrade virou o som normal do acorde, e a cifra brasileira escreve 7M onde a americana escreve maj7.',
   ],
 };
 
@@ -105,12 +124,30 @@ const en: typeof pt = {
   lgIn: 'notes of the key',
   minorOf: (n: S) => `${n} minor`,
   logicTitle: 'The logic underneath',
+  p1: (deg: S, names: S, fifth: S) => `The triad on degree ${deg} is <b>${names}</b>. Keep stacking thirds: from the 5th (${fifth}), skip one scale note and tap the 7th.`,
+  p1r: (fifth: S, skip: S, sev: S, semis: number, size: S, sym: S) => `${sev}. From ${fifth} you skip ${skip} and land on ${sev}. It is ${semis} half steps above the root, a ${size} 7th, so the chord is called ${sym}. The letter comes from “skip one”; the size comes from the scale.`,
+  sizeM: 'major',
+  sizem: 'minor',
+  p2: 'In harmonic minor the 7th degree is raised a half step to become a leading tone. Stacking thirds from it gives three minor thirds: 3 + 3 + 3. How many °7 chords that sound different exist among the 12 notes?',
+  p2opts: ['12', '4', '3'],
+  p2ans: '3',
+  p2r: 'Three. One more minor third closes the octave (3 + 3 + 3 + 3 = 12), so the °7 splits the octave into four equal parts. Start the stack on any note of the chord and you land on the same four keys: each °7 serves four roots, and 12 ÷ 4 = 3.',
+  transfer: (k: S) => `In ${k}: what is the seventh chord on IV, and which note is its 7th? Build the stack skipping one scale note each time.`,
+  recap: {
+    oneLine: 'The triad gains a 7th and becomes a seventh chord; since the scale decides whether each third is major or minor, a major key gives only four kinds: maj7, m7, 7 and m7♭5.',
+    confusions: [
+      '<b>7 vs maj7:</b> a plain “7” is the minor 7th (10 half steps, a whole step below the octave); maj7 is the major 7th (11 half steps, a half step below the octave). C7 has B♭; Cmaj7 has B.',
+      '<b>m7♭5 vs °7:</b> both start with a diminished triad. Half-diminished ends with a major 3rd (3 + 3 + 4); diminished, with another minor 3rd (3 + 3 + 3). A major scale only has the m7♭5.',
+      '<b>Number vs size:</b> “7th” says which note of the stack (the fourth one); “major” or “minor” says the distance. Every seventh chord in the scale has a 7th, but its size depends on the degree.',
+    ],
+    show: 'Play C E G and add B, skipping A: Cmaj7. Lower B to B♭: C7. Then build the stack from D (D F A C) and show that, on white keys only, you get an m7.',
+  } satisfies RecapText,
   logic: [
     '<b>Why just skip notes:</b> a third is “one note yes, one note no” in the scale. 1 3 5 7 are four alternating letters, so the 7th always has the right letter and the chord never needs an accidental outside the key signature.',
-    '<b>Why maj7 on I and IV:</b> the 7th of I is the leading tone, a half step below the tonic. The 7th of IV is the tonic’s 3rd, also a half step below its root. maj7 = 11 half steps, an octave minus a half step.',
-    '<b>Why only one “7” chord:</b> 4 + 3 + 3 is the only major chord with a minor 7th. It is born on V because that is where the major triad meets the scale’s 4th degree, 10 half steps above. That chord holds the leading tone and the subdominant together: the tritone.',
-    '<b>The °7 and harmonic minor:</b> in harmonic minor the 7th degree is raised a half step to become a leading tone. Stacking thirds from it gives three minor thirds (3 + 3 + 3). Since 3 × 4 = 12, the °7 splits the octave into four equal parts: there are only three different °7 chords.',
-    '<b>Where it came from:</b> in the Baroque the 7th was a passing dissonance, written as “7” in figured bass. In jazz and bossa nova seventh chords became the normal sound of a chord, and Brazilian charts write 7M where American ones write maj7.',
+    '<b>Why maj7 on I and IV:</b> the 7th of I is the leading tone, a half step below the tonic. The 7th of IV is the tonic’s 3rd, also a half step below the root of IV. maj7 = 11 half steps, an octave minus a half step.',
+    '<b>Why only V gets the “7”:</b> I, IV and V are the scale’s three major triads. On I and IV the 7th lands a half step below the octave (maj7). On V it lands on the scale’s 4th degree, a whole step below the octave: a minor 7th. Only there do you get 4 + 3 + 3, and that chord holds the leading tone and the subdominant together: the tritone.',
+    '<b>The °7 and harmonic minor:</b> in harmonic minor the 7th degree is raised a half step to become a leading tone. Stacking thirds from it gives three minor thirds (3 + 3 + 3). Since 3 × 4 = 12, the °7 splits the octave into four equal parts: by sound, there are only three different °7 chords.',
+    '<b>Where it came from:</b> in the Baroque the 7th was treated as a dissonance: it usually sounded already in the previous chord (preparation) and then fell by step (resolution). In figured bass it was written “7”. In jazz and bossa nova the seventh chord became the normal sound of a chord, and Brazilian charts write 7M where American ones write maj7.',
   ],
 };
 

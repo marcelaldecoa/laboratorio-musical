@@ -3,12 +3,13 @@ import { playNotes, stopAll } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, roleMark } from '../components/layout';
 import { PianoGrandStaff, STAFF_MAX, STAFF_MIN, type StaffNote } from '../components/PianoGrandStaff';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Html, Legend, Notes, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/reading';
 import { useLessonText } from '../i18n/lessonText';
 import { getState, setState } from '../state/store';
 import { useLab } from '../state/useLab';
-import { type Note, pcOf, sameNote } from '../theory';
+import { type Note, mod, pcOf, sameNote } from '../theory';
 import {
   BOTTOM_LINE, type Clef, accidentalToShow, clefFor, diatonic, ledgerLines, noteAtDiatonic, octaveOf, spellInKey,
   staffLetters,
@@ -152,9 +153,30 @@ export function Reading() {
   const letters = (c: Clef, k: 'line' | 'space') => staffLetters(c, k).map((l) => nm({ letter: l, acc: 0 })).join(' ');
   const N = (l: number) => nm({ letter: l, acc: 0 });
 
+  // predictions, from the current key: the tonic in the treble clef (where?) and in the bass clef (which key?)
+  const span = (a: number, b: number) => {
+    const out: string[] = [];
+    for (let x = a; ; x += Math.sign(b - a) || 1) { out.push(N(mod(x, 7))); if (x === b) break; }
+    return out.join(', ');
+  };
+  const d1 = 28 + cur.letter < 30 ? 35 + cur.letter : 28 + cur.letter;
+  const opts1 = [d1 - 1, d1, d1 + 1, d1 + 2].map((x) => where(x).w);
+  const d2 = 21 + cur.letter > 26 ? 14 + cur.letter : 21 + cur.letter;
+  const n2 = noteAtDiatonic(sc, d2);
+  const p2Marks: Record<number, Mark> = {};
+  for (let x = -24; x <= 0; x += 12) p2Marks[x] = { name: T.noteName(N(0), 4 + x / 12) };
+  const recap = T.recap(N(0), N(1), N(2));
+
   return (
     <>
       <p className="desc">{T.desc}</p>
+      <Predict mode="choice" resetOn={s.k + s.enh} options={opts1} answer={where(d1).w}
+        prompt={T.p1(keyName(cur), nm(cur))} reveal={T.p1Reveal(where(d1).w, span(32, d1))} />
+      <div className="board">
+        <PianoGrandStaff tonic={cur} notes={[{ note: n2.note, oct: n2.oct }]} label={T.p2Staff(keyName(cur))} className="piano-staff-sm" />
+      </div>
+      <Predict mode="key" resetOn={s.k + s.enh} lay={layout(-24, 0)} marks={p2Marks} answer={[n2.s]}
+        prompt={T.p2} reveal={T.p2Reveal(full(n2.note, n2.oct), span(24, d2))} />
       <div className="piano-ctrls">
         <Seg label={T.modeLabel} value={mode} onChange={(m) => {
           setMode(m);
@@ -211,7 +233,9 @@ export function Reading() {
       </ul>
 
       <h3 className="sub-h">{T.logicTitle}</h3>
-      <Notes items={T.logic(N(4), N(3), N(0)).map((html, i) => ({ html, color: i === 4 ? 'var(--change)' : undefined }))} />
+      <Notes items={T.logic(N(4), N(3), N(0)).map((html, i) => ({ html, color: i === 4 ? 'var(--change)' : undefined }))} more={[3, 5]} />
+      <Transfer question={T.transfer} />
+      <Recap oneLine={recap.oneLine} confusions={recap.confusions} show={recap.show} />
     </>
   );
 }

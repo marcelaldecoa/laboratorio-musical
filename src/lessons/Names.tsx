@@ -1,12 +1,16 @@
 import { playNotes } from '../audio/audio';
 import { Bracket, Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark, type Role } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Html, Legend, Notes, PlayButton } from '../components/ui';
+import { extras } from '../i18n/lessons/extras/names';
 import { note, pcOf } from '../theory';
 import { useLab } from '../state/useLab';
 
 export function Names() {
-  const { t, nm, cur, sc } = useLab();
+  const { s, t, nm, cur, sc } = useLab();
+  const e = extras[s.lang];
+  const reset = s.k + s.enh + s.lang + s.nt;
   const c = pcOf(cur) + 7;
   const lay = rangeAround(c - 7, c + 7);
   const P: [number, number, Role][] = [
@@ -19,7 +23,11 @@ export function Names() {
   const cap = t.staffCap(nm(note(0)), nm(note(4)));
   return (
     <>
-      <p className="desc">{t.namesDesc}</p>
+      <p className="desc">{e.desc}</p>
+      <Predict mode="key" prompt={e.pSub(nm(sc[0]), nm(sc[4]))} lay={lay} answer={[c - 7]} anyOctave resetOn={reset}
+        marks={{ [c]: roleMark(c, 'tonic', 1, nm(sc[0])), [c + 7]: roleMark(c + 7, 'dom', 5, nm(sc[4])) }}
+        reveal={e.pSubRev(nm(sc[3]), nm(sc[0]))} />
+      <Predict mode="choice" prompt={e.pMed(nm(sc[0]))} options={e.pMedOpts} answer={e.pMedAns} reveal={e.pMedRev(nm(sc[5]), nm(sc[0]))} resetOn={reset} />
       <Board>
         <Keyboard lay={lay} marks={marks} top={100} channel="names" label={P.map(([, d]) => nm(sc[d])).join(' ')}
           ann={(l) => (<>
@@ -66,7 +74,9 @@ export function Names() {
       <div className="bar"><Html as="p" className="readout" html={cap} />
         <PlayButton label={t.playFifth} onPlay={() => playNotes([0, 2, 4, 5, 7].map((s, i) => ({ s, t: i * 0.3, d: 0.45 })).concat([{ s: 0, t: 1.8, d: 1.2 }, { s: 7, t: 1.8, d: 1.2 }]))} />
       </div>
-      <Notes items={t.nI.map((html) => ({ html }))} />
+      <Notes items={e.notes.map((html) => ({ html }))} more={e.more} />
+      <Transfer question={e.transfer} />
+      <Recap {...e.recap} />
     </>
   );
 }

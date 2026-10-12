@@ -6,6 +6,8 @@ O protótipo funcional está em `prototype/circle-of-fifths-lab.html`. Ele é a 
 
 ## Princípios pedagógicos
 
+- **Uma jornada, não uma lista de regras.** A maioria dos apps de teoria cita a regra sem o porquê, e o aluno precisa decorar. Aqui nenhuma regra aparece sem a sua razão, e o objetivo é que o aluno consiga explicar cada uma a outra pessoa.
+- **Cada aula abre com uma pergunta e a responde** (`src/i18n/hooks.ts`). No caminho: o aluno prevê antes de ver (`Predict`), e no fim recebe o resumo para explicar (`Recap`: em uma frase, confusões comuns, como mostrar no piano) e um desafio em outra tonalidade (`Transfer`). Curiosidades históricas ficam em "Para saber mais".
 - **Deduzir, não decorar.** Toda regra nasce de um fato anterior. A cadeia é: fórmula T T S T T T S → tetracordes → círculo das quintas → janela de 7 quintas → intervalos → campo harmônico → funções → progressões → composição.
 - **Cada conceito tem quatro partes:** explicação curta, piano interativo, som, e a lógica ou origem histórica por baixo.
 - **Uma ideia por passo.** Quando algo ficar confuso, reescreva em passos numerados com exemplos concretos no teclado, em vez de acrescentar mais conceitos.

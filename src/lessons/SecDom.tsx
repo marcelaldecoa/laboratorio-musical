@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { MotionFifthsLine, type FifthsCell } from '../components/MotionFifthsLine';
 import { MotionProgression, type ProgChord, type ProgTone } from '../components/MotionProgression';
+import { layout, type Mark, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Html, Notes } from '../components/ui';
-import { FUNCTION_OF, type Note, chordInfo, fifthIndex, fromFifthIndex } from '../theory';
-import { SECDOM_TARGETS, SUFFIX, diatonicTriad, qualityOf, secondaryDominant } from '../theory/harmony';
+import { FUNCTION_OF, type Note, chordInfo, fifthIndex, fromFifthIndex, mod, pcOf } from '../theory';
+import { SECDOM_TARGETS, SUFFIX, closeVoicing, diatonicTriad, qualityOf, secondaryDominant } from '../theory/harmony';
 import { text } from '../i18n/lessons/secdom';
 import { useLessonText } from '../i18n/lessonText';
 import { useLab } from '../state/useLab';
 import '../styles/motion.css';
 
 export function SecDom() {
-  const { nm, keyName, cur, sc } = useLab();
+  const { s, nm, keyName, cur, sc } = useLab();
   const t = useLessonText(text);
   const [target, setTarget] = useState(4);
   const sym = (ns: Note[]) => nm(ns[0]) + SUFFIX[qualityOf(ns)];
@@ -62,11 +64,23 @@ export function SecDom() {
       : t.step4lt(borrowedNotes.map(nm).join(' · '), keyName(cur), nm(lt), nm(sc[target])),
   ];
   const vv = secondaryDominant(cur, 4);
+  /* predict: which note of V/V is outside the key? */
+  const vvVoicing = closeVoicing(vv.notes.map(pcOf), null, 0, 23, 9);
+  const vvMarks: Record<number, Mark> = {};
+  let vvAnswer = 0;
+  vvVoicing.forEach((x) => {
+    const k = vv.notes.findIndex((n) => mod(pcOf(n) - x, 12) === 0);
+    vvMarks[x] = roleMark(x, 'dom', ['1', '3', '5', '7'][k], nm(vv.notes[k]));
+    if (vv.borrowed[k]) vvAnswer = x;
+  });
   const labels = { play: t.play, stop: t.stop, prev: t.prev, next: t.next, now: t.now };
 
   return (
     <>
       <Html as="p" className="desc" html={t.desc} />
+      <Predict mode="key" resetOn={`${s.k}${s.enh}`} lay={layout(0, 23)} marks={vvMarks} answer={[vvAnswer]} anyOctave
+        prompt={t.predictQ(keyName(cur), sym(vv.notes), vv.notes.map(nm).join(' '), nm(sc[4]))}
+        reveal={t.predictA(keyName(cur), nm(vv.notes[1]), nm(sc[4]))} />
       <p className="rowlab">{t.targetLab}</p>
       <div className="chips" role="group">
         {SECDOM_TARGETS.map((d) => {
@@ -123,7 +137,9 @@ export function SecDom() {
         ]} />
 
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic(keyName(cur), sym(vv.notes), nm(vv.notes[1]), nm(sc[3])).map((html) => ({ html }))} />
+      <Notes items={t.logic(keyName(cur), sym(vv.notes), nm(vv.notes[1]), nm(sc[3])).map((html) => ({ html }))} more={[4]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

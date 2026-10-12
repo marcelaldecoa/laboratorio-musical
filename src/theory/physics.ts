@@ -84,3 +84,74 @@ export const JUST_INTERVALS: { id: string; p: number; q: number; semis: number }
   { id: 'M2', p: 9, q: 8, semis: 2 },
   { id: 'm2', p: 16, q: 15, semis: 1 },
 ];
+
+/* ---------- consonance ---------- */
+
+export type ConsClass = 'perfect' | 'imperfect' | 'dissonant';
+
+export interface ConsInterval {
+  /** short id: quality letter + number (P8, M3, m2, A4…) */
+  id: string;
+  /** interval number (2nd = 2…) */
+  num: number;
+  /** size in half steps on the piano */
+  semis: number;
+  /** just ratio p:q (p > q, lowest terms) */
+  p: number;
+  q: number;
+  /** steps on the line of fifths from the lower note to the upper one (gives the spelling) */
+  fifths: number;
+  /** traditional class (common-practice counterpoint) */
+  cls: ConsClass;
+}
+
+/** The intervals inside one octave with their just ratios (the tritone as 45:32, from stacked fifths and thirds). */
+export const CONS_INTERVALS: ConsInterval[] = [
+  { id: 'P8', num: 8, semis: 12, p: 2, q: 1, fifths: 0, cls: 'perfect' },
+  { id: 'P5', num: 5, semis: 7, p: 3, q: 2, fifths: 1, cls: 'perfect' },
+  { id: 'P4', num: 4, semis: 5, p: 4, q: 3, fifths: -1, cls: 'perfect' },
+  { id: 'M6', num: 6, semis: 9, p: 5, q: 3, fifths: 3, cls: 'imperfect' },
+  { id: 'M3', num: 3, semis: 4, p: 5, q: 4, fifths: 4, cls: 'imperfect' },
+  { id: 'm3', num: 3, semis: 3, p: 6, q: 5, fifths: -3, cls: 'imperfect' },
+  { id: 'm6', num: 6, semis: 8, p: 8, q: 5, fifths: -4, cls: 'imperfect' },
+  { id: 'm7', num: 7, semis: 10, p: 9, q: 5, fifths: -2, cls: 'dissonant' },
+  { id: 'M2', num: 2, semis: 2, p: 9, q: 8, fifths: 2, cls: 'dissonant' },
+  { id: 'M7', num: 7, semis: 11, p: 15, q: 8, fifths: 5, cls: 'dissonant' },
+  { id: 'm2', num: 2, semis: 1, p: 16, q: 15, fifths: -5, cls: 'dissonant' },
+  { id: 'A4', num: 4, semis: 6, p: 45, q: 32, fifths: 6, cls: 'dissonant' },
+];
+
+/**
+ * The first harmonic of the lower note that coincides with one of the upper note: harmonic p
+ * (= harmonic q of the upper note). The sooner the two series meet, the more consonant the interval.
+ */
+export const firstShared = (p: number) => p;
+
+/** Sort from most to least consonant: the earlier the first shared harmonic (p), then the smaller q. */
+export function byConsonance<T extends { p: number; q: number }>(list: T[]): T[] {
+  return [...list].sort((a, b) => a.p - b.p || a.q - b.q);
+}
+
+/** Two voices given as scale degrees (0 = tonic; 7 and up = the next octave). */
+export interface Resolution {
+  id: string;
+  from: [number, number];
+  to: [number, number];
+}
+
+/** Classic resolutions: a dissonance moves by step into a consonance. */
+export const RESOLUTIONS: Resolution[] = [
+  { id: 'second', from: [0, 1], to: [0, 2] },
+  { id: 'fourth', from: [0, 3], to: [0, 2] },
+  { id: 'tritone', from: [3, 6], to: [2, 7] },
+  { id: 'dim5', from: [6, 10], to: [7, 9] },
+];
+
+const MAJOR = [0, 2, 4, 5, 7, 9, 11];
+/** Half steps above the tonic of a scale degree (0-based, may be ≥ 7). */
+export const degreeSemis = (d: number) => MAJOR[mod(d, 7)] + 12 * Math.floor(d / 7);
+
+/** Number and half steps of the interval between two degrees (lower first). */
+export function degreeInterval(a: number, b: number): { num: number; semis: number } {
+  return { num: b - a + 1, semis: degreeSemis(b) - degreeSemis(a) };
+}

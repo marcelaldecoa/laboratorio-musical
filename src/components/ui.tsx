@@ -39,7 +39,9 @@ export interface NoteItem {
 }
 
 /** The "why" list. In step-by-step mode it reveals one explanation at a time. */
-export function Notes({ items }: { items: NoteItem[] }) {
+export function Notes({ items: all, more }: { items: NoteItem[]; /** indexes moved into a collapsed “want to know more” block */ more?: number[] }) {
+  const items = all.filter((_, i) => !more?.includes(i));
+  const extra = all.filter((_, i) => more?.includes(i));
   const stepMode = useStore((st) => st.stepMode);
   const lang = useStore((st) => st.lang);
   const [n, setN] = useState(1);
@@ -60,6 +62,19 @@ export function Notes({ items }: { items: NoteItem[] }) {
           </li>
         ))}
       </ul>
+      {!!extra.length && (
+        <details className="more">
+          <summary>{DICTS[lang].learn.more}</summary>
+          <ul className="notes">
+            {extra.map((it, i) => (
+              <li key={i}>
+                {it.color && <i className="sw" style={{ background: it.color }} />}
+                <Html html={it.html} />
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       {stepping && (
         <div className="step-bar">
           <span className="step-of">{T.of(n, items.length)}</span>

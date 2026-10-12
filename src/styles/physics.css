@@ -23,3 +23,14 @@
 .phys-cbar{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:2px;height:14px}
 .phys-cbar i{background:var(--line);border-radius:2px}
 .phys-cbar i.q-a{background:var(--accent)}.phys-cbar i.q-b{background:var(--flat)}
+/* consonance */
+.phys-cbar i.cons-p{background:var(--accent)}.phys-cbar i.cons-i{background:var(--k-scaleb)}.phys-cbar i.cons-d{background:var(--change)}
+.cons-it{color:var(--fg)}
+.phys-eras{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin:8px 0}
+@media (min-width:680px){.phys-eras{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.phys-ivs{display:flex;flex-wrap:wrap;gap:4px}
+.phys-iv{font:600 .8rem var(--f-mono);padding:3px 7px;border-radius:8px;border:2px solid transparent}
+.phys-iv.p{background:var(--k-tonic);color:var(--k-tonic-ink)}
+.phys-iv.i{background:var(--k-scale);color:var(--k-scale-ink)}
+.phys-iv.d{background:var(--k-chg);color:var(--k-chg-ink)}
+.phys-iv.f{background:transparent;color:var(--change-ink);border:2px dashed var(--k-chg)}

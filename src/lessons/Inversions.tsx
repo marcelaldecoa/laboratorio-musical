@@ -3,6 +3,7 @@ import { playNotes } from '../audio/audio';
 import { ColorBracket } from '../components/ChordsKit';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/inversions';
 import { useLessonText } from '../i18n/lessonText';
@@ -98,9 +99,25 @@ export function Inversions() {
   };
   const lineRead = t.bassLine(bassNotes.map(nm).join(' → '), mode === 'inv' ? t.byStep : t.leaps);
 
+  // predict 1: the triad in root position; which note goes to the bass in 1st inversion?
+  const pTri = triad(sc, d);
+  const pPs = stackUp(pTri.map(pcOf), 0);
+  const pMarks: Record<number, Mark> = {};
+  pPs.forEach((p, i) => (pMarks[p] = roleMark(p, i === 0 ? 'tonic' : 'scale', undefined, nm(pTri[i]))));
+  const pSym = letterName(sc[d]) + chordInfo(sc, d).suffix;
+  // predict 2: the bass from I to vi, which note of V in between?
+  const p2Marks: Record<number, Mark> = {
+    [b0]: roleMark(b0, 'tonic', undefined, nm(sc[0])),
+    [b0 - 3]: roleMark(b0 - 3, 'scale', undefined, nm(sc[5])),
+  };
+  const vSym = letterName(sc[4]);
+  const reset = `${s.k}${s.enh}`;
+
   return (
     <>
       <p className="desc">{t.desc}</p>
+      <Predict mode="key" resetOn={reset + d} lay={layout(0, 23)} marks={pMarks} answer={[pPs[1]]} anyOctave
+        prompt={t.p1(pSym, pTri.map(nm).join(' '), nm(pTri[0]))} reveal={t.p1r(nm(pTri[1]), nm(pTri[0]))} />
       <div className="bar mt">
         <Seg label={t.kind} value={kind} onChange={(v) => setKind(v)} options={[{ v: 3, label: t.triad }, { v: 4, label: t.tetrad }]} />
       </div>
@@ -150,6 +167,9 @@ export function Inversions() {
       <p className="hint">{t.slash}</p>
 
       <h3 className="sub-h">{t.lineTitle}</h3>
+      <Predict mode="key" resetOn={reset} lay={layout(-12, 11)} marks={p2Marks} answer={[b0 - 1]} anyOctave
+        prompt={t.p2(lsym[0], vSym, lsym[2], nm(sc[0]), nm(sc[5]), triad(sc, 4).map(nm).join(' '))}
+        reveal={t.p2r(nm(sc[6]), vSym, nm(sc[0]), nm(sc[5]), `${vSym}/${letterName(sc[6])}`)} />
       <p className="desc">{t.lineDesc(lsym[0], letterName(sc[4]) + '/' + letterName(sc[6]), lsym[2])}</p>
       <div className="bar">
         <Seg label={t.lineTitle} value={mode} onChange={setMode} options={[{ v: 'inv', label: t.withInv }, { v: 'root', label: t.rootOnly }]} />
@@ -172,7 +192,9 @@ export function Inversions() {
         { dash: 'var(--muted)', label: t.lgWas },
       ]} />
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic.map((html) => ({ html }))} />
+      <Notes items={t.logic.map((html) => ({ html }))} more={[4, 5]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

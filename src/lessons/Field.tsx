@@ -1,10 +1,13 @@
 import { playNotes } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
-import { type Mark, layout } from '../components/layout';
-import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
-import { chordInfo, fifthIndex, fromFifthIndex, pcOf, triadSteps } from '../theory';
+import { type Mark, layout, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
+import { Bar, Board, Html, Legend, Notes, PlayButton } from '../components/ui';
+import { extras } from '../i18n/lessons/extras/field';
+import { chordInfo, fifthIndex, fromFifthIndex, mod, pcOf, triad, triadSteps } from '../theory';
 import { setState } from '../state/store';
 import { useLab } from '../state/useLab';
+import '../styles/harmony.css';
 
 const QCOL = {
   maj: ['var(--k-tonic)', 'var(--k-tonic-ink)'],
@@ -58,9 +61,21 @@ export function Field() {
     );
   };
   const read = t.chordRead(label, names, a, b);
+  const x = extras[s.lang];
+  const reset = `${s.k}${s.enh}`;
+  // predict 1: quality of the vi chord
+  const vi = triad(sc, 5);
+  const viA = mod(pcOf(vi[1]) - pcOf(vi[0]), 12);
+  // predict 2: the third of V (the leading tone)
+  const vRoot = pcOf(sc[4]);
+  const vLay = layout(0, 23);
   return (
     <>
-      <p className="desc">{t.fieldDesc}</p>
+      <p className="desc">{x.desc}</p>
+      <ol className="harmony-steps">{x.steps.map((h, k) => <Html as="li" key={k} html={h} />)}</ol>
+      <Predict mode="choice" resetOn={reset} prompt={x.p1(keyName(cur), nm(sc[5]))}
+        options={[x.quality.maj, x.quality.min, x.quality.dim]} answer={x.quality.min}
+        reveal={x.p1r(vi.map(nm).join('–'), viA)} />
       <p className="rowlab">{t.orderScale}</p>
       <div className="chips" role="group">{[0, 1, 2, 3, 4, 5, 6].map(chip)}</div>
       <p className="rowlab">{t.orderWin}</p>
@@ -123,8 +138,13 @@ export function Field() {
         { color: 'var(--k-sub)', label: t.lgMin },
         { color: 'var(--k-lt)', label: t.lgDim },
       ]} />
+      <Predict mode="key" resetOn={reset} prompt={x.p2(keyName(cur), nm(sc[4]))} lay={vLay} anyOctave
+        marks={{ [vRoot]: { ...roleMark(vRoot, 'dom', '1'), name: nm(sc[4]) } }} answer={[vRoot + 4]}
+        reveal={x.p2r(nm(sc[4]), nm(sc[5]), nm(sc[6]))} />
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.fieldWhy.map((html) => ({ html }))} />
+      <Notes items={x.why.map((html) => ({ html }))} more={[4, 5, 6]} />
+      <Transfer question={x.transfer} />
+      <Recap {...x.recap} />
     </>
   );
 }

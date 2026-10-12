@@ -1,6 +1,9 @@
 import { useRef } from 'react';
 import { playNotes, seq } from '../audio/audio';
+import { Predict, Recap, Transfer } from '../components/Learn';
+import { type Mark, rangeAround, roleMark } from '../components/layout';
 import { Board, Notes, PlayButton } from '../components/ui';
+import { extras } from '../i18n/lessons/extras/win';
 import { fifthIndex, fromFifthIndex, pcOf, scaleSemitones } from '../theory';
 import { goToKey, setDirection } from '../state/store';
 import { useLab } from '../state/useLab';
@@ -25,9 +28,25 @@ export function Window() {
     goToKey(s.k + d);
   };
   const sx = useRef<number | null>(null);
+  const E = extras[s.lang];
+  // predictions follow the current direction: clockwise = slide right
+  const right = s.dir === 'cw';
+  const b = pcOf(cur);
+  const notes = scaleSemitones(b);
+  const pMarks: Record<number, Mark> = {};
+  notes.forEach((k, i) => (pMarks[k] = roleMark(k, i % 7 === 0 ? 'tonic' : 'scale', (i % 7) + 1, nm(sc[i % 7]))));
+  const outN = nm(fromFifthIndex(right ? f0 : f0 + 6));
+  const inN = nm(fromFifthIndex(right ? f0 + 7 : f0 - 1));
+  const winNotes = [0, 1, 2, 3, 4, 5, 6].map((j) => nm(fromFifthIndex(f0 + j)));
+  const reset = `${s.k}${s.enh}${s.dir}`;
   return (
     <>
       <p className="desc">{t.winDesc}</p>
+      <Predict mode="choice" resetOn={reset} prompt={E.pOut(right)} options={winNotes} answer={outN}
+        reveal={right ? E.pOutRevR(outN) : E.pOutRevL(outN)} />
+      <Predict mode="key" resetOn={reset} lay={rangeAround(b, b + 12)} marks={pMarks} anyOctave
+        prompt={E.pIn(right)} answer={[right ? notes[3] + 1 : notes[6] - 1]}
+        reveal={right ? E.pInRevR(inN, outN) : E.pInRevL(inN, outN)} />
       <div className="bar">
         <span className="now">{win}</span>
         <div className="nav">
@@ -84,9 +103,12 @@ export function Window() {
       </div>
       <Notes items={[
         { color: 'var(--accent-soft)', html: t.winRead(keyName(cur), win) },
+        { color: 'var(--k-lt)', html: E.why(nm(sc[6]), nm(sc[3])) },
         { dash: 'var(--k-lt-line)', html: t.winR(nm(fromFifthIndex(f0)), nm(fromFifthIndex(f0 + 7)), keyName(fromFifthIndex(f0 + 2))) },
         { dash: 'var(--k-lt-line)', html: t.winL(nm(fromFifthIndex(f0 + 6)), nm(fromFifthIndex(f0 - 1)), keyName(fromFifthIndex(f0))) },
       ]} />
+      <Transfer question={E.transfer} />
+      <Recap {...E.recap} />
     </>
   );
 }

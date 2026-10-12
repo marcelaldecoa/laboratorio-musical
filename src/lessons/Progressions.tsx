@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { later, playNotes, stopAll } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
-import { type Mark, layout } from '../components/layout';
+import { type Mark, layout, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Html, Legend, Notes } from '../components/ui';
+import { extras } from '../i18n/lessons/extras/prog';
 import {
   FUNCTION_OF, PROGRESSIONS, type HarmonicFunction, type Note, chordInfo, commonTones, pcOf, triad, voice,
 } from '../theory';
 import { setState } from '../state/store';
 import { useLab } from '../state/useLab';
+import '../styles/harmony.css';
 
 const FC: Record<HarmonicFunction, [string, string]> = {
   T: ['var(--k-tonic)', 'var(--k-tonic-ink)'],
@@ -95,15 +98,26 @@ export function Progressions() {
     </div>
   );
 
+  const x = extras[s.lang];
+  const reset = `${s.k}${s.enh}`;
+  const pats = { ...t.pats, ...x.pats };
+  const vV = voice(triad(sc, 4).map(pcOf), null);
+  const vMarks: Record<number, Mark> = {};
+  vV.forEach((p, k) => (vMarks[p] = { ...roleMark(p, 'dom', ['1', '3', '5'][k]), name: nm(triad(sc, 4)[k]) }));
+
   return (
     <>
-      <p className="desc">{t.progDesc}</p>
+      <Html as="p" className="desc" html={x.desc} />
+      <Predict mode="choice" resetOn={reset} prompt={x.p1(keyName(cur), lab(0))}
+        options={[lab(4), lab(5), lab(1)]} answer={lab(5)} reveal={x.p1r(lab(5), lab(0), cn(0, 5))} />
       <div className="fgrid">
         {fcard('T', t.fT, [0, 5, 2], t.fTd(lab(5), lab(2), lab(0), cn(0, 5), cn(0, 2)))}
         {fcard('SD', t.fSD, [3, 1], t.fSDd(lab(1), lab(3), cn(3, 1)))}
         {fcard('D', t.fD, [4, 6], t.fDd(lab(6), lab(4), cn(4, 6), nm(sc[6])))}
       </div>
       <p className="rule">{t.flow}</p>
+      <Predict mode="key" resetOn={reset} prompt={x.p2(keyName(cur), lab(4))} lay={layout(0, 23)} marks={vMarks}
+        answer={[pcOf(sc[4])]} anyOctave reveal={x.p2r(nm(sc[4]), nm(sc[6]), nm(sc[0]))} />
       <h3 className="sub-h">{t.patTitle}</h3>
       <div className="chips" role="group">
         {PROGRESSIONS.map((p, i) => (
@@ -113,7 +127,7 @@ export function Progressions() {
           </button>
         ))}
       </div>
-      <Html as="p" className="desc" html={t.pats[P.id]} />
+      <Html as="p" className="desc" html={pats[P.id]} />
       <p className="rowlab mt">{t.chordsLabel}</p>
       <div className="chips timeline" role="group">
         {degs.map((dd, i) => (
@@ -143,7 +157,9 @@ export function Progressions() {
       ]} />
       <p className="readout">{read}</p>
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.pLogic.map((html) => ({ html }))} />
+      <Notes items={x.logic.map((html) => ({ html }))} more={[4, 5]} />
+      <Transfer question={x.transfer} />
+      <Recap {...x.recap} />
     </>
   );
 }

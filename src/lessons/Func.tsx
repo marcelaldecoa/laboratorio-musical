@@ -1,12 +1,15 @@
 import { playNotes } from '../audio/audio';
 import { Bracket, Keyboard } from '../components/Keyboard';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { type Mark, rangeAround, roleMark } from '../components/layout';
 import { Bar, Board, Notes, PlayButton } from '../components/ui';
+import { extras } from '../i18n/lessons/extras/func';
 import { pcOf } from '../theory';
 import { useLab } from '../state/useLab';
 
 export function Func() {
-  const { t, nm, keyName, cur, sc } = useLab();
+  const { s, t, nm, keyName, cur, sc } = useLab();
+  const X = extras[s.lang];
   const c = pcOf(cur) + 12;
   const sub = c - 7;
   const lt = c - 1;
@@ -18,11 +21,20 @@ export function Func() {
     [c]: roleMark(c, 'tonic', 1, nm(sc[0])),
     [dom]: roleMark(dom, 'dom', 5, nm(sc[4])),
   };
+  const reset = `${s.k}${s.enh}`;
   return (
     <>
       <p className="desc">{t.funcDesc}</p>
+      <Predict mode="key" resetOn={reset} lay={rangeAround(c - 9, c + 7)} anyOctave
+        marks={{ [c]: roleMark(c, 'tonic', 1, nm(sc[0])) }}
+        prompt={X.pSub(nm(sc[0]))} answer={[sub]} reveal={X.pSubRev(nm(sc[3]))} />
+      <Predict mode="choice" resetOn={reset} prompt={X.pSide(keyName(cur))} options={X.sides} answer={X.sides[0]} reveal={X.pSideRev} />
       <Bar now={keyName(cur)}>
         <PlayButton label={t.playFunc} onPlay={() => playNotes([{ s: lt, t: 0, d: 0.75 }, { s: c, t: 0.7, d: 1.3 }], 'func')} />
+        <PlayButton label={X.playVI} seconds={2.4} onPlay={() => playNotes([
+          { s: dom - 12, t: 0, d: 1.1 }, { s: lt, t: 0, d: 1.1 }, { s: c + 2, t: 0, d: 1.1 },
+          { s: c - 12, t: 1.1, d: 1.4 }, { s: c, t: 1.1, d: 1.4 }, { s: c + 4, t: 1.1, d: 1.4 },
+        ], 'func')} />
       </Bar>
       <Board>
         <Keyboard lay={lay} marks={marks} top={72} channel="func"
@@ -43,12 +55,15 @@ export function Func() {
             </>);
           }} />
       </Board>
-      <Notes items={[
-        { color: 'var(--k-tonic)', html: t.fTonic(nm(sc[0])) },
+      <Notes more={[4]} items={[
         { color: 'var(--k-sub)', html: t.fSub(nm(sc[3]), keyName(sc[3])) },
-        { color: 'var(--k-dom)', html: t.fDom(nm(sc[4]), keyName(sc[4])) },
+        { color: 'var(--k-dom)', html: X.dom(nm(sc[4]), keyName(sc[4])) },
         { color: 'var(--k-lt)', html: t.fLt(nm(sc[6]), nm(sc[0])) },
+        { color: 'var(--k-tonic)', html: X.why(nm(sc[4]), nm(sc[6]), nm(sc[1]), nm(sc[0]), nm(sc[3])) },
+        { color: 'var(--k-tonic)', html: t.fTonic(nm(sc[0])) },
       ]} />
+      <Transfer question={X.transfer} />
+      <Recap {...X.recap} />
     </>
   );
 }

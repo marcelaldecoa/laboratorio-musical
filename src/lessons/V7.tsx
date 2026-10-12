@@ -2,18 +2,19 @@ import { useState } from 'react';
 import { playNotes } from '../audio/audio';
 import { ColorBracket, VoiceArrow } from '../components/ChordsKit';
 import { Keyboard } from '../components/Keyboard';
-import { type Mark, rangeAround, roleMark } from '../components/layout';
+import { type Mark, layout, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/v7';
 import { useLessonText } from '../i18n/lessonText';
 import { pcOf } from '../theory';
-import { letterName } from '../theory/chords7';
+import { letterName, stackUp } from '../theory/chords7';
 import { WHH } from '../components/layout';
 import { useLab } from '../state/useLab';
 import '../styles/chords.css';
 
 export function V7() {
-  const { nm, keyName, cur, sc } = useLab();
+  const { s, nm, keyName, cur, sc } = useLab();
   const t = useLessonText(text);
   const [view, setView] = useState<'v7' | 'i'>('v7');
   let T = pcOf(sc[0]);
@@ -44,15 +45,25 @@ export function V7() {
   const play = (a: number[], b: number[]) =>
     playNotes([...a.map((s) => ({ s, t: 0, d: 1.3, v: 0.55 })), ...[...new Set(b)].map((s) => ({ s, t: 1.45, d: 1.9, v: 0.55 }))], ch);
 
+  // predict: the V7 in root position, all blue; which one is the leading tone?
+  const pDeg = [4, 6, 1, 3];
+  const pPs = stackUp(pDeg.map((dd) => pcOf(sc[dd])), 0);
+  const pMarks: Record<number, Mark> = {};
+  pPs.forEach((p, k) => (pMarks[p] = roleMark(p, 'dom', undefined, nm(sc[pDeg[k]]))));
+
   return (
     <>
       <p className="desc">{t.desc(v7sym, keyName(cur))}</p>
+      <Predict mode="key" resetOn={`${s.k}${s.enh}`} lay={layout(0, 23)} marks={pMarks} answer={[pPs[1]]} anyOctave
+        prompt={t.p1(v7sym, keyName(cur), nm(sc[0]))} reveal={t.p1r(nm(sc[6]), nm(sc[0]), v7sym)} />
       <ol className="recipe">
         <li>{t.steps[0](nm(sc[4]), v7sym)}</li>
         <li>{t.steps[1](nm(sc[6]), nm(sc[0]))}</li>
         <li>{t.steps[2](nm(sc[3]), nm(sc[2]))}</li>
         <li>{t.steps[3](nm(sc[6]), nm(sc[3]))}</li>
       </ol>
+      <Predict mode="choice" options={t.p2opts} answer={t.p2opts[0]} prompt={t.p2} resetOn={`${s.k}${s.enh}`}
+        reveal={t.p2r(nm(sc[6]), nm(sc[0]), nm(sc[3]), nm(sc[2]))} />
       <div className="bar mt">
         <Seg label={t.view} value={view} onChange={setView} options={[{ v: 'v7', label: t.vV7 }, { v: 'i', label: t.vI }]} />
       </div>
@@ -86,7 +97,9 @@ export function V7() {
       <p className="hint">{t.numNote}</p>
       <p className="rule mt">{t.compare}</p>
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic.map((html) => ({ html }))} />
+      <Notes items={t.logic.map((html) => ({ html }))} more={[4]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

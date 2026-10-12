@@ -28,3 +28,4 @@
 .piano-score{font-family:var(--f-mono);font-size:.88rem;color:var(--muted)}
 .piano-nudge{display:flex;gap:6px}
 .piano-nudge button{min-width:48px;min-height:44px}
+.piano-staff-sm{max-width:380px}

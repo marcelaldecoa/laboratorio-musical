@@ -3,11 +3,12 @@ import { playNotes, seq } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, fillFor, layout, rangeAround, roleMark } from '../components/layout';
 import { type FifthCell, ScalesFifthsRow, scaleSemis, stepsAny, upDown } from '../components/ScalesKit';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Html, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { useLessonText } from '../i18n/lessonText';
 import { text } from '../i18n/lessons/penta';
 import { useLab } from '../state/useLab';
-import { FS, type Note, fifthIndex, fromFifthIndex, pcOf, sameNote } from '../theory';
+import { FS, MAJOR_OFFSETS, type Note, fifthIndex, fromFifthIndex, pcOf, sameNote } from '../theory';
 import {
   blueNote, bluesScale, majorPentatonic, minorPentatonic, naturalMinor, offsetsOf, pentatonicByFifths, relativeMinor,
 } from '../theory/scales';
@@ -22,7 +23,7 @@ const DEG: Record<View, string[]> = {
 const BLACK = [6, 8, 10, 13, 15];
 
 export function Penta() {
-  const { t, nm, keyName, cur, sc } = useLab();
+  const { s, t, nm, keyName, cur, sc } = useLab();
   const tx = useLessonText(text);
   const [view, setView] = useState<View>('maj');
 
@@ -59,6 +60,12 @@ export function Penta() {
   const read =
     view === 'blues' ? tx.bluesRead(nm(blue), nm(notes[2]), nm(notes[4])) : tx.missing(nm(missing[0][1]), nm(missing[1][1]));
 
+  // predict: which two notes leave the major scale?
+  const kBase = pcOf(cur);
+  const kSemis = scaleSemis(kBase, MAJOR_OFFSETS);
+  const pMarks: Record<number, Mark> = {};
+  kSemis.forEach((x, i) => (pMarks[x] = roleMark(x, i % 7 === 0 ? 'tonic' : 'scale', (i % 7) + 1, nm(sc[i % 7]))));
+
   // 3 · line of fifths
   const f0 = fifthIndex(sc[3]);
   const cells: FifthCell[] = [];
@@ -94,6 +101,8 @@ export function Penta() {
       ]} />
 
       <h3 className="sub-h">{tx.mainTitle}</h3>
+      <Predict mode="key" prompt={tx.predict(keyName(cur))} reveal={tx.predictReveal(nm(sc[3]), nm(sc[6]))}
+        lay={rangeAround(kBase, kBase + 12)} marks={pMarks} answer={[kSemis[3], kSemis[6]]} anyOctave top={30} resetOn={s.k + s.enh} />
       <p className="rowlab">{tx.view}</p>
       <Seg value={view} label={tx.view} onChange={setView}
         options={[{ v: 'maj', label: tx.vMaj }, { v: 'min', label: tx.vMin }, { v: 'blues', label: tx.vBlues }]} />
@@ -120,7 +129,9 @@ export function Penta() {
         { dash: 'var(--k-lt-line)', label: tx.lgLineOut },
       ]} />
       <h3 className="sub-h">{tx.whyTitle}</h3>
-      <Notes items={tx.why(nm(cur), pentatonicByFifths(cur).map(nm).join(' → '), nm(sc[3]), nm(sc[6]), nm(mt), nm(blue)).map((html) => ({ html }))} />
+      <Notes items={tx.why(nm(cur), pentatonicByFifths(cur).map(nm).join(' → '), nm(sc[3]), nm(sc[6]), nm(mt), nm(blue)).map((html) => ({ html }))} more={[4]} />
+      <Transfer question={tx.transfer} />
+      <Recap {...tx.recap} />
     </>
   );
 }

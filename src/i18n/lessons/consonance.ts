@@ -1,0 +1,178 @@
+import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
+
+type S = string;
+
+const pt = {
+  meta: {
+    nav: 'Consonância',
+    title: 'Consonância e dissonância',
+    sub: 'do repouso à tensão, e por que a tensão anda',
+    teaser: 'Um espectro, não “bonito × feio”: e a dissonância é o que faz a música andar.',
+  },
+  desc: 'Algumas combinações de notas soam calmas; outras parecem pedir para andar. A diferença não é “bonito × feio”. É um espectro, do mais estável ao mais instável, e ele sai dos harmônicos que você viu duas aulas atrás.',
+
+  s1: '1 · O espectro: do mais calmo ao mais tenso',
+  p1: (t: S) => `Depois da oitava, qual nota forma com <b>${t}</b> o intervalo mais calmo de todos? Toque.`,
+  p1Rev: (n: S, t: S) => `${n}, a 5ª justa (3:2). Ela é o harmônico 3 de ${t}, a primeira nota nova da série. A cada 3 harmônicos de ${t}, um coincide com um de ${n}: as duas séries se encontram cedo e quase não brigam.`,
+  s1d: (t: S) => `Cada linha é um intervalo a partir de ${t}, com a razão de frequências. A barra mostra os 16 primeiros harmônicos de ${t}; os acesos coincidem com harmônicos da nota de cima. Quanto menores os números da razão, mais cedo as duas séries se encontram e mais calmo o intervalo. Toque numa linha para ouvir.`,
+  short: { P8: '8ª J', P5: '5ª J', P4: '4ª J', M6: '6ª M', M3: '3ª M', m3: '3ª m', m6: '6ª m', m7: '7ª m', M2: '2ª M', M7: '7ª M', m2: '2ª m', A4: '4ª aum.' } as Record<string, S>,
+  long: { P8: 'oitava', P5: '5ª justa', P4: '4ª justa', M6: '6ª maior', M3: '3ª maior', m3: '3ª menor', m6: '6ª menor', m7: '7ª menor', M2: '2ª maior', M7: '7ª maior', m2: '2ª menor', A4: '4ª aumentada (o trítono)' } as Record<string, S>,
+  cls: { perfect: 'consonância perfeita', imperfect: 'consonância imperfeita', dissonant: 'dissonância' } as Record<string, S>,
+  clsShort: { perfect: 'perfeita', imperfect: 'imperfeita', dissonant: 'dissonante' } as Record<string, S>,
+  now: (a: S, b: S, name: S, s: number, k: number) => `${a}–${b} · ${name} · ${s} semitons · ${k} de 16 em comum`,
+  bracket: (name: S, s: number) => `${name} · ${s} semitons`,
+  playAll: 'Ouvir do mais calmo ao mais tenso',
+  playOne: 'Ouvir o intervalo',
+
+  s2: '2 · A dissonância pede movimento',
+  p2: (f: S, b: S) => `${f}–${b} (4º e 7º graus) é o intervalo mais instável da escala: 6 semitons, a 4ª aumentada, também chamada trítono (três tons). ${b} é a sensível. Toque para onde ela quer ir.`,
+  p2Rev: (t: S, f: S, e: S, b: S) => `${t}: a sensível sobe meio tom até a tônica, e ${f} desce meio tom até ${e}. A 4ª aumentada ${f}–${b} vira a 6ª menor ${e}–${t}. A tensão se desfaz numa consonância, e cada voz andou o mínimo possível.`,
+  s2d: 'Uma dissonância não é um erro: é uma tensão. O ouvido espera que ela se desfaça, e o caminho mais curto é cada voz andar um grau (meio tom ou um tom) até um intervalo consonante. Esse movimento se chama resolução. Escolha um exemplo e alterne entre a tensão e a resolução.',
+  resPick: 'Exemplo',
+  resNames: { second: '2ª → 3ª', fourth: '4ª → 3ª', tritone: '4ª aum. → 6ª', dim5: '5ª dim. → 3ª' } as Record<string, S>,
+  before: 'Tensão',
+  after: 'Resolução',
+  q: { P: 'justa', M: 'maior', m: 'menor', A: 'aumentada', d: 'diminuta' } as Record<string, S>,
+  ivName: (n: number, q: S) => `${n}ª ${q}`,
+  resRead: (a: S, b: S, n1: S, s1: number, c: S, d: S, n2: S, s2: number) => `${a}–${b}: ${n1} (${s1} semitons) → ${c}–${d}: ${n2} (${s2} semitons)`,
+  resWhy: {
+    second: 'A 2ª maior tem as duas notas quase grudadas: os harmônicos esbarram. Basta a voz de cima subir um tom para virar uma 3ª.',
+    fourth: 'Sobre o baixo, a 4ª soa “suspensa”: é o acorde sus. A voz de cima desce um semitom e cai na 3ª, que completa a tríade.',
+    tritone: 'As duas notas do trítono estão a meio tom de notas do acorde da tônica. Elas se afastam, cada uma meio tom, e abrem numa 6ª.',
+    dim5: 'Virado ao contrário, o mesmo trítono (5ª diminuta) se fecha: cada nota anda meio tom para dentro, e chega numa 3ª.',
+  } as Record<string, S>,
+  playRes: 'Ouvir tensão → resolução',
+  lgTense: 'nota em tensão',
+  lgRest: 'nota em repouso',
+  lgGo: 'tracejado: para onde a voz vai',
+  lgWas: 'tracejado: onde a voz estava',
+
+  s3: '3 · O que é “consonante” mudou com o tempo',
+  s3d: 'A física dá a ordem do espectro, mas onde fica a linha entre consonância e dissonância foi decidido pela música de cada época. A linha andou para baixo: intervalos antes evitados viraram parte do repouso.',
+  eras: [
+    { t: 'Idade Média (até o séc. XII)', d: 'Consonantes: só uníssono, 8ª, 5ª e 4ª, as razões feitas com 1, 2, 3 e 4. Os primeiros cantos a várias vozes andavam nesses intervalos. A 3ª da afinação pitagórica (81:64) soava áspera.' },
+    { t: 'Séculos XIII a XV', d: '3ªs e 6ªs entram como consonâncias imperfeitas: boas no caminho, mas não para terminar. No séc. XV, a música inglesa ficou famosa pelo som cheio de 3ªs e 6ªs.' },
+    { t: 'Séculos XVI a XIX', d: 'A tríade (3ª + 5ª) vira a base da harmonia, e o acorde final passa a ter a 3ª. A 4ª acima do baixo é tratada como dissonância, que resolve na 3ª.' },
+    { t: 'Séculos XIX e XX', d: 'Dissonâncias passam a soar sem resolver, como cor. Schoenberg falou em “emancipação da dissonância”; no jazz, 7ªs e 9ªs são parte do acorde de repouso.' },
+  ],
+  ivRow: ['8ª', '5ª', '4ª', '3ª', '6ª', '2ª', '7ª'],
+  lgP: 'consonância perfeita',
+  lgI: 'consonância imperfeita',
+  lgD: 'dissonância',
+  lgFree: 'dissonância usada como cor',
+
+  why: 'A lógica por baixo',
+  notes: [
+    '<b>1. Calmo = harmônicos que coincidem</b>: numa razão p:q, as duas séries se encontram no harmônico p da nota de baixo. Com 2:1 é logo no 2º; com 3:2, no 3º; com 16:15 (a 2ª menor), só no 16º. Antes disso, harmônicos muito próximos “batem”, um tremor que o ouvido sente como aspereza.',
+    '<b>2. Tenso pede movimento</b>: o ouvido ouve a aspereza como algo por terminar. A saída mais curta é cada voz andar um grau até um intervalo consonante: a resolução. Por isso tensão e repouso viram movimento, e a música anda.',
+    '<b>3. O trítono e a sensível</b>: 45:32 é a razão mais complicada da escala, sem nenhum harmônico em comum entre os 16 primeiros. As duas notas dele (4º e 7º graus) ficam a meio tom de notas do acorde da tônica, então resolvem andando meio tom cada uma.',
+    '<b>4. O contexto conta</b>: a mesma 4ª é consonância perfeita entre vozes de cima, mas dissonância sobre o baixo. Timbre e registro também mudam a sensação: no grave, até 3ªs embolam. O espectro é a base; o estilo decide onde fica a linha.',
+    '<b>Quem explicou a aspereza</b>: Hermann von Helmholtz, em 1863, ligou a dissonância aos batimentos entre harmônicos próximos. Pesquisas depois disso mostraram que hábito e cultura também pesam: a parte de cima do espectro (8ª, 5ª, 4ª) é consenso, mas a ordem exata das dissonâncias varia entre autores.',
+    '<b>“Diabolus in musica”</b>: o apelido do trítono aparece em textos bem posteriores à Idade Média. Não há prova de que a Igreja tenha proibido o intervalo; a teoria medieval apenas o evitava, por ser a dissonância mais difícil de cantar afinada.',
+    '<b>Perfeita × imperfeita</b>: as consonâncias perfeitas (8ª, 5ª, 4ª) soam estáveis e “ocas”; as imperfeitas (3ª, 6ª), mais doces e cheias, mas por muito tempo não podiam fechar uma peça. Quando a 3ª passou a entrar no acorde final, a tríade virou o centro da harmonia.',
+  ],
+  more: [4, 5, 6],
+  transfer: (k: S) => `Em ${k}: quais notas formam a 4ª aumentada da escala (4º e 7º graus)? Para onde cada uma vai?`,
+  recap: {
+    oneLine: 'Algumas combinações soam calmas porque os harmônicos das duas notas coincidem muito (razões simples, como 2:1 e 3:2); outras pedem para andar porque quase não coincidem, e essa tensão se desfaz quando cada voz anda um grau até um intervalo consonante: a resolução.',
+    confusions: [
+      '<b>Dissonante × errado</b>: a dissonância é tensão, e sem tensão a música não anda. O que importa é para onde ela vai.',
+      '<b>Consonância perfeita × imperfeita</b>: 8ª, 5ª e 4ª são as mais estáveis (e “ocas”); 3ª e 6ª são doces, mas por séculos não podiam terminar uma peça.',
+      '<b>A 4ª justa</b>: consonância perfeita entre vozes de cima, mas tratada como dissonância sobre o baixo. Por isso o acorde sus4 resolve na 3ª.',
+    ],
+    show: 'Toque Dó e Ré juntos e segure; leve o Ré ao Mi e ouça a tensão se desfazer. Depois toque Fá e Si juntos e mova cada um meio tom, Fá para Mi e Si para Dó: o trítono vira uma 6ª.',
+  } as RecapText,
+};
+
+const en: typeof pt = {
+  meta: {
+    nav: 'Consonance',
+    title: 'Consonance and dissonance',
+    sub: 'from rest to tension, and why tension moves',
+    teaser: 'A spectrum, not “pretty vs ugly”: and dissonance is what makes music move.',
+  },
+  desc: 'Some note combinations sound calm; others seem to ask to move. The difference is not “pretty vs ugly”. It is a spectrum, from most stable to least stable, and it comes from the harmonics you met two lessons ago.',
+
+  s1: '1 · The spectrum: from calmest to most tense',
+  p1: (t: S) => `After the octave, which note makes the calmest interval of all with <b>${t}</b>? Tap it.`,
+  p1Rev: (n: S, t: S) => `${n}, the perfect 5th (3:2). It is harmonic 3 of ${t}, the first new note of the series. One in every 3 harmonics of ${t} coincides with one of ${n}: the two series meet early and barely clash.`,
+  s1d: (t: S) => `Each row is an interval from ${t}, with its frequency ratio. The bar shows the first 16 harmonics of ${t}; the lit ones coincide with harmonics of the upper note. The smaller the numbers in the ratio, the sooner the two series meet and the calmer the interval. Tap a row to hear it.`,
+  short: { P8: 'P8', P5: 'P5', P4: 'P4', M6: 'M6', M3: 'M3', m3: 'm3', m6: 'm6', m7: 'm7', M2: 'M2', M7: 'M7', m2: 'm2', A4: 'A4' },
+  long: { P8: 'octave', P5: 'perfect 5th', P4: 'perfect 4th', M6: 'major 6th', M3: 'major 3rd', m3: 'minor 3rd', m6: 'minor 6th', m7: 'minor 7th', M2: 'major 2nd', M7: 'major 7th', m2: 'minor 2nd', A4: 'augmented 4th (the tritone)' },
+  cls: { perfect: 'perfect consonance', imperfect: 'imperfect consonance', dissonant: 'dissonance' },
+  clsShort: { perfect: 'perfect', imperfect: 'imperfect', dissonant: 'dissonant' },
+  now: (a: S, b: S, name: S, s: number, k: number) => `${a}–${b} · ${name} · ${s} half steps · ${k} of 16 shared`,
+  bracket: (name: S, s: number) => `${name} · ${s} half steps`,
+  playAll: 'Play from calmest to most tense',
+  playOne: 'Play the interval',
+
+  s2: '2 · Dissonance asks to move',
+  p2: (f: S, b: S) => `${f}–${b} (degrees 4 and 7) is the most unstable interval in the scale: 6 half steps, the augmented 4th, also called the tritone (three whole steps). ${b} is the leading tone. Tap where it wants to go.`,
+  p2Rev: (t: S, f: S, e: S, b: S) => `${t}: the leading tone rises a half step to the tonic, and ${f} falls a half step to ${e}. The augmented 4th ${f}–${b} becomes the minor 6th ${e}–${t}. The tension dissolves into a consonance, and each voice moved as little as possible.`,
+  s2d: 'A dissonance is not a mistake: it is tension. The ear expects it to dissolve, and the shortest way is for each voice to move by step (a half or a whole step) into a consonant interval. That motion is called resolution. Pick an example and switch between the tension and the resolution.',
+  resPick: 'Example',
+  resNames: { second: '2nd → 3rd', fourth: '4th → 3rd', tritone: 'A4 → 6th', dim5: 'd5 → 3rd' },
+  before: 'Tension',
+  after: 'Resolution',
+  q: { P: 'perfect', M: 'major', m: 'minor', A: 'augmented', d: 'diminished' },
+  ivName: (n: number, q: S) => `${q} ${n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th'}`,
+  resRead: (a: S, b: S, n1: S, s1: number, c: S, d: S, n2: S, s2: number) => `${a}–${b}: ${n1} (${s1} half steps) → ${c}–${d}: ${n2} (${s2} half steps)`,
+  resWhy: {
+    second: 'In a major 2nd the two notes are almost touching: their harmonics bump. The upper voice only has to rise a whole step to make a 3rd.',
+    fourth: 'Over the bass, the 4th sounds “suspended”: it is the sus chord. The upper voice falls a half step onto the 3rd, which completes the triad.',
+    tritone: 'Both notes of the tritone are a half step from notes of the tonic chord. They move apart, a half step each, and open into a 6th.',
+    dim5: 'Turned upside down, the same tritone (diminished 5th) closes in: each note moves a half step inward and lands on a 3rd.',
+  },
+  playRes: 'Play tension → resolution',
+  lgTense: 'note under tension',
+  lgRest: 'note at rest',
+  lgGo: 'dashed: where the voice goes',
+  lgWas: 'dashed: where the voice was',
+
+  s3: '3 · What counts as “consonant” changed over time',
+  s3d: 'Physics gives the order of the spectrum, but where the line between consonance and dissonance falls was decided by the music of each era. The line moved down: intervals once avoided became part of rest.',
+  eras: [
+    { t: 'Middle Ages (up to the 12th c.)', d: 'Consonant: only unison, octave, 5th and 4th, the ratios made of 1, 2, 3 and 4. The first many-voiced chants moved in these intervals. The Pythagorean 3rd (81:64) sounded harsh.' },
+    { t: '13th to 15th centuries', d: '3rds and 6ths come in as imperfect consonances: fine along the way, but not for ending. In the 15th century English music became famous for its sound full of 3rds and 6ths.' },
+    { t: '16th to 19th centuries', d: 'The triad (3rd + 5th) becomes the basis of harmony, and the final chord takes the 3rd. A 4th above the bass is treated as a dissonance that resolves to the 3rd.' },
+    { t: '19th and 20th centuries', d: 'Dissonances are allowed to sound without resolving, as color. Schoenberg spoke of the “emancipation of the dissonance”; in jazz, 7ths and 9ths are part of the resting chord.' },
+  ],
+  ivRow: ['8ve', '5th', '4th', '3rd', '6th', '2nd', '7th'],
+  lgP: 'perfect consonance',
+  lgI: 'imperfect consonance',
+  lgD: 'dissonance',
+  lgFree: 'dissonance used as color',
+
+  why: 'The logic underneath',
+  notes: [
+    '<b>1. Calm = harmonics that coincide</b>: in a ratio p:q, the two series meet at harmonic p of the lower note. With 2:1 that is right at the 2nd; with 3:2, at the 3rd; with 16:15 (the minor 2nd), only at the 16th. Before that, harmonics that are very close “beat”, a trembling the ear feels as roughness.',
+    '<b>2. Tension asks to move</b>: the ear hears roughness as something unfinished. The shortest way out is for each voice to move by step into a consonant interval: the resolution. That is how tension and rest turn into motion, and music moves.',
+    '<b>3. The tritone and the leading tone</b>: 45:32 is the most complicated ratio in the scale, with no harmonic shared among the first 16. Its two notes (degrees 4 and 7) are a half step from notes of the tonic chord, so they resolve by moving a half step each.',
+    '<b>4. Context matters</b>: the same 4th is a perfect consonance between upper voices but a dissonance over the bass. Timbre and register also change the feeling: low down, even 3rds get muddy. The spectrum is the basis; style decides where the line falls.',
+    '<b>Who explained roughness</b>: Hermann von Helmholtz, in 1863, linked dissonance to beats between close harmonics. Later research showed that habit and culture also weigh in: the top of the spectrum (octave, 5th, 4th) is agreed on, but the exact order of the dissonances varies between authors.',
+    '<b>“Diabolus in musica”</b>: the tritone’s nickname appears in texts written long after the Middle Ages. There is no evidence that the Church banned the interval; medieval theory simply avoided it, as the dissonance hardest to sing in tune.',
+    '<b>Perfect vs imperfect</b>: perfect consonances (octave, 5th, 4th) sound stable and “hollow”; imperfect ones (3rd, 6th) sweeter and fuller, but for a long time they could not end a piece. When the 3rd entered the final chord, the triad became the center of harmony.',
+  ],
+  more: [4, 5, 6],
+  transfer: (k: S) => `In ${k}: which notes form the augmented 4th of the scale (degrees 4 and 7)? Where does each one go?`,
+  recap: {
+    oneLine: 'Some combinations sound calm because the harmonics of the two notes coincide a lot (simple ratios, like 2:1 and 3:2); others ask to move because they barely coincide, and that tension dissolves when each voice moves by step into a consonant interval: the resolution.',
+    confusions: [
+      '<b>Dissonant vs wrong</b>: dissonance is tension, and without tension music does not move. What matters is where it goes.',
+      '<b>Perfect vs imperfect consonance</b>: octave, 5th and 4th are the most stable (and “hollow”); 3rds and 6ths are sweet, but for centuries they could not end a piece.',
+      '<b>The perfect 4th</b>: a perfect consonance between upper voices, but treated as a dissonance over the bass. That is why the sus4 chord resolves to the 3rd.',
+    ],
+    show: 'Play C and D together and hold them; move D to E and hear the tension dissolve. Then play F and B together and move each a half step, F to E and B to C: the tritone becomes a 6th.',
+  } as RecapText,
+};
+
+export const text = {
+  pt,
+  en,
+  glossary: [
+    ['Consonance', 'consonant', 'Consonância', 'Intervalo ou acorde que soa estável, em repouso. Na física, uma razão simples entre as frequências (2:1, 3:2, 5:4), com muitos harmônicos em comum.', 'An interval or chord that sounds stable, at rest. Physically, a simple frequency ratio (2:1, 3:2, 5:4) with many shared harmonics.'],
+    ['Dissonance', 'dissonant', 'Dissonância', 'Intervalo ou acorde que soa instável, com tensão, e pede movimento. Razão complexa, poucos harmônicos em comum. Não é “errado”: é o que faz a música andar.', 'An interval or chord that sounds unstable, tense, and asks to move. A complex ratio with few shared harmonics. Not “wrong”: it is what makes music move.'],
+    ['Resolution', 'to resolve', 'Resolução', 'O movimento de uma dissonância para uma consonância, em geral com cada voz andando um grau (semitom ou tom). Ex.: Fá–Si → Mi–Dó.', 'The motion from a dissonance to a consonance, usually with each voice moving by step (half or whole step). E.g. F–B → E–C.'],
+  ],
+} satisfies LessonText<typeof pt>;

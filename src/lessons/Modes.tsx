@@ -3,6 +3,7 @@ import { chord, playNotes, seq } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark, stepsFor } from '../components/layout';
 import { type FifthCell, ScalesFifthsRow, scaleSemis, upDown } from '../components/ScalesKit';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Html, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { useLessonText } from '../i18n/lessonText';
 import { text } from '../i18n/lessons/modes';
@@ -10,14 +11,14 @@ import { useLab } from '../state/useLab';
 import { MAJOR_OFFSETS, fifthIndex, fromFifthIndex, pcOf, sameNote } from '../theory';
 import {
   MODES_BY_BRIGHTNESS, MODE_CHAR, type ModeId, modeAlterations, modeBrightness, modeDegree, modeIsMajor, modeOfKey,
-  modeOffsets, modeScale,
+  modeOffsets, modeScale, naturalMinor,
 } from '../theory/scales';
 import '../styles/scales.css';
 
 const sign = (d: number) => (d > 0 ? '♯' : d < 0 ? '♭' : '');
 
 export function Modes() {
-  const { t, nm, keyName, cur, sc } = useLab();
+  const { s, t, nm, keyName, cur, sc } = useLab();
   const tx = useLessonText(text);
   const [mode, setMode] = useState<ModeId>('dorian');
   const [view, setView] = useState<'rel' | 'par'>('rel');
@@ -87,6 +88,13 @@ export function Modes() {
     bracket = { from: ms - from, to: ms - from + 6, text: tx.lineMode(modeName) };
   }
 
+  // predict: Dorian on degree 2 vs the natural minor on the same tonic
+  const dT = sc[1];
+  const dBase = pcOf(dT);
+  const dSemis = scaleSemis(dBase, modeOffsets('dorian'));
+  const dNotes = modeOfKey(cur, 'dorian');
+  const pMarks: Record<number, Mark> = {};
+  dSemis.forEach((x, i) => (pMarks[x] = roleMark(x, i % 7 === 0 ? 'tonic' : 'scale', (i % 7) + 1, nm(dNotes[i % 7]))));
   const altList = alts.map((a, i) => (a ? sign(a) + (i + 1) : '')).filter(Boolean);
   const altTxt = altList.length > 1 ? altList.slice(0, -1).join(', ') + tx.and + altList[altList.length - 1] : altList.join('');
   const now = (rel ? tx.relNow : tx.parNow)(tx.cap(modeName), notes.map(nm).join(' '));
@@ -103,6 +111,8 @@ export function Modes() {
   return (
     <>
       <p className="desc">{tx.desc}</p>
+      <Predict mode="key" prompt={tx.predict(keyName(cur), nm(dT))} reveal={tx.predictReveal(nm(dNotes[5]), nm(dT), nm(naturalMinor(dT)[5]))}
+        lay={rangeAround(dBase, dBase + 12)} marks={pMarks} answer={[dSemis[5]]} anyOctave top={30} resetOn={s.k + s.enh} />
       <p className="rowlab">{tx.pick}</p>
       <div className="chips" role="group" aria-label={tx.pick}>
         {MODES_BY_BRIGHTNESS.map((m) => (
@@ -137,7 +147,9 @@ export function Modes() {
         ...(rel ? [] : [{ dash: 'var(--k-lt-line)', label: tx.lgLineOut }]),
       ]} />
       <h3 className="sub-h">{tx.whyTitle}</h3>
-      <Notes items={tx.why(tx.names.lydian, tx.names.locrian).map((html) => ({ html }))} />
+      <Notes items={tx.why(tx.names.lydian, tx.names.locrian).map((html) => ({ html }))} more={[4, 5]} />
+      <Transfer question={tx.transfer} />
+      <Recap {...tx.recap} />
     </>
   );
 }

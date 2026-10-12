@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { playNotes, seq } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, rangeAround, roleMark, stepsFor } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { useLessonText } from '../i18n/lessonText';
 import { text } from '../i18n/lessons/sym';
@@ -77,6 +78,7 @@ export function Symmetric() {
   return (
     <>
       <p className="desc">{tx.desc}</p>
+      <Predict mode="choice" prompt={tx.predict(nm(cur))} options={tx.predictOptions} answer={tx.predictAnswer} reveal={tx.predictReveal} />
       <p className="rowlab">{tx.kind}</p>
       <Seg value={kind} label={tx.kind} onChange={setKind}
         options={(['chromatic', 'whole', 'octatonic'] as const).map((v) => ({ v, label: tx[v] }))} />
@@ -119,7 +121,9 @@ export function Symmetric() {
       </Board>
       <p className="readout">{tx.circleRead[kind]} {tx.count(transpositions(offs))}</p>
       <h3 className="sub-h">{tx.whyTitle}</h3>
-      <Notes items={tx.why.map((html) => ({ html }))} />
+      <Notes items={tx.why.map((html) => ({ html }))} more={[4, 5]} />
+      <Transfer question={tx.transfer} />
+      <Recap {...tx.recap} />
     </>
   );
 }

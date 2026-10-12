@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -34,12 +35,28 @@ const pt = {
   sigList: (l: S) => `Notas alteradas: ${l}`,
   why: 'A lógica por baixo',
   notes: [
-    '<b>Por que a fórmula e não a lista</b>: decorar 12 escalas é decorar 84 notas. A fórmula é uma regra só, e qualquer escala maior sai dela em sete passos. É a primeira peça da cadeia: tudo o que vem depois (círculo das quintas, intervalos, acordes) é deduzido daqui.',
-    '<b>Por que cada letra uma vez</b>: a escala tem 7 notas e existem 7 letras. Usando cada letra uma vez, cada nota tem a sua linha ou espaço na pauta, e os graus ficam fáceis de contar. Por isso em Fá maior o 4º grau é Si♭, e não Lá♯: Lá já foi usado no 3º grau.',
-    '<b>Os sinais não são arbitrários</b>: em Sol maior, o último passo (S) leva até Sol. Meio tom abaixo de Sol fica a tecla preta, então o 7º grau precisa ser Fá♯. A fórmula obriga o sustenido. A armadura de clave é só o resumo dessas obrigações.',
-    '<b>Por que “maior”</b>: a distância da tônica até o 3º grau é de 4 semitons, uma terça maior. É essa terça que dá o caráter claro da escala. A aula de intervalos explica o nome.',
+    '<b>1. Por que Sol maior tem Fá♯</b>: siga a fórmula a partir de Sol. T leva a Lá, T a Si, S a Dó, T a Ré, T a Mi: tudo em teclas brancas. O próximo T, a partir de Mi, cai na tecla preta entre Fá e Sol. A letra que falta é Fá (Mi já foi usada e Sol é a tônica), então a nota se escreve Fá♯. O último S leva de Fá♯ a Sol. Nenhum outro passo cai numa preta, por isso Fá♯ é o único sustenido.',
+    '<b>2. Por que cada letra uma vez</b>: a escala tem 7 notas e existem 7 letras. Usando cada letra uma vez, cada nota tem a sua linha ou espaço na pauta, e os graus ficam fáceis de contar. Por isso em Fá maior o 4º grau é Si♭, e não Lá♯: Lá já foi usado no 3º grau.',
+    '<b>3. Por que a fórmula e não a lista</b>: decorar 12 escalas é decorar 84 notas. A fórmula é uma regra só, e qualquer escala maior sai dela em sete passos. A armadura de clave é só o resumo do que a fórmula obrigou.',
+    '<b>4. Por que “maior”</b>: da tônica até o 3º grau há 4 semitons, uma terça maior. É essa terça que dá o caráter claro da escala. As aulas de intervalos explicam o nome.',
     '<b>Experimente</b>: comece em Sol e conte os sinais; depois em Ré, em Lá, em Mi. A cada passo aparece um sustenido a mais. As próximas aulas mostram por quê, e esse é o caminho até o círculo das quintas.',
   ],
+  more: [4],
+  pSteps: 'Antes de ver os passos: lembre da aula anterior. Na escala de Dó (só teclas brancas), onde ficam os dois passos de semitom (S)?',
+  pStepsOpts: (n: string[]) => [`${n[1]}–${n[2]} e ${n[5]}–${n[6]}`, `${n[2]}–${n[3]} e ${n[6]}–${n[0]}`, `${n[0]}–${n[1]} e ${n[3]}–${n[4]}`],
+  pStepsRev: (n: string[]) => `${n[2]}–${n[3]} e ${n[6]}–${n[0]}: são as duas brancas vizinhas sem preta no meio. Todos os outros passos têm uma preta no meio e valem um tom. Por isso a escala de Dó dá T T S T T T S: o S cai no 3º e no 7º passo.`,
+  p7: (k: string, t: string) => `Na escala de <b>${k}</b>, o último passo da fórmula é S e termina em ${t}, a tônica de cima. Toque o 7º grau.`,
+  p7Rev: (n7: string, l: string, t: string) => `${n7}: a fórmula termina em S, então o 7º grau fica meio tom abaixo de ${t}. Ele precisa da letra ${l} (a que vem antes de ${t}), e por isso se escreve ${n7}. É assim que a fórmula “obriga” um sinal.`,
+  transfer: (k: string) => `Em ${k}: construa a escala passo a passo. Em qual passo aparece o primeiro ♯ ou ♭, e por que é aquela letra?`,
+  recap: {
+    oneLine: 'Sol maior tem Fá♯ porque a fórmula T T S T T T S, a partir de Sol, pede uma tecla preta só no 7º grau, e a letra que falta ali é Fá; em qualquer tonalidade, os ♯ e ♭ são as teclas pretas que a fórmula obriga, com cada letra usada uma vez.',
+    confusions: [
+      '<b>T (tom) × tônica</b>: T na fórmula é um passo de 2 semitons; tônica é a nota de partida, o grau 1.',
+      '<b>Lá♯ × Si♭ em Fá maior</b>: mesma tecla, mas a letra Lá já foi usada no 3º grau. Cada letra uma vez: Si♭.',
+      '<b>Escala maior × teclas brancas</b>: só a escala de Dó usa só brancas. Em qualquer outra tecla de partida, a mesma fórmula pede pretas.',
+    ],
+    show: 'Comece em Sol e toque a escala cantando os passos: T, T, S, T, T, T, S. No sexto passo mostre que, a partir de Mi, um tom cai na preta: é Fá♯, e dali um S chega a Sol.',
+  } as RecapText,
 };
 
 const en: typeof pt = {
@@ -74,12 +91,28 @@ const en: typeof pt = {
   sigList: (l: S) => `Altered notes: ${l}`,
   why: 'The logic underneath',
   notes: [
-    '<b>Why the formula and not the list</b>: memorizing 12 scales means memorizing 84 notes. The formula is a single rule, and any major scale comes out of it in seven steps. It is the first link of the chain: everything after it (circle of fifths, intervals, chords) is deduced from here.',
-    '<b>Why each letter once</b>: the scale has 7 notes and there are 7 letters. Using each letter once gives each note its own line or space on the staff, and the degrees are easy to count. That is why in F major degree 4 is B♭, not A♯: A was already used for degree 3.',
-    '<b>The signs are not arbitrary</b>: in G major the last step (H) lands on G. A half step below G is a black key, so degree 7 must be F♯. The formula forces the sharp. The key signature is just a summary of these requirements.',
-    '<b>Why “major”</b>: from the tonic to degree 3 there are 4 half steps, a major third. That third gives the scale its bright character. The intervals lesson explains the name.',
+    '<b>1. Why G major has F♯</b>: follow the formula from G. W takes you to A, W to B, H to C, W to D, W to E: all white keys. The next W, from E, lands on the black key between F and G. The missing letter is F (E is used and G is the tonic), so the note is spelled F♯. The last H goes from F♯ to G. No other step lands on a black key, so F♯ is the only sharp.',
+    '<b>2. Why each letter once</b>: the scale has 7 notes and there are 7 letters. Using each letter once gives each note its own line or space on the staff, and the degrees are easy to count. That is why in F major degree 4 is B♭, not A♯: A was already used for degree 3.',
+    '<b>3. Why the formula and not the list</b>: memorizing 12 scales means memorizing 84 notes. The formula is a single rule, and any major scale comes out of it in seven steps. The key signature is just a summary of what the formula required.',
+    '<b>4. Why “major”</b>: from the tonic to degree 3 there are 4 half steps, a major third. That third gives the scale its bright character. The intervals lessons explain the name.',
     '<b>Try it</b>: start on G and count the signs; then on D, A, E. Each time one more sharp appears. The next lessons show why, and that is the road to the circle of fifths.',
   ],
+  more: [4],
+  pSteps: 'Before seeing the steps, remember the last lesson. In the C scale (white keys only), where are the two half steps (H)?',
+  pStepsOpts: (n: string[]) => [`${n[1]}–${n[2]} and ${n[5]}–${n[6]}`, `${n[2]}–${n[3]} and ${n[6]}–${n[0]}`, `${n[0]}–${n[1]} and ${n[3]}–${n[4]}`],
+  pStepsRev: (n: string[]) => `${n[2]}–${n[3]} and ${n[6]}–${n[0]}: the two neighboring white keys with no black key between them. Every other step has a black key in the middle and is a whole step. So the C scale gives W W H W W W H: the H falls on the 3rd and the 7th step.`,
+  p7: (k: string, t: string) => `In <b>${k}</b>, the last step of the formula is H and it ends on ${t}, the upper tonic. Tap degree 7.`,
+  p7Rev: (n7: string, l: string, t: string) => `${n7}: the formula ends with H, so degree 7 is a half step below ${t}. It needs the letter ${l} (the one before ${t}), so it is spelled ${n7}. That is how the formula “forces” a sign.`,
+  transfer: (k: string) => `In ${k}: build the scale step by step. On which step does the first ♯ or ♭ appear, and why that letter?`,
+  recap: {
+    oneLine: 'G major has F♯ because the formula W W H W W W H, starting on G, needs a black key only on degree 7, and the missing letter there is F; in any key, the ♯ and ♭ are the black keys the formula forces, with each letter used once.',
+    confusions: [
+      '<b>W (whole step) vs tonic</b>: W in the formula is a step of 2 half steps; the tonic is the starting note, degree 1.',
+      '<b>A♯ vs B♭ in F major</b>: the same key, but the letter A is already used for degree 3. Each letter once: B♭.',
+      '<b>Major scale vs white keys</b>: only the C scale uses white keys only. From any other starting key the same formula needs black keys.',
+    ],
+    show: 'Start on G and play the scale singing the steps: W, W, H, W, W, W, H. On the sixth step show that a whole step from E lands on a black key: F♯, and from there an H reaches G.',
+  } as RecapText,
 };
 
 export const text: LessonText<typeof pt> = { pt, en };

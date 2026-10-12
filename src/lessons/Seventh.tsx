@@ -3,10 +3,11 @@ import { playNotes } from '../audio/audio';
 import { ColorBracket, type FifthCell, FifthsStrip } from '../components/ChordsKit';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
 import { text } from '../i18n/lessons/seventh';
 import { useLessonText } from '../i18n/lessonText';
-import { type Note, fifthIndex, fromFifthIndex, pcOf, sameNote } from '../theory';
+import { type Note, chordInfo, fifthIndex, fromFifthIndex, pcOf, sameNote } from '../theory';
 import {
   SEVENTH_QUALITIES, SEVENTH_SEMIS, type SeventhQuality, diatonicSeventhInfo, fifthShape, letterName,
   seventhNotes, seventhRoman, seventhSuffix, thirdsOf,
@@ -81,9 +82,17 @@ export function Seventh() {
     return t.qWhere[qq](romans(qq).join(t.and));
   };
 
+  // predict: the triad is given, the learner taps the 7th
+  const pMarks: Record<number, Mark> = {};
+  ps.slice(0, 3).forEach((p, k) => (pMarks[p] = roleMark(p, k === 0 ? 'tonic' : 'scale', String(1 + 2 * k), nm(info.notes[k]))));
+  const sevSemis = ps[3] - ps[0];
+  const p1r = t.p1r(nm(info.notes[2]), nm(sc[(d + 5) % 7]), nm(info.notes[3]), sevSemis, sevSemis === 11 ? t.sizeM : t.sizem, label);
+
   return (
     <>
       <p className="desc">{t.desc}</p>
+      <Predict mode="key" resetOn={`${s.k}${s.enh}${d}`} lay={layout(0, 23)} marks={pMarks} answer={[ps[3]]} anyOctave
+        prompt={t.p1(chordInfo(sc, d).roman, info.notes.slice(0, 3).map(nm).join(' '), nm(info.notes[2]))} reveal={p1r} />
       <p className="rowlab">{t.pick(keyName(cur))}</p>
       <div className="chips" role="group">
         {[0, 1, 2, 3, 4, 5, 6].map((k) => {
@@ -133,6 +142,7 @@ export function Seventh() {
       {spans && <p className="hint">{t.spans}</p>}
 
       <h3 className="sub-h">{t.qTitle}</h3>
+      <Predict mode="choice" options={t.p2opts} answer={t.p2ans} prompt={t.p2} reveal={t.p2r} />
       <p className="desc">{t.qDesc(nm(info.notes[0]))}</p>
       <div className="chords-qlist">
         {SEVENTH_QUALITIES.map((qq) => {
@@ -165,7 +175,9 @@ export function Seventh() {
       <p className="readout">{t.qRead(sym(info.notes[0], q), qNotes.map(nm).join(' '))}</p>
 
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic.map((html) => ({ html }))} />
+      <Notes items={t.logic.map((html) => ({ html }))} more={[4]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

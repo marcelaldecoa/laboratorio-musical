@@ -40,3 +40,13 @@ describe('syllabus: concepts arrive gradually', () => {
     expect(orphans).toEqual([]);
   });
 });
+
+import { HOOKS } from '../i18n/hooks';
+describe('every lesson opens with a question', () => {
+  it('has a hook in both languages', () => {
+    CURRICULUM.filter((c) => c.track !== 'ref').forEach((c) => {
+      expect(HOOKS[c.id]?.pt, c.id).toMatch(/\?$/);
+      expect(HOOKS[c.id]?.en, c.id).toMatch(/\?$/);
+    });
+  });
+});

@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 const pt = {
   meta: {
@@ -70,12 +71,30 @@ const pt = {
 
   whyTitle: 'A lógica por baixo',
   why: [
-    '<b>Por que sempre a metade</b>: o sistema de figuras nasceu na Idade Média dividindo uma nota longa em duas, depois em duas de novo. Por isso os números da fórmula de compasso de baixo são sempre potências de 2: 1, 2, 4, 8, 16.',
+    '<b>Por que sempre a metade</b>: dividir em dois é a divisão mais simples de sentir (andar é esquerda-direita; o pulso dividido é “um-e”) e de somar. Com uma regra só, cada figura nova é a anterior partida ao meio, então duas iguais sempre completam a de cima, e qualquer figura cabe um número inteiro de vezes nas maiores. Por isso o número de baixo da fórmula de compasso é uma potência de 2: 1, 2, 4, 8, 16.',
     '<b>Os dois números do compasso</b>: o de cima diz quantos tempos; o de baixo diz qual figura vale um tempo (4 = semínima, 8 = colcheia). 3/4 é “3 semínimas por compasso”. Não é uma fração para simplificar: 3/4 e 6/8 têm a mesma duração total, mas outro agrupamento.',
-    '<b>Simples × composto</b>: em 2/4, 3/4 e 4/4 cada tempo se divide em 2. Em 6/8 os tempos sentidos são 2 grupos de 3 colcheias. É a diferença entre “um-e-dois-e” e “um-e-a-dois-e-a”.',
+    '<b>E quando precisamos de 3?</b> Em 2/4, 3/4 e 4/4 cada tempo se divide em 2. Em 6/8 os tempos sentidos são 2 grupos de 3 colcheias: é a diferença entre “um-e-dois-e” e “um-e-a-dois-e-a”. A escrita também tem o ponto e a tercina para o 3 (próxima aula).',
     '<b>Tempo forte</b>: é onde a harmonia costuma mudar e onde caem as notas importantes da melodia. A barra de compasso na partitura existe para mostrar onde fica o próximo tempo forte.',
     '<b>Andamento</b>: o BPM só muda a velocidade do pulso. As proporções entre as figuras continuam as mesmas: uma mínima sempre dura duas semínimas, em qualquer andamento.',
+    '<b>De onde vêm os nomes</b>: da notação medieval. Breve quer dizer “curta”, semibreve é “meia breve” e mínima, “a menor”: naquela época eram notas curtas. Ali uma figura podia valer 3 ou 2 da seguinte; a divisão sempre por 2 se firmou aos poucos e virou a regra da escrita moderna.',
   ],
+  p1: (meter: string) => `Em <b>${meter}</b>, quantas colcheias cabem num compasso?`,
+  p1r: (meter: string, counts: number, unit: number, n: number) =>
+    unit === 4
+      ? `Em ${meter} há ${counts} tempos de semínima, e cada semínima vale 2 colcheias (sempre a metade): ${counts} × 2 = ${n}.`
+      : `Em ${meter} o número de baixo, 8, diz que cada unidade contada já é uma colcheia: são ${n}.`,
+  p2: '3/4 e 6/8 duram o mesmo: seis colcheias. Então qual é a diferença entre eles?',
+  p2opts: ['O agrupamento das colcheias', '6/8 é mais rápido', '6/8 tem mais notas'],
+  p2r: 'Em 3/4 as seis colcheias se juntam de 2 em 2 (3 tempos: UM-e-dois-e-três-e); em 6/8, de 3 em 3 (2 tempos: UM-e-a-dois-e-a). Mesma duração, outro balanço. Troque o compasso abaixo e ouça.',
+  recap: {
+    oneLine: 'Porque dividir em dois é o jeito mais simples de sentir e de somar o tempo: cada figura é a anterior partida ao meio, duas iguais sempre completam a de cima, e para dividir em 3 existem o ponto, a tercina e o compasso composto.',
+    confusions: [
+      '<b>Andamento × figura</b>: o BPM muda a velocidade de tudo; a figura diz quanto a nota dura em relação ao pulso.',
+      '<b>3/4 × 6/8</b>: mesma duração total, agrupamento diferente: 3 tempos que se dividem em 2 contra 2 tempos que se dividem em 3.',
+      '<b>Número de baixo</b>: não é “quantas notas”; é qual figura vale um tempo (4 = semínima, 8 = colcheia).',
+    ],
+    show: 'Toque a tônica em semínimas contando 1-2-3-4 em voz alta, com o 1 mais forte. Sem mudar o pulso, toque colcheias dizendo “um-e-dois-e”, e depois semicolcheias: cada vez, o dobro de notas no mesmo tempo.',
+  } as RecapText,
 };
 
 const en: typeof pt = {
@@ -148,12 +167,30 @@ const en: typeof pt = {
 
   whyTitle: 'The logic underneath',
   why: [
-    '<b>Why always half</b>: the note-value system was born in the Middle Ages by splitting a long note into two, then into two again. That is why the bottom number of a time signature is always a power of 2: 1, 2, 4, 8, 16.',
+    '<b>Why always half</b>: splitting in two is the simplest division to feel (walking is left-right; a split pulse is “one-and”) and to add up. With a single rule, each new value is the previous one cut in half, so two equal values always make the one above, and every value fits a whole number of times into the bigger ones. That is why the bottom number of a time signature is a power of 2: 1, 2, 4, 8, 16.',
     '<b>The two numbers of the meter</b>: the top one says how many beats; the bottom one says which note value gets one beat (4 = quarter, 8 = eighth). 3/4 means “3 quarter notes per bar”. It is not a fraction to simplify: 3/4 and 6/8 last the same in total but group the beats differently.',
-    '<b>Simple vs compound</b>: in 2/4, 3/4 and 4/4 each beat splits into 2. In 6/8 the felt beats are 2 groups of 3 eighths. It is the difference between “one-and-two-and” and “one-and-a-two-and-a”.',
+    '<b>And when we need 3?</b> In 2/4, 3/4 and 4/4 each beat splits into 2. In 6/8 the felt beats are 2 groups of 3 eighths: the difference between “one-and-two-and” and “one-and-a-two-and-a”. Notation also has the dot and the triplet for 3 (next lesson).',
     '<b>Strong beat</b>: it is where the harmony usually changes and where the important melody notes fall. The bar line in sheet music exists to show where the next strong beat is.',
     '<b>Tempo</b>: BPM only changes the speed of the pulse. The proportions between the values stay the same: a half note always lasts two quarter notes, at any tempo.',
+    '<b>Where the names come from</b>: medieval notation. The Portuguese names keep the old ones: breve means “short”, semibreve “half a breve” and mínima “the smallest”; back then they were short notes. In that system a value could be worth 3 or 2 of the next; division always by 2 settled in gradually and became the rule of modern notation.',
   ],
+  p1: (meter: string) => `In <b>${meter}</b>, how many eighth notes fit in one bar?`,
+  p1r: (meter: string, counts: number, unit: number, n: number) =>
+    unit === 4
+      ? `${meter} has ${counts} quarter-note beats, and each quarter is worth 2 eighths (always half): ${counts} × 2 = ${n}.`
+      : `In ${meter} the bottom number, 8, says each counted unit is already an eighth: there are ${n}.`,
+  p2: '3/4 and 6/8 last the same: six eighth notes. So what is the difference between them?',
+  p2opts: ['How the eighths are grouped', '6/8 is faster', '6/8 has more notes'],
+  p2r: 'In 3/4 the six eighths group in 2s (3 beats: ONE-and-two-and-three-and); in 6/8, in 3s (2 beats: ONE-and-a-two-and-a). Same length, a different swing. Change the meter below and listen.',
+  recap: {
+    oneLine: 'Because splitting in two is the simplest way to feel and add up time: each value is the previous one cut in half, two equal values always make the one above, and to split in 3 there are the dot, the triplet and compound meter.',
+    confusions: [
+      '<b>Tempo vs note value</b>: BPM changes the speed of everything; the note value says how long a note lasts relative to the pulse.',
+      '<b>3/4 vs 6/8</b>: same total length, different grouping: 3 beats split in 2 versus 2 beats split in 3.',
+      '<b>Bottom number</b>: it is not “how many notes”; it is which value gets one beat (4 = quarter, 8 = eighth).',
+    ],
+    show: 'Play the tonic in quarter notes counting 1-2-3-4 out loud, with 1 the strongest. Without changing the pulse, play eighths saying “one-and-two-and”, then sixteenths: each time, twice the notes in the same beat.',
+  },
 };
 
 export const text = {

@@ -18,6 +18,8 @@ export const pt = {
     start: 'Começar pela primeira aula', continue: 'Continuar', allLessons: 'Todas as aulas',
     chain: 'A cadeia: fórmula → tetracordes → círculo → janela → intervalos → campo harmônico → funções → progressões → composição.',
     lessonN: (n: number) => `Aula ${n}`,
+    question: 'A pergunta desta aula', journey: 'A jornada', builds: 'parte de',
+    journeyIntro: 'Cada aula começa com uma pergunta e a responde usando só o que veio antes. Nada para decorar: cada regra nasce de um fato que você já viu. Siga o caminho de cima para baixo.',
     before: 'Antes desta aula', terms: (n: number) => (n === 1 ? 'Termo novo nesta aula' : `${n} termos novos nesta aula`), inLesson: 'explicado em',
   },
   keyBar: {
@@ -55,7 +57,7 @@ export const pt = {
     func: { nav: 'Funções', title: 'As funções', sub: 'tônica, subdominante, dominante e sensível', teaser: 'Uma quinta abaixo, uma quinta acima.' },
     names: { nav: 'Nomes', title: 'De onde vêm os nomes', sub: 'graus e intervalos', teaser: 'O espelho em volta da tônica.' },
     int: { nav: 'Intervalos', title: 'Intervalos', sub: 'número e qualidade', teaser: 'Duas réguas: nomes de nota e semitons.' },
-    hinge: { nav: 'Dobradiças', title: 'As dobradiças', sub: 'o 4º e o 7º graus', teaser: 'As duas notas que se movem no círculo.' },
+    hinge: { nav: 'Dobradiças', title: 'As dobradiças', sub: 'as duas notas que giram', teaser: 'As duas notas que se movem no círculo.' },
     tri: { nav: 'Trítono', title: 'O trítono', sub: 'três tons, meia oitava', teaser: 'O único intervalo que é seu próprio espelho.' },
     origin: { nav: 'Origem', title: 'A origem', sub: 'por que a quinta', teaser: 'Pitágoras, a espiral e a coma.' },
     win: { nav: 'Janela', title: 'A janela', sub: 'uma tonalidade são 7 quintas seguidas', teaser: 'Deslize a janela na linha de quintas.' },
@@ -66,7 +68,7 @@ export const pt = {
   },
 
   tracks: {
-    basics: 'Fundamentos', harmony: 'Acordes da escala e progressões',
+    basics: 'Fundamentos', harmony: 'Acordes da escala e progressões', minorharm: 'Harmonia na menor', repertoire: 'Repertório analisado',
     circle: 'O círculo das quintas', physics: 'A física por baixo', scales: 'Escalas e modos', chords: 'Acordes',
     motion: 'Harmonia em movimento', melody: 'Melodia e forma', piano: 'Piano na prática', rhythm: 'Ritmo', ref: 'Referência',
   } as Record<string, S>,
@@ -285,6 +287,12 @@ export const pt = {
     title: 'Seu progresso', streak: (n: number) => (n === 1 ? '1 dia seguido' : `${n} dias seguidos`), noStreak: 'Comece hoje a sua sequência',
     lessons: (a: number, b: number) => `${a} de ${b} aulas concluídas`, review: (n: number) => (n ? `${n} para revisar hoje` : 'revisão em dia'),
     markDone: 'Marcar aula como concluída', isDone: 'Aula concluída ✓', week: 'Últimos 7 dias',
+  },
+  learn: {
+    predict: 'Antes de ver: preveja', tapKey: 'Toque a tecla no teclado abaixo.', tryAgain: 'Ainda não. Tente de novo.', showAnswer: 'Mostrar a resposta', right: 'Isso!', answerWas: 'A resposta:', again: 'Tentar de novo',
+    recap: 'Resumo para explicar', oneLine: 'Em uma frase', confusions: 'Confusões comuns', show: 'Como mostrar no piano',
+    more: 'Para saber mais', transfer: 'Desafio: leve a ideia para outra tonalidade', goKey: (k: string) => `Ir para ${k}`,
+    startInC: 'Primeira vez nesta aula? Comece em Dó maior, sem sustenidos nem bemóis.', goC: 'Ir para Dó maior',
   },
   stepper: {
     mode: 'Passo a passo', modeHint: 'Mostra as explicações uma de cada vez.', next: 'Próximo passo →', all: 'Mostrar tudo', of: (a: number, b: number) => `passo ${a} de ${b}`,

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { type NoteEvent, later, playNotes, stopAll } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
-import { type Mark, rangeAround, roleMark } from '../components/layout';
+import { type Mark, layout, rangeAround, roleMark } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Legend, Notes, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/lefthand';
 import { useLessonText } from '../i18n/lessonText';
@@ -81,9 +82,20 @@ export function LeftHand() {
 
   const cells = Array.from({ length: 8 }, (_, k) => lhBar(bar).find((e) => e.at === k));
 
+  // predictions, from the current key
+  const tonicLow = -24 + t0;
+  const p1Marks: Record<number, Mark> = { [tonicLow]: roleMark(tonicLow, 'tonic', 'I', nm(sc[0])) };
+  const vNotes = triad(sc, 4);
+  const p2Opts = [...vNotes, sc[0]].map(nm).sort((a, b) => a.localeCompare(b));
+  const recap = T.recap(keyName(cur), triad(sc, 0).map(nm), nm(sc[3]), nm(sc[0]));
+
   return (
     <>
       <p className="desc">{T.desc}</p>
+      <Predict mode="key" resetOn={s.k + s.enh} lay={layout(-24, -1)} marks={p1Marks} anyOctave
+        answer={[-24 + pcOf(sc[3])]} prompt={T.p1(keyName(cur))} reveal={T.p1Reveal(nm(sc[3]))} />
+      <Predict mode="choice" resetOn={s.k + s.enh} options={p2Opts} answer={nm(vNotes[2])}
+        prompt={T.p2(lab(4))} reveal={T.p2Reveal(nm(vNotes[2]))} />
       <p className="rowlab">{T.patLabel}</p>
       <div className="chips" role="group" aria-label={T.patLabel}>
         {LH_PATTERNS.map((p) => (
@@ -140,7 +152,9 @@ export function LeftHand() {
         ))}
       </div>
       <h3 className="sub-h">{T.logicTitle}</h3>
-      <Notes items={T.logic.map((html) => ({ html }))} />
+      <Notes items={T.logic.map((html) => ({ html }))} more={[4]} />
+      <Transfer question={T.transfer} />
+      <Recap oneLine={recap.oneLine} confusions={recap.confusions} show={recap.show} />
     </>
   );
 }

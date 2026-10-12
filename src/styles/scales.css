@@ -14,3 +14,6 @@
 .scales-two{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 @media (min-width:860px){.scales-two{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
 .chips .chip.scales-mode{min-width:92px}
+/* "minorharm" track (lessons minorfield, minorcad) */
+.minor-pair{align-items:center;flex-wrap:nowrap}
+.minor-arrow{font:500 1.1rem var(--f-mono);color:var(--muted);padding:0 2px}

@@ -1,6 +1,9 @@
 import { playHz } from '../audio/audio';
-import { Board, Seg } from '../components/ui';
-import { fromFifthIndex } from '../theory';
+import { Predict, Recap } from '../components/Learn';
+import { layout, roleMark } from '../components/layout';
+import { Board, Html, Notes, Seg } from '../components/ui';
+import { extras } from '../i18n/lessons/extras/origin';
+import { fromFifthIndex, note } from '../theory';
 import { setState } from '../state/store';
 import { useLab } from '../state/useLab';
 
@@ -8,6 +11,9 @@ const C4 = 261.63;
 
 export function Origin() {
   const { s, t, nm } = useLab();
+  const e = extras[s.lang];
+  const C = nm(note(0));
+  const opts = e.pCommaOpts(C);
   const pure = s.tune !== 'eq';
   const cx = 180;
   const cy = 180;
@@ -22,9 +28,11 @@ export function Origin() {
   const strings: [number, string][] = [[1, t.stringWhole], [1 / 2, t.stringHalf], [2 / 3, t.stringTwoThirds], [3 / 4, t.stringThreeQuarters]];
   return (
     <>
-      <p className="desc">{t.originDesc}</p>
+      {e.desc.map((h, i) => <Html key={i} as="p" className="desc" html={h} />)}
 
       <h3 className="sub-h">{t.stringTitle}</h3>
+      <Predict mode="key" prompt={e.pString(C)} lay={layout(0, 12)} answer={[7]} anyOctave resetOn={s.lang + s.nt}
+        marks={{ 0: roleMark(0, 'tonic', 1, C), 12: roleMark(12, 'tonic', '2:1', C) }} reveal={e.pStringRev(nm(note(4)))} />
       <p className="hint">{t.stringHint}</p>
       <div className="strings">
         {strings.map(([f, label]) => (
@@ -37,6 +45,7 @@ export function Origin() {
         ))}
       </div>
 
+      <Predict mode="choice" prompt={e.pComma(C)} options={opts} answer={opts[1]} reveal={e.pCommaRev} resetOn={s.lang + s.nt} />
       <div className="bar mt">
         <Seg value={s.tune} onChange={(v) => setState({ tune: v })} options={[{ v: 'pure', label: t.tunePure }, { v: 'eq', label: t.tuneEq }]} />
         <div className="row">
@@ -76,6 +85,10 @@ export function Origin() {
         </svg>
       </Board>
       <p className="readout">{read}</p>
+
+      <h3 className="sub-h">{e.why}</h3>
+      <Notes items={e.notes.map((html) => ({ html }))} more={e.more} />
+      <Recap {...e.recap} />
     </>
   );
 }

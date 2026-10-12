@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 const pt = {
   meta: {
@@ -51,11 +52,31 @@ const pt = {
   logic: (g: string, f: string, c: string) => [
     `<b>Linhas e espaços se alternam</b>: subir da linha para o espaço de cima é andar uma letra. Por isso, de uma linha para a próxima linha pula-se uma letra (a do espaço do meio), e as linhas formam uma sequência de 3ªs. Não precisa decorar frases: basta saber uma nota e contar, como nas teclas brancas.`,
     `<b>As claves são letras</b>: a clave de sol é um G (Sol) desenhado; a espiral abraça a 2ª linha, que vira ${g}4, o ${g} logo acima do Dó central. A clave de fá é um F (Fá); os dois pontos cercam a 4ª linha, que vira ${f}3, o ${f} logo abaixo do Dó central.`,
-    `<b>Por que o ${c} central fica entre as pautas</b>: empilhe as duas pautas e conte. As 5 linhas da clave de fá, mais uma linha, mais as 5 da clave de sol formam uma pauta de 11 linhas. A linha do meio, a 6ª, é o ${c}4. Ela foi tirada porque 11 linhas seguidas são difíceis de ler; quando a nota é o ${c} central, a linha volta curtinha, como linha suplementar, abaixo da clave de sol ou acima da clave de fá.`,
+    `<b>Por que duas pautas, e o ${c} central entre elas</b>: uma pauta de 5 linhas mostra só 9 degraus (pouco mais de uma oitava) sem linhas suplementares, e o piano tem mais de 7 oitavas. Por isso ele usa duas. Agora empilhe as duas e conte. As 5 linhas da clave de fá, mais uma linha, mais as 5 da clave de sol formam uma grade de 11 linhas, e a linha do meio, a 6ª, é o ${c}4. Essa linha não é desenhada (11 linhas seguidas seriam difíceis de ler); quando a nota é o ${c} central, ela aparece curtinha, como linha suplementar, abaixo da clave de sol ou acima da clave de fá. Assim cada pauta cobre uma metade do teclado, e cada mão costuma ler a sua.`,
     `<b>Linhas suplementares</b>: são pedacinhos da mesma grade que continuam para fora da pauta. A alternância linha, espaço, linha continua igual.`,
     `<b>A armadura vale em toda parte</b>: o ♯ ou ♭ da armadura vale em todas as oitavas e nas duas pautas. Um sinal ao lado da nota (♯, ♭ ou ♮) só aparece quando a nota foge da armadura.`,
-    `<b>Origem</b>: no século XI, Guido d’Arezzo organizou as notas em linhas separadas por 3ªs e escreveu uma letra (F ou C, às vezes G) no começo de uma linha para dizer qual nota ela era. Com o tempo essas letras viraram os desenhos das claves.`,
+    `<b>Origem</b>: no século XI, Guido d’Arezzo difundiu a pauta com linhas separadas por 3ªs e marcou certas linhas com uma letra (F ou C) para dizer qual nota elas eram. Com o tempo essas letras, e mais tarde também o G, viraram os desenhos das claves.`,
   ],
+
+  p1: (key: string, name: string) =>
+    `Na clave de sol, onde fica a tônica de <b>${key}</b>: o ${name} mais grave que cabe dentro das 5 linhas?`,
+  p1Reveal: (where: string, path: string) =>
+    `${where}. Comece pela 2ª linha, que é o Sol (a espiral da clave de sol a abraça), e conte uma letra por degrau, linha, espaço, linha: ${path}.`,
+  p2Staff: (key: string) => `Pauta dupla em ${key} com uma nota na clave de fá`,
+  p2: 'A nota na pauta acima está na clave de fá (com a armadura da tonalidade). Toque a tecla dela, na oitava certa.',
+  p2Reveal: (name: string, path: string) =>
+    `É o ${name}. Os dois pontos da clave de fá cercam a 4ª linha, que é o Fá logo abaixo do Dó central; conte a partir dele, uma letra por degrau: ${path}.`,
+  transfer: (key: string) =>
+    `Vá para <b>${key}</b> e responda antes de tocar: quais letras levam sinal na armadura, e em que linha ou espaço fica a tônica na clave de fá?`,
+  recap: (c: string, d: string, e: string): RecapText => ({
+    oneLine: `O piano soa grave e agudo demais para uma pauta só, então usa duas, uma para cada metade do teclado; empilhadas, elas formam uma grade de 11 linhas, e a linha do meio, a que não se desenha, é o ${c} central. Dentro delas é só contar letras: cada degrau é a próxima tecla branca.`,
+    confusions: [
+      '<b>Clave de sol × clave de fá</b>: a mesma posição é outra nota. Na clave de fá, cada linha e espaço tem a letra duas acima da clave de sol (a 1ª linha é Mi numa e Sol na outra), e soa bem mais grave.',
+      `<b>Linha suplementar × linha da pauta</b>: a linha curta do ${c} central não é a 1ª linha de nenhuma das pautas. É a linha que falta entre as duas.`,
+      '<b>Armadura × sinal ao lado da nota</b>: o ♯ ou ♭ da armadura vale para todas as notas com aquela letra, em todas as oitavas e nas duas pautas. O sinal ao lado da nota só aparece quando ela foge da armadura.',
+    ],
+    show: `Ponha o polegar direito no ${c} central: na pauta ele fica na linha curta logo abaixo da clave de sol. Suba ${d} e ${e}: o ${e} já é a 1ª linha. Depois mostre que o mesmo ${c} é a linha curta logo acima da clave de fá.`,
+  }),
 };
 
 const en: typeof pt = {
@@ -109,11 +130,31 @@ const en: typeof pt = {
   logic: (g: string, f: string, c: string) => [
     `<b>Lines and spaces alternate</b>: going from a line to the space above is one letter. So from one line to the next line you skip one letter (the one in the space between), and the lines form a chain of 3rds. No need to memorize sentences: know one note and count, as on the white keys.`,
     `<b>The clefs are letters</b>: the treble clef is a drawn G; its curl wraps the 2nd line, which becomes ${g}4, the ${g} just above middle C. The bass clef is an F; its two dots surround the 4th line, which becomes ${f}3, the ${f} just below middle C.`,
-    `<b>Why middle ${c} sits between the staves</b>: stack the two staves and count. The 5 lines of the bass clef, plus one line, plus the 5 of the treble clef make an 11-line staff. The middle line, the 6th, is ${c}4. It was removed because 11 lines in a row are hard to read; when the note is middle ${c}, the line comes back short, as a ledger line, below the treble clef or above the bass clef.`,
+    `<b>Why two staves, with middle ${c} between them</b>: a 5-line staff shows only 9 steps (a little more than an octave) without ledger lines, and the piano has more than 7 octaves. So it uses two. Now stack them and count. The 5 lines of the bass clef, plus one line, plus the 5 of the treble clef make an 11-line grid, and the middle line, the 6th, is ${c}4. That line is not drawn (11 lines in a row would be hard to read); when the note is middle ${c}, it shows up short, as a ledger line, below the treble clef or above the bass clef. So each staff covers one half of the keyboard, and each hand usually reads its own.`,
     `<b>Ledger lines</b>: short pieces of the same grid that continue outside the staff. The line, space, line pattern stays the same.`,
     `<b>The key signature counts everywhere</b>: a ♯ or ♭ in the key signature applies in every octave and on both staves. A sign before a note (♯, ♭ or ♮) appears only when the note departs from the key signature.`,
-    `<b>Origin</b>: in the 11th century, Guido of Arezzo set notes on lines a 3rd apart and wrote a letter (F or C, sometimes G) at the start of a line to say which note it was. Over time those letters became the clef shapes.`,
+    `<b>Origin</b>: in the 11th century, Guido of Arezzo spread the use of a staff with lines a 3rd apart and marked certain lines with a letter (F or C) to say which note they were. Over time those letters, and later G as well, became the clef shapes.`,
   ],
+
+  p1: (key: string, name: string) =>
+    `In the treble clef, where is the tonic of <b>${key}</b>: the lowest ${name} that fits inside the 5 lines?`,
+  p1Reveal: (where: string, path: string) =>
+    `${where[0].toUpperCase() + where.slice(1)}. Start from line 2, which is G (the curl of the treble clef wraps it), and count one letter per step, line, space, line: ${path}.`,
+  p2Staff: (key: string) => `Grand staff in ${key} with one note on the bass clef`,
+  p2: 'The note on the staff above is on the bass clef (with the key signature). Tap its key, in the right octave.',
+  p2Reveal: (name: string, path: string) =>
+    `It is ${name}. The two dots of the bass clef surround line 4, the F just below middle C; count from there, one letter per step: ${path}.`,
+  transfer: (key: string) =>
+    `Go to <b>${key}</b> and answer before playing: which letters carry a sign in the key signature, and on which line or space is the tonic in the bass clef?`,
+  recap: (c: string, d: string, e: string): RecapText => ({
+    oneLine: `The piano goes too low and too high for one staff, so it uses two, one for each half of the keyboard; stacked, they form an 11-line grid, and the middle line, the one not drawn, is middle ${c}. Inside them you just count letters: each step is the next white key.`,
+    confusions: [
+      '<b>Treble clef × bass clef</b>: the same position is a different note. In the bass clef each line and space has the letter two above the treble clef (line 1 is E in one and G in the other), and it sounds much lower.',
+      `<b>Ledger line × staff line</b>: the short line of middle ${c} is not line 1 of either staff. It is the missing line between the two.`,
+      '<b>Key signature × sign before a note</b>: a ♯ or ♭ in the key signature applies to every note with that letter, in every octave and on both staves. A sign before a note appears only when the note departs from the key signature.',
+    ],
+    show: `Put your right thumb on middle ${c}: on the staff it sits on the short line just below the treble clef. Go up ${d} and ${e}: ${e} is already line 1. Then show that the same ${c} is the short line just above the bass clef.`,
+  }),
 };
 
 export const text = {

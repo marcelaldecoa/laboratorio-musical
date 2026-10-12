@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { playNotes, seq } from '../audio/audio';
 import { Bracket, Keyboard } from '../components/Keyboard';
 import { type Mark, layout, roleMark, stepsFor } from '../components/layout';
+import { Predict, Recap } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/keys';
 import { useLessonText } from '../i18n/lessonText';
@@ -65,6 +66,8 @@ export function Keys() {
 
       <h3 className="sub-h">{x.s2}</h3>
       <p className="desc">{x.s2d}</p>
+      <Predict mode="key" prompt={x.pGap} lay={layout(0, 11)} answer={[4, 11]} anyOctave
+        reveal={x.pGapRev(nm(note(2)), nm(note(3)), nm(note(6)), nm(note(0)))} />
       <Bar now={x.oct}>
         <PlayButton label={x.s2play} seconds={4} onPlay={() => playNotes(seq([...Array(13).keys()], 0.26, 0.4), 'keys2')} />
       </Bar>
@@ -77,6 +80,9 @@ export function Keys() {
 
       <h3 className="sub-h">{x.s3}</h3>
       <p className="desc">{x.s3d}</p>
+      <Predict mode="key" prompt={x.pEs(nm(note(2, 1)))} lay={layout(0, 11)} answer={[5]}
+        marks={{ 4: { ghost: 'var(--k-sub-line)', name: nm(note(2)) } }}
+        reveal={x.pEsRev(nm(note(2, 1)), nm(note(3)), nm(note(2)))} />
       <p className="rowlab">{x.letter}</p>
       <div className="chips" role="group" aria-label={x.letter}>
         {[0, 1, 2, 3, 4, 5, 6].map((l) => (
@@ -104,7 +110,8 @@ export function Keys() {
       </Board>
 
       <h3 className="sub-h">{x.why}</h3>
-      <Notes items={x.notes.map((html) => ({ html }))} />
+      <Notes items={x.notes.map((html) => ({ html }))} more={x.more} />
+      <Recap {...x.recap} />
     </>
   );
 }

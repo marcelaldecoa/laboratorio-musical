@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -39,6 +40,18 @@ const pt = {
     harmonic: (seven: S, tonic: S, six: S) => `<b>Harmônica:</b> ${seven} fica meio tom abaixo de ${tonic}, como a sensível da escala maior. O preço é o salto de 3 semitons entre ${six} e ${seven}.`,
     melodic: (seven: S, _tonic: S, six: S) => `<b>Melódica:</b> subindo, ${six} e ${seven} sobem juntos e o salto some. Descendo, a escala volta a ser a natural.`,
   },
+  predict: (min: S, n7: S, tonic: S) => `Em ${min} natural, o 7º grau (${n7}) fica um tom inteiro abaixo de ${tonic}. Para ele virar sensível, a meio tom da tônica, em que tecla ele precisa ir? Toque-a.`,
+  predictReveal: (r7: S, n7: S, tonic: S) => `${r7}: o mesmo 7º grau, meio tom acima. Agora ele fica a 1 semitom de ${tonic}, como a sensível da escala maior. Mantém a letra de ${n7} e ganha um acidente para cima.`,
+  transfer: (k: S) => `Vá para ${k} e olhe a relativa menor: qual é a sensível dela, e como se escreve? (mesma letra do 7º grau natural, com um acidente a mais para cima)`,
+  recap: {
+    oneLine: 'Porque a natural não tem sensível: a harmônica sobe o 7º grau meio tom para criar uma (e um V maior), e a melódica sobe também o 6º para tirar o salto de 3 semitons que isso deixa.',
+    confusions: [
+      '<b>Harmônica × melódica:</b> na harmônica só o 7º sobe (e sobra a 2ª aumentada); na melódica sobem o 6º e o 7º, e só na subida.',
+      '<b>Sol♯ × Lá♭ em Lá menor:</b> a nota nova é o 7º grau elevado, então mantém a letra Sol. Lá♭ seria um segundo “Lá” na escala, e nenhum Sol.',
+      '<b>Armadura × acidente:</b> a menor harmônica não tem armadura própria. A armadura é a da natural; o 7º elevado aparece como acidente ocorrente na partitura.',
+    ],
+    show: 'Em Lá menor, toque Mi–Sol♯–Si e depois Lá–Dó–Mi: a sensível Sol♯ sobe para Lá. Repita com Sol natural no lugar de Sol♯ e ouça a chegada perder força.',
+  } satisfies RecapText,
   whyTitle: 'Por que existem três formas',
   why: (min: S, n7: S, r7: S, n6: S, r6: S, tonic: S, par: S) => [
     `<b>O problema:</b> em ${min} natural, ${n7} fica a 2 semitons de ${tonic}. Na escala maior, a sensível fica a 1 semitom e é ela que cria a vontade de voltar para casa. Sem isso, o acorde do 5º grau é menor e o final soa “fraco”.`,
@@ -47,6 +60,7 @@ const pt = {
     `<b>O efeito colateral:</b> entre ${n6} e ${r7} ficam 3 semitons com só dois nomes de nota: é uma 2ª aumentada. Esse salto dá um sabor “oriental” e é difícil de cantar.`,
     `<b>A solução melódica:</b> para tirar o salto, sobe também o 6º grau (${n6} → ${r6}). A metade de cima vira T T S, o mesmo tetracorde da escala maior. Descendo, a melodia vai para longe da tônica e não precisa de sensível, então volta à forma natural.`,
     `<b>Na partitura:</b> a armadura de clave da menor é sempre a da natural. O 7º (e às vezes o 6º) elevado aparece como acidente ocorrente. Ver ${r7} espalhado pela peça é a pista mais forte de que ela está em ${min}, e não na relativa maior.`,
+    `<b>No jazz:</b> a menor melódica costuma ser usada igual na subida e na descida, como uma escala própria (às vezes chamada de “menor jazz”). A volta à natural na descida é a convenção da música clássica.`,
   ],
 };
 
@@ -87,6 +101,18 @@ const en: typeof pt = {
     harmonic: (seven: S, tonic: S, six: S) => `<b>Harmonic:</b> ${seven} is a half step below ${tonic}, like the leading tone of the major scale. The price is the 3-half-step leap between ${six} and ${seven}.`,
     melodic: (seven: S, _tonic: S, six: S) => `<b>Melodic:</b> going up, ${six} and ${seven} are raised together and the leap disappears. Going down, the scale goes back to natural.`,
   },
+  predict: (min: S, n7: S, tonic: S) => `In natural ${min}, degree 7 (${n7}) is a whole step below ${tonic}. For it to become a leading tone, a half step below the tonic, which key must it move to? Tap it.`,
+  predictReveal: (r7: S, n7: S, tonic: S) => `${r7}: the same degree 7, a half step higher. Now it is 1 half step below ${tonic}, like the leading tone of the major scale. It keeps the letter of ${n7} and gets one accidental higher.`,
+  transfer: (k: S) => `Go to ${k} and look at its relative minor: what is its leading tone, and how is it spelled? (the same letter as the natural degree 7, one accidental higher)`,
+  recap: {
+    oneLine: 'Because natural minor has no leading tone: harmonic minor raises degree 7 a half step to create one (and a major V), and melodic minor raises degree 6 as well to remove the 3-half-step leap that leaves.',
+    confusions: [
+      '<b>Harmonic vs melodic:</b> in harmonic only 7 is raised (leaving the augmented 2nd); in melodic both 6 and 7 are raised, and only going up.',
+      '<b>G♯ vs A♭ in A minor:</b> the new note is the raised degree 7, so it keeps the letter G. A♭ would give the scale a second “A” and no G at all.',
+      '<b>Key signature vs accidental:</b> harmonic minor has no key signature of its own. The signature is the natural one; the raised 7th appears as an accidental in the music.',
+    ],
+    show: 'In A minor, play E–G♯–B and then A–C–E: the leading tone G♯ rises to A. Repeat with G natural instead of G♯ and hear the arrival lose its pull.',
+  } satisfies RecapText,
   whyTitle: 'Why there are three forms',
   why: (min: S, n7: S, r7: S, n6: S, r6: S, tonic: S, par: S) => [
     `<b>The problem:</b> in natural ${min}, ${n7} is 2 half steps below ${tonic}. In the major scale the leading tone is 1 half step below, and that is what creates the urge to go home. Without it, the chord on degree 5 is minor and the ending sounds “weak”.`,
@@ -95,6 +121,7 @@ const en: typeof pt = {
     `<b>The side effect:</b> between ${n6} and ${r7} there are 3 half steps but only two letter names: an augmented 2nd. That leap has an “exotic” flavor and is hard to sing.`,
     `<b>The melodic fix:</b> to remove the leap, raise degree 6 as well (${n6} → ${r6}). The upper half becomes W W H, the same tetrachord as the major scale. Going down, the melody moves away from the tonic and needs no leading tone, so it returns to the natural form.`,
     `<b>On the page:</b> a minor key signature is always that of the natural form. The raised 7th (and sometimes 6th) appears as an accidental in the music. Seeing ${r7} throughout a piece is the strongest clue that it is in ${min} and not in the relative major.`,
+    `<b>In jazz:</b> the melodic minor is usually played the same way up and down, as a scale of its own (sometimes called the “jazz minor”). Returning to natural on the way down is the classical convention.`,
   ],
 };
 
@@ -105,6 +132,6 @@ export const text = {
     ['Harmonic minor', '', 'Menor harmônica', 'A menor natural com o 7º grau elevado meio tom, para ter uma sensível e um acorde maior no 5º grau. Cria uma 2ª aumentada entre o 6º e o 7º graus.', 'The natural minor with degree 7 raised a half step, to get a leading tone and a major chord on degree 5. It creates an augmented 2nd between degrees 6 and 7.'],
     ['Melodic minor', '', 'Menor melódica', 'A menor com o 6º e o 7º graus elevados ao subir (sem o salto da harmônica) e na forma natural ao descer.', 'The minor with degrees 6 and 7 raised going up (avoiding the harmonic minor’s leap) and in natural form going down.'],
     ['Augmented second', 'A2', 'Segunda aumentada', 'Uma 2ª com 3 semitons: dois nomes de nota vizinhos, mas a distância de uma 3ª menor (Fá–Sol♯).', 'A 2nd spanning 3 half steps: two neighboring letter names, but the distance of a minor 3rd (F–G♯).'],
-    ['Parallel key', 'parallel major / minor', 'Homônima', 'Maior e menor com a mesma tônica (Lá maior e Lá menor). Diferem em três notas: o 3º, o 6º e o 7º graus.', 'Major and minor on the same tonic (A major and A minor). They differ in three notes: degrees 3, 6 and 7.'],
+    ['Parallel key', 'parallel major / minor', 'Tonalidade homônima', 'Maior e menor com a mesma tônica (Lá maior e Lá menor); a menor é chamada de homônima ou menor paralela. Diferem em três notas: o 3º, o 6º e o 7º graus.', 'Major and minor on the same tonic (A major and A minor). They differ in three notes: degrees 3, 6 and 7.'],
   ],
 } satisfies LessonText<typeof pt>;

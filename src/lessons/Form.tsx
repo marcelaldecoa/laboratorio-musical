@@ -3,6 +3,7 @@ import { type NoteEvent, later, playNotes, stopAll } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { MelodyRoll, type RollBar, type RollNote } from '../components/MelodyRoll';
 import { type Mark, layout } from '../components/layout';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Board, Legend, Notes, Seg } from '../components/ui';
 import { text } from '../i18n/lessons/form';
 import { useLessonText } from '../i18n/lessonText';
@@ -23,7 +24,7 @@ const KIND_COL: Record<SectionKind, [string, string]> = {
 };
 
 export function Form() {
-  const { nm, sc, cur } = useLab();
+  const { s: st, nm, sc, cur } = useLab();
   const L = useLessonText(text);
   const [ending, setEnding] = useState<Ending>('authentic');
   const [show, setShow] = useState<'q' | 'a'>('a');
@@ -132,11 +133,25 @@ export function Form() {
 
   const F = FORMS.find((f) => f.id === form)!;
 
+  // predictions: the leading tone inside V, then the chord that closes the answer
+  const reset = `${st.k}${st.enh}${st.nt}`;
+  const vSemis = [4, 6, 8].map((i) => stepSemi(base, i));
+  const vMarks: Record<number, Mark> = {};
+  vSemis.forEach((s, j) => (vMarks[s] = { fill: FN_KEY.D[0], ink: FN_KEY.D[1], name: nm(sc[degreeOf([4, 6, 8][j])]) }));
+  const endOpts = [0, 1, 3, 5].map(rom);
+
   return (
     <>
       <p className="desc">{L.desc}</p>
       <h3 className="sub-h">{L.stepsTitle}</h3>
       <ol className="mel-steps">{L.steps.map((s, i) => <li key={i}>{s}</li>)}</ol>
+      <Predict mode="key" resetOn={reset} lay={layout(...groupRange([base, vSemis[2]]))} marks={vMarks}
+        answer={[vSemis[1]]} anyOctave
+        prompt={L.predLt(rom(4), [4, 6, 1].map((d) => nm(sc[d])).join(' – '))}
+        reveal={L.predLtReveal(nm(sc[6]), nm(sc[0]))} />
+      <Predict mode="choice" resetOn={reset + st.lang} prompt={L.predEnd} options={endOpts} answer={endOpts[0]}
+        reveal={L.predEndReveal(rom(4), rom(0), nm(sc[6]), nm(sc[0]))} />
+      <ol className="mel-steps" start={L.steps.length + 1}>{L.steps2.map((s, i) => <li key={i}>{s}</li>)}</ol>
 
       <p className="rowlab">{L.endLabel}</p>
       <div className="mel-tools">
@@ -204,7 +219,9 @@ export function Form() {
       <p className="readout">{L.formRead[form]}</p>
 
       <h3 className="sub-h">{L.logicTitle}</h3>
-      <Notes items={L.logic.map((html) => ({ html }))} />
+      <Notes items={L.logic.map((html) => ({ html }))} more={[3, 4]} />
+      <Transfer question={L.transfer} />
+      <Recap {...L.recap} />
     </>
   );
 }

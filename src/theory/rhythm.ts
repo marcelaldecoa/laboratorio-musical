@@ -124,3 +124,129 @@ export const compareCounts = (want: number[], got: number[]) => want.map((w, i) 
 
 /** Seconds per count at a given tempo (beats per minute). */
 export const secondsPerCount = (bpm: number) => 60 / bpm;
+
+/* ------------------------------------------------------------------------------------------------
+ * Reading rhythm on paper (lesson rhythm2): dots, ties, rests, syncopation, pickups and triplets.
+ * Durations here are in ticks: a quarter note = 12, so halves, thirds and quarters of a beat are whole numbers.
+ * ---------------------------------------------------------------------------------------------- */
+
+/** Ticks per quarter note. */
+export const TQ = 12;
+
+/** One written symbol: a note or a rest, with its length in ticks. */
+export interface RNote {
+  /** length in ticks (quarter = 12, dotted quarter = 18, triplet eighth = 4) */
+  dur: number;
+  /** the base note value of the symbol (1, 2, 4, 8, 16) */
+  v: NoteValue;
+  /** a dot after the note */
+  dot?: boolean;
+  rest?: boolean;
+  /** tied to the next note: the next one is not played again */
+  tie?: boolean;
+  accent?: boolean;
+  /** part of a triplet group (3 in the time of 2) */
+  tri?: boolean;
+  /** pitch in semitones from middle C, when the example has a melody */
+  s?: number;
+}
+
+/** Length in ticks of a value, with an optional dot (the dot adds half of the value). */
+export const ticks = (v: NoteValue, dot = false) => (len16(v) * TQ * (dot ? 3 : 2)) / 8;
+
+/** Triplet length: three of them take the time of two of the same value. */
+export const tripletTicks = (v: NoteValue) => (ticks(v) * 2) / 3;
+
+export const nt = (v: NoteValue, o: Partial<RNote> = {}): RNote => ({ v, dur: ticks(v, o.dot), ...o });
+export const rest = (v: NoteValue, o: Partial<RNote> = {}): RNote => nt(v, { ...o, rest: true });
+export const trip = (v: NoteValue, o: Partial<RNote> = {}): RNote => ({ v, dur: tripletTicks(v), tri: true, ...o });
+
+export const totalTicks = (r: RNote[]) => r.reduce((a, n) => a + n.dur, 0);
+
+/** Start of each symbol, in ticks. */
+export function startsT(r: RNote[]): number[] {
+  const out: number[] = [];
+  let t = 0;
+  for (const n of r) {
+    out.push(t);
+    t += n.dur;
+  }
+  return out;
+}
+
+/** What you actually play: one attack per note, ties merged into the first note, rests skipped. */
+export function attacks(r: RNote[]): { t: number; dur: number; accent: boolean; s?: number }[] {
+  const st = startsT(r);
+  const out: { t: number; dur: number; accent: boolean; s?: number }[] = [];
+  let tied = false;
+  r.forEach((n, i) => {
+    if (n.rest) {
+      tied = false;
+      return;
+    }
+    if (tied) out[out.length - 1].dur += n.dur;
+    else out.push({ t: st[i], dur: n.dur, accent: !!n.accent, s: n.s });
+    tied = !!n.tie;
+  });
+  return out;
+}
+
+/** How many attacks start in each beat (beat = `beatT` ticks). */
+export function attacksPerBeat(r: RNote[], beatT = TQ): number[] {
+  const out = Array<number>(Math.ceil(totalTicks(r) / beatT)).fill(0);
+  for (const a of attacks(r)) out[Math.floor(a.t / beatT)]++;
+  return out;
+}
+
+/** Beats (0-based) on which no note starts while a note started earlier is still sounding: the felt syncopation. */
+export function syncopatedBeats(r: RNote[], beatT = TQ): number[] {
+  const out: number[] = [];
+  for (const a of attacks(r)) {
+    if (a.t % beatT === 0) continue;
+    const next = Math.ceil(a.t / beatT) * beatT;
+    if (a.t + a.dur > next) out.push(next / beatT);
+  }
+  return out;
+}
+
+/** Start ticks of the attacks that are syncopated (off the beat and held over the next beat). */
+export function syncopatedStarts(r: RNote[], beatT = TQ): Set<number> {
+  return new Set(attacks(r).filter((a) => a.t % beatT !== 0 && a.t + a.dur > Math.ceil(a.t / beatT) * beatT).map((a) => a.t));
+}
+
+export interface RExample {
+  id: 'dot' | 'tie' | 'rest' | 'sync' | 'pickup' | 'tri';
+  /** beats per bar */
+  beats: number;
+  /** ticks before the first bar line (anacrusis) */
+  pickup: number;
+  /** rows to compare: the plain version first, the concept last */
+  rows: RNote[][];
+}
+
+/** The examples of the lesson. Every row fills whole bars after its pickup. */
+export const REXAMPLES: RExample[] = [
+  { id: 'dot', beats: 4, pickup: 0, rows: [
+    [nt(4, { tie: true }), nt(8), nt(8), nt(4, { tie: true }), nt(8), nt(8)],
+    [nt(4, { dot: true }), nt(8), nt(4, { dot: true }), nt(8)],
+  ] },
+  { id: 'tie', beats: 4, pickup: 0, rows: [
+    [nt(2), nt(4), nt(4), nt(4), nt(4), nt(2)],
+    [nt(2), nt(4), nt(4, { tie: true }), nt(4), nt(4), nt(2)],
+  ] },
+  { id: 'rest', beats: 4, pickup: 0, rows: [
+    [nt(4), nt(4), nt(4), nt(4)],
+    [nt(4), rest(4), nt(4), rest(8), nt(8)],
+  ] },
+  { id: 'sync', beats: 4, pickup: 0, rows: [
+    [nt(8), nt(8), nt(8), nt(8), nt(4), nt(4)],
+    [nt(8), nt(4, { accent: true }), nt(8), nt(4), nt(4)],
+  ] },
+  { id: 'pickup', beats: 3, pickup: TQ, rows: [
+    [nt(8, { s: 7 }), nt(8, { s: 7 }), nt(4, { s: 9 }), nt(4, { s: 7 }), nt(4, { s: 12 }), nt(2, { s: 11 }), rest(4)],
+  ] },
+  { id: 'tri', beats: 4, pickup: 0, rows: [
+    [nt(8), nt(8), nt(8), nt(8), nt(8), nt(8), nt(8), nt(8)],
+    [nt(8), nt(8), trip(8), trip(8), trip(8), nt(8), nt(8), trip(8), trip(8), trip(8)],
+  ] },
+];

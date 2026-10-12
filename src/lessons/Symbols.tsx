@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { playNotes } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout, roleMark } from '../components/layout';
+import { ChordsTapChord } from '../components/ChordsTapChord';
+import { Predict, Recap, Transfer } from '../components/Learn';
 import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
 import { text } from '../i18n/lessons/symbols';
 import { useLessonText } from '../i18n/lessonText';
 import { type Note, mod, pcOf, sameNote } from '../theory';
-import { diatonicSeventhInfo, letterName, seventhSuffix, simpleNumber, toneLabel, toneQuality } from '../theory/chords7';
+import { diatonicSeventhInfo, letterName, seventhSuffix, simpleNumber, stackUp, toneLabel, toneQuality } from '../theory/chords7';
 import { type ParsedChord, chordNotes, formatChord, parseChord, sameChord } from '../theory/symbol';
 import { useLab } from '../state/useLab';
 import '../styles/chords.css';
@@ -109,12 +111,24 @@ export function Symbols() {
   const keyEx = [dia(0), dia(1), dia(4), dia(6), `${letterName(sc[4])}/${letterName(sc[6])}`, compose(sc[0], 'add9', null), compose(sc[4], '7(9)', null)];
   const fixedEx = ['F#m7', 'Bb7M', 'G/B', 'Am7(b5)', 'C9', 'Dsus4', 'C6/9', 'E7(#9)'];
 
+  // predict 1: read the half-diminished chord of the key (Bm7(♭5) in C) and tap its keys
+  const vii = diatonicSeventhInfo(sc, 6);
+  const viiSym = dia(6);
+  const viiPs = stackUp(vii.notes.map(pcOf), 0);
+  const viiNames = vii.notes.map(nm);
+  const reset = `${s.k}${s.enh}${st}`;
+  const v7 = letterName(sc[4]) + '7';
+
   const rootTxt = letterName(c.root);
   const qualTxt = suffixOf(c);
 
   return (
     <>
       <p className="desc">{t.desc}</p>
+      <ChordsTapChord resetOn={reset} lay={layout(0, 23)} answer={viiPs} names={viiNames} progress={t.p1found} playLabel={t.p1play}
+        prompt={t.p1(viiSym)}
+        reveal={t.p1r(viiNames.join(' '), letterName(vii.notes[0]), viiNames[0], viiNames[1], viiNames[2], viiNames[3], keyName(cur))} />
+      <Predict mode="choice" resetOn={reset} options={t.p2opts} answer={t.p2opts[1]} prompt={t.p2(v7)} reveal={t.p2r(v7, nm(sc[3]))} />
       <div className="chords-input">
         <input type="text" value={input} aria-label={t.inputLabel} placeholder={t.placeholder} aria-invalid={!parsed}
           autoCapitalize="off" autoCorrect="off" spellCheck={false} onChange={(e) => update(e.target.value)} />
@@ -173,7 +187,9 @@ export function Symbols() {
       <p className="hint">{t.letters}</p>
 
       <h3 className="sub-h">{t.logicTitle}</h3>
-      <Notes items={t.logic.map((html) => ({ html }))} />
+      <Notes items={t.logic.map((html) => ({ html }))} more={[4, 5]} />
+      <Transfer question={t.transfer} />
+      <Recap {...t.recap} />
     </>
   );
 }

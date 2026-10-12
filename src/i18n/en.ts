@@ -18,6 +18,8 @@ export const en: Dict = {
     start: 'Start with the first lesson', continue: 'Continue', allLessons: 'All lessons',
     chain: 'The chain: formula → tetrachords → circle → window → intervals → diatonic chords → functions → progressions → composing.',
     lessonN: (n: number) => `Lesson ${n}`,
+    question: 'This lesson’s question', journey: 'The journey', builds: 'builds on',
+    journeyIntro: 'Every lesson opens with a question and answers it using only what came before. Nothing to memorize: every rule grows from a fact you have already seen. Follow the path from top to bottom.',
     before: 'Before this lesson', terms: (n: number) => (n === 1 ? 'New term in this lesson' : `${n} new terms in this lesson`), inLesson: 'explained in',
   },
   keyBar: {
@@ -53,7 +55,7 @@ export const en: Dict = {
     func: { nav: 'Functions', title: 'The functions', sub: 'tonic, subdominant, dominant, leading tone', teaser: 'A fifth below, a fifth above.' },
     names: { nav: 'Names', title: 'Where the names come from', sub: 'degrees and intervals', teaser: 'The mirror around the tonic.' },
     int: { nav: 'Intervals', title: 'Intervals', sub: 'number and quality', teaser: 'Two rulers: letter names and half steps.' },
-    hinge: { nav: 'Hinges', title: 'The hinges', sub: 'degrees 4 and 7', teaser: 'The two notes that move on the circle.' },
+    hinge: { nav: 'Hinges', title: 'The hinges', sub: 'the two notes that turn', teaser: 'The two notes that move on the circle.' },
     tri: { nav: 'Tritone', title: 'The tritone', sub: 'three whole steps, half an octave', teaser: 'The only interval that is its own mirror.' },
     origin: { nav: 'Origin', title: 'The origin', sub: 'why the fifth', teaser: 'Pythagoras, the spiral and the comma.' },
     win: { nav: 'Window', title: 'The window', sub: 'a key is 7 consecutive fifths', teaser: 'Slide the window along the line of fifths.' },
@@ -64,7 +66,7 @@ export const en: Dict = {
   },
 
   tracks: {
-    basics: 'Fundamentals', harmony: 'Scale chords and progressions',
+    basics: 'Fundamentals', harmony: 'Scale chords and progressions', minorharm: 'Harmony in minor', repertoire: 'Analyzed repertoire',
     circle: 'The circle of fifths', physics: 'The physics underneath', scales: 'Scales and modes', chords: 'Chords',
     motion: 'Harmony in motion', melody: 'Melody and form', piano: 'Piano in practice', rhythm: 'Rhythm', ref: 'Reference',
   },
@@ -266,6 +268,12 @@ export const en: Dict = {
     title: 'Your progress', streak: (n: number) => (n === 1 ? '1 day in a row' : `${n} days in a row`), noStreak: 'Start your streak today',
     lessons: (a: number, b: number) => `${a} of ${b} lessons done`, review: (n: number) => (n ? `${n} to review today` : 'review up to date'),
     markDone: 'Mark lesson as done', isDone: 'Lesson done ✓', week: 'Last 7 days',
+  },
+  learn: {
+    predict: 'Before you look: predict', tapKey: 'Tap the key on the keyboard below.', tryAgain: 'Not yet. Try again.', showAnswer: 'Show the answer', right: 'That’s it!', answerWas: 'The answer:', again: 'Try again',
+    recap: 'Summary to explain it', oneLine: 'In one sentence', confusions: 'Common confusions', show: 'How to show it at the piano',
+    more: 'Want to know more', transfer: 'Challenge: take the idea to another key', goKey: (k: string) => `Go to ${k}`,
+    startInC: 'First time in this lesson? Start in C major, with no sharps or flats.', goC: 'Go to C major',
   },
   stepper: {
     mode: 'Step by step', modeHint: 'Shows the explanations one at a time.', next: 'Next step →', all: 'Show all', of: (a: number, b: number) => `step ${a} of ${b}`,

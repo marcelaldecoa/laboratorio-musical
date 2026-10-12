@@ -1,4 +1,5 @@
 import type { LessonText } from '../lessonText';
+import type { RecapText } from './extras/types';
 
 type S = string;
 
@@ -12,7 +13,7 @@ const pt = {
   desc: 'O coração do V7 é o trítono entre a terça (a sensível) e a sétima. Como o trítono é exatamente meia oitava, as mesmas duas teclas servem para outro acorde dominante, cuja fundamental está do outro lado do círculo. Trocar um pelo outro é a substituição de trítono.',
   stepsTitle: 'Passo a passo',
   step1: (v: S, notes: S, lt: S, sev: S) => `<b>O V7:</b> ${v} = ${notes}. A terça ${lt} e a sétima ${sev} formam um trítono (6 semitons).`,
-  step2: 'Inverta o trítono: continua com 6 semitons. Ele é o único intervalo que é igual de cabeça para baixo, então o par também serve “ao contrário”.',
+  step2: '<b>Inverta o trítono:</b> continua com 6 semitons, porque 6 + 6 = 12. Fora a oitava, é o único intervalo que tem o mesmo tamanho invertido, então o par também serve “ao contrário”.',
   step3: (sev: S, lt2: S, sub: S, notes: S) => `<b>Troque os papéis:</b> ${sev} vira a terça e ${lt2} (a mesma tecla da sensível) vira a sétima. Esse acorde é ${sub} = ${notes}.`,
   step4: (sub: S, tonic: S) => `<b>Fundamental:</b> ${sub} fica meio tom acima de ${tonic}. Por isso o chamamos de ♭II7.`,
   pickLab: 'Qual acorde mostrar',
@@ -29,7 +30,7 @@ const pt = {
   circleDesc: (v: S, sub: S) => `${v} e ${sub} estão a 6 passos de distância: exatamente do outro lado do círculo. Seis quintas somam 42 semitons, que menos 3 oitavas (36) dá 6: um trítono.`,
   circleAria: (v: S, sub: S) => `Círculo das quintas com ${v} e ${sub} em lados opostos`,
   circleMid: '6 passos',
-  practical: (logic: S, prac: S) => `Grafia lógica: ${logic} (um grau acima da tônica). Na prática, quase todo mundo escreve ${prac}, a mesma tecla.`,
+  practical: (logic: S, prac: S) => `Grafia lógica: ${logic} (uma letra acima da tônica). Na prática, quase todo mundo escreve ${prac}, a mesma tecla.`,
   bassTitle: 'O baixo cromático',
   bassDesc: (a: S, b: S, c: S) => `Em ii – V7 – I o baixo salta. Com o substituto, ele desce meio tom de cada vez: ${a} → ${b} → ${c}.`,
   bassAria: (a: S, b: S, c: S) => `Linha do baixo: ${a}, ${b}, ${c}`,
@@ -50,8 +51,22 @@ const pt = {
     `<b>Por que funciona:</b> o que puxa o V7 para a tônica é o trítono, que se resolve com cada nota andando meio tom. ${v} e ${sub} têm o mesmo trítono, então resolvem do mesmo jeito.`,
     `<b>Por que só dois:</b> o trítono divide a oitava ao meio (6 + 6). Cada trítono serve de 3ª e 7ª para exatamente dois acordes dominantes, cujas fundamentais também ficam a um trítono uma da outra.`,
     `<b>Grafia pela letra:</b> a sétima de um acorde fica 7 letras acima da fundamental, contando as duas pontas. Em ${sub}, isso dá ${sev}, e não ${lt}. É a mesma tecla, escrita pela letra certa.`,
-    `<b>Na história:</b> o nome vem do jazz (bebop, anos 1940), mas o som é antigo. O acorde de sexta aumentada alemã do século XVIII soa igual a ${gerRoot} e resolve em ${gerTarget}: é a substituição de trítono do V/V.`,
+    `<b>Na história:</b> o nome e o uso sistemático vêm do jazz, sobretudo a partir do bebop (anos 1940), mas o som é mais antigo. A sexta aumentada alemã, comum nos séculos XVIII e XIX, soa igual a ${gerRoot} e resolve em ${gerTarget}: na prática, é a substituição de trítono do V/V.`,
   ],
+  predictQ: (v: S, lt: S, sev: S) =>
+    `O trítono de <b>${v}</b> (${lt} e ${sev}, em coral) também é a terça e a sétima de outro acorde dominante. Onde fica a fundamental desse outro acorde? Toque-a.`,
+  predictA: (root: S, vRoot: S, tonic: S) =>
+    `${root}: fica a um trítono de ${vRoot} (6 semitons), do outro lado do círculo, e meio tom acima de ${tonic}. Como o trítono divide a oitava ao meio, o par de notas serve para os dois acordes.`,
+  transfer: (k: S) => `Em ${k}, qual é o substituto de trítono do V7? Quais duas notas ele divide com o V7?`,
+  recap: {
+    oneLine: 'O que puxa o V7 para a tônica é o trítono entre a terça e a sétima; o dominante do outro lado do círculo (meio tom acima da tônica) tem o mesmo trítono, com os papéis trocados, por isso faz o mesmo trabalho.',
+    confusions: [
+      '<b>Quarta aumentada × quinta diminuta:</b> as duas têm 6 semitons (trítono); o nome muda pela contagem de letras. Fá–Si é 4ª aumentada; Si–Fá é 5ª diminuta.',
+      '<b>♭II7 × ii:</b> em Dó maior, D♭7 (Ré♭ Fá Lá♭ Dó♭) é o substituto do V7; Dm (Ré Fá Lá) é o ii da escala.',
+      '<b>Si × Dó♭:</b> a mesma tecla. Em G7 ela é a terça (Si); em D♭7 é a sétima, escrita Dó♭ porque fica 7 letras acima de Ré♭.',
+    ],
+    show: 'Em Dó maior: segure Fá e Si com a mão direita. Com a esquerda toque Sol no baixo e depois Ré♭: os dois resolvem em Dó, com Si subindo para Dó e Fá descendo para Mi.',
+  } satisfies RecapText,
 };
 
 const en: typeof pt = {
@@ -64,7 +79,7 @@ const en: typeof pt = {
   desc: 'The core of the V7 is the tritone between its third (the leading tone) and its seventh. Since the tritone is exactly half an octave, the same two keys also serve another dominant chord, whose root sits on the other side of the circle. Swapping one for the other is the tritone substitution.',
   stepsTitle: 'Step by step',
   step1: (v: S, notes: S, lt: S, sev: S) => `<b>The V7:</b> ${v} = ${notes}. The third ${lt} and the seventh ${sev} make a tritone (6 half steps).`,
-  step2: 'Invert the tritone: it is still 6 half steps. It is the only interval that stays the same upside down, so the pair also works “the other way round”.',
+  step2: '<b>Invert the tritone:</b> it is still 6 half steps, because 6 + 6 = 12. Apart from the octave, it is the only interval that keeps its size when inverted, so the pair also works “the other way round”.',
   step3: (sev: S, lt2: S, sub: S, notes: S) => `<b>Swap the roles:</b> ${sev} becomes the third and ${lt2} (the same key as the leading tone) becomes the seventh. That chord is ${sub} = ${notes}.`,
   step4: (sub: S, tonic: S) => `<b>Root:</b> ${sub} sits a half step above ${tonic}. That is why we call it ♭II7.`,
   pickLab: 'Which chord to show',
@@ -102,8 +117,22 @@ const en: typeof pt = {
     `<b>Why it works:</b> what pulls the V7 to the tonic is the tritone, which resolves with each note moving a half step. ${v} and ${sub} share the same tritone, so they resolve the same way.`,
     `<b>Why only two:</b> the tritone splits the octave in half (6 + 6). Each tritone serves as 3rd and 7th of exactly two dominant chords, whose roots are also a tritone apart.`,
     `<b>Spelling by letter:</b> a chord’s seventh sits 7 letters above its root, counting both ends. In ${sub} that gives ${sev}, not ${lt}. Same key, spelled with the right letter.`,
-    `<b>In history:</b> the name comes from jazz (bebop, 1940s), but the sound is old. The 18th-century German augmented sixth chord sounds just like ${gerRoot} and resolves to ${gerTarget}: it is the tritone substitute of V/V.`,
+    `<b>In history:</b> the name and its systematic use come from jazz, especially from bebop on (1940s), but the sound is older. The German augmented sixth, common in the 18th and 19th centuries, sounds just like ${gerRoot} and resolves to ${gerTarget}: in practice, it is the tritone substitute of V/V.`,
   ],
+  predictQ: (v: S, lt: S, sev: S) =>
+    `The tritone of <b>${v}</b> (${lt} and ${sev}, in coral) is also the third and seventh of another dominant chord. Where is that other chord’s root? Tap it.`,
+  predictA: (root: S, vRoot: S, tonic: S) =>
+    `${root}: a tritone away from ${vRoot} (6 half steps), across the circle, and a half step above ${tonic}. Since the tritone splits the octave in half, the pair of notes serves both chords.`,
+  transfer: (k: S) => `In ${k}, what is the tritone substitute of V7? Which two notes does it share with V7?`,
+  recap: {
+    oneLine: 'What pulls V7 to the tonic is the tritone between its third and seventh; the dominant across the circle (a half step above the tonic) has the same tritone with the roles swapped, so it does the same job.',
+    confusions: [
+      '<b>Augmented fourth vs diminished fifth:</b> both are 6 half steps (a tritone); the name depends on the letter count. F–B is an augmented 4th; B–F is a diminished 5th.',
+      '<b>♭II7 vs ii:</b> in C major, D♭7 (D♭ F A♭ C♭) is the V7 substitute; Dm (D F A) is the scale’s ii.',
+      '<b>B vs C♭:</b> the same key. In G7 it is the third (B); in D♭7 it is the seventh, spelled C♭ because it sits 7 letters above D♭.',
+    ],
+    show: 'In C major: hold F and B in the right hand. With the left hand play G in the bass, then D♭: both resolve to C, with B rising to C and F falling to E.',
+  },
 };
 
 export const text = {
