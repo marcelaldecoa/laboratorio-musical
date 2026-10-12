@@ -67,6 +67,7 @@ O componente `Keyboard` deve aceitar: faixa de notas, marcas por tecla (cor, ró
 ## Regras
 
 - **Grafia das notas:** nunca derive o nome da nota a partir da pitch class. Use sempre letra + acidente, para que Fá♯ maior tenha Mi♯ e Sol♭ maior tenha Dó♭.
+- **Ordem das aulas:** a sequência, os pré-requisitos e os termos de cada aula ficam em `src/lessons/curriculum.ts` (explicado em `docs/CURRICULO.md`). Uma aula só pode usar conceitos de aulas anteriores; `curriculum.test.ts` confere.
 - **Testes obrigatórios para `src/theory/`:** cubra as 12 tonalidades nos dois sentidos do círculo, as 7 tríades de cada tonalidade, o censo de intervalos (cada número com exatamente dois tamanhos, a 8ª com um), inversões e notas comuns entre acordes.
 - **Contraste:** nunca use texto com cor próxima do fundo. Todo texto precisa de contraste AA nos temas claro e escuro.
 - **Mobile primeiro:** a página funciona a ~400 px sem rolagem horizontal; teclados largos rolam dentro do próprio container.

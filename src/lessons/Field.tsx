@@ -1,7 +1,7 @@
 import { playNotes } from '../audio/audio';
 import { Keyboard } from '../components/Keyboard';
 import { type Mark, layout } from '../components/layout';
-import { Bar, Board, Legend, PlayButton } from '../components/ui';
+import { Bar, Board, Legend, Notes, PlayButton } from '../components/ui';
 import { chordInfo, fifthIndex, fromFifthIndex, pcOf, triadSteps } from '../theory';
 import { setState } from '../state/store';
 import { useLab } from '../state/useLab';
@@ -123,6 +123,8 @@ export function Field() {
         { color: 'var(--k-sub)', label: t.lgMin },
         { color: 'var(--k-lt)', label: t.lgDim },
       ]} />
+      <h3 className="sub-h">{t.logicTitle}</h3>
+      <Notes items={t.fieldWhy.map((html) => ({ html }))} />
     </>
   );
 }

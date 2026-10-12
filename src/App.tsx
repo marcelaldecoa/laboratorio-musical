@@ -7,6 +7,7 @@ import { Sheet } from './components/Sheet';
 import { Seg } from './components/ui';
 import { DICTS } from './i18n';
 import { LESSONS, TRACKS } from './lessons';
+import { glossaryEntry } from './lessons/glossaryAll';
 import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
 import { Practice } from './pages/Practice';
@@ -219,6 +220,39 @@ function LessonPage({ id }: { id: string }) {
         <p className="eyebrow">{t.nav.lessonN(i + 1)} · {t.tracks[L.track]}</p>
         <h1>{m.title} <span className="sub">· {m.sub}</span></h1>
       </header>
+      {(!!L.needs?.length || !!L.terms?.length) && (
+        <aside className="lesson-intro">
+          {!!L.needs?.length && (
+            <div className="needs">
+              <span className="rowlab">{t.nav.before}</span>
+              {L.needs.map((n) => {
+                const N = LESSONS.find((x) => x.id === n);
+                return N ? <a key={n} className="need" href={href({ page: 'lesson', id: n })}>{lessonMeta(N, t, s.lang).title}</a> : null;
+              })}
+            </div>
+          )}
+          {!!L.terms?.length && (
+            <details className="terms">
+              <summary>{t.nav.terms(L.terms.length)}: {L.terms.map((en) => {
+                const g = glossaryEntry(en);
+                return g ? (s.lang === 'pt' ? g[2] : g[0]) : en;
+              }).join(' · ')}</summary>
+              <dl>
+                {L.terms.map((en) => {
+                  const g = glossaryEntry(en);
+                  if (!g) return null;
+                  return (
+                    <div key={en}>
+                      <dt>{s.lang === 'pt' ? g[2] : g[0]} <span className="alt">{s.lang === 'pt' ? g[0] : g[2]}</span></dt>
+                      <dd>{s.lang === 'pt' ? g[3] : g[4]}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </details>
+          )}
+        </aside>
+      )}
       <div className="lesson-body"><L.Comp /></div>
       {L.track !== 'ref' && (
         <button type="button" className={'done-btn' + (s.done.includes(L.id) ? ' on' : '')} aria-pressed={s.done.includes(L.id)} onClick={() => toggleDone(L.id)}>

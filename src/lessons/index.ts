@@ -14,10 +14,13 @@ import { Scale } from './Scale';
 import { Tetra } from './Tetra';
 import { Tritone } from './Tritone';
 import { Window } from './Window';
+import { CURRICULUM } from './curriculum';
 import { EXTRA } from './extra';
+import { BASICS } from './track-basics';
 
-export type TrackId = 'circle' | 'physics' | 'scales' | 'chords' | 'motion' | 'melody' | 'piano' | 'rhythm' | 'ref';
-export const TRACKS: TrackId[] = ['circle', 'physics', 'scales', 'chords', 'motion', 'melody', 'piano', 'rhythm', 'ref'];
+export type TrackId = 'basics' | 'physics' | 'circle' | 'harmony' | 'rhythm' | 'melody' | 'scales' | 'chords' | 'motion' | 'piano' | 'ref';
+/** Track order follows the syllabus in curriculum.ts */
+export const TRACKS: TrackId[] = ['basics', 'physics', 'circle', 'harmony', 'rhythm', 'melody', 'scales', 'chords', 'motion', 'piano', 'ref'];
 
 export interface LessonDef {
   id: string;
@@ -25,6 +28,10 @@ export interface LessonDef {
   icon: string;
   tone: string;
   track: TrackId;
+  /** lessons this one builds on (from curriculum.ts) */
+  needs?: string[];
+  /** glossary terms (English key) this lesson introduces (from curriculum.ts) */
+  terms?: string[];
   /** texts for lessons added after the prototype (the prototype's lessons use Dict.lessons) */
   text?: LessonText<{ meta: LessonMeta }>;
 }
@@ -48,6 +55,15 @@ const CIRCLE: LessonDef[] = [
 
 const GLOSS: LessonDef = { id: 'gloss', Comp: Glossary, icon: 'Aa', tone: 'neutral', track: 'ref' };
 
-/** Every lesson in study order: the prototype's chain first, then the new tracks (docs/ROADMAP.md, Phase 3). */
-export const LESSONS: LessonDef[] = [...CIRCLE, ...EXTRA, GLOSS];
+const REGISTRY = new Map([...BASICS, ...CIRCLE, ...EXTRA, GLOSS].map((L) => [L.id, L]));
+
+/** Every lesson in study order, as set by the syllabus (curriculum.ts). */
+export const LESSONS: LessonDef[] = CURRICULUM.map((c) => {
+  const L = REGISTRY.get(c.id);
+  if (!L) throw new Error(`curriculum lists unknown lesson "${c.id}"`);
+  return { ...L, track: c.track, needs: c.needs, terms: c.terms };
+});
+
+/** Lessons registered but missing from the syllabus (should be empty; checked by tests). */
+export const UNLISTED = [...REGISTRY.keys()].filter((id) => !CURRICULUM.some((c) => c.id === id));
 

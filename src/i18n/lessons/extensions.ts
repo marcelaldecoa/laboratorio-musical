@@ -37,7 +37,7 @@ const pt = {
     '<b>Por que 9 = 2 + 8 − 1:</b> contar intervalos inclui as duas pontas. Subir uma oitava soma 7 nomes de nota, não 8, porque a oitava compartilha a nota de partida. Então 2 + 7 = 9, 4 + 7 = 11 e 6 + 7 = 13.',
     '<b>Por que não existe 10, 12 ou 14:</b> os números pares acima da oitava repetem notas do acorde: 10 = 3, 12 = 5, 14 = 7, e 15 é a fundamental de novo. Só os ímpares que caem fora da tríade (9, 11, 13) trazem cor nova.',
     '<b>Por que algumas são evitadas:</b> uma extensão meio tom acima de uma nota do acorde forma com ela uma 9ª menor, o choque mais áspero que existe. Sobre um acorde maior (I7M, V7) a 11ª fica meio tom acima da 3ª e apaga o caráter maior. Por isso, sobre acordes maiores, a 11 aparece como ♯11.',
-    '<b>Por acorde:</b> 7M aceita 9, ♯11 e 13; 7 (dominante) aceita 9 e 13, e as alteradas ♭9, ♯9, ♯11 e ♭13; m7 aceita 9 e 11 (a 13 depende do grau); m7(♭5) aceita 11 e ♭13. Toque cada grau acima e veja a regra do meio tom funcionando.',
+    '<b>Por acorde:</b> 7M aceita 9, ♯11 e 13; 7 (dominante) aceita 9 e 13, e as alteradas (subidas ou abaixadas meio tom) ♭9, ♯9, ♯11 e ♭13; m7 aceita 9 e 11 (a 13 depende do grau); m7(♭5) aceita 11 e ♭13. Toque cada grau acima e veja a regra do meio tom funcionando.',
     '<b>Na prática:</b> no piano raramente se tocam as sete notas. Em geral se tira a 5ª (e às vezes a fundamental, que o baixo já toca) e se mantêm 3ª, 7ª e as tensões, que são as notas que dão cor.',
   ],
 };
@@ -77,7 +77,7 @@ const en: typeof pt = {
     '<b>Why 9 = 2 + 8 − 1:</b> counting intervals includes both ends. Going up an octave adds 7 letter names, not 8, because the octave shares its starting note. So 2 + 7 = 9, 4 + 7 = 11 and 6 + 7 = 13.',
     '<b>Why there is no 10, 12 or 14:</b> the even numbers above the octave repeat chord tones: 10 = 3, 12 = 5, 14 = 7, and 15 is the root again. Only the odd ones outside the triad (9, 11, 13) bring new color.',
     '<b>Why some are avoided:</b> an extension a half step above a chord tone makes a minor 9th with it, the harshest clash there is. Over a major chord (Imaj7, V7) the 11th sits a half step above the 3rd and blurs the major sound. That is why, over major chords, the 11 shows up as ♯11.',
-    '<b>Chord by chord:</b> maj7 takes 9, ♯11 and 13; 7 (dominant) takes 9 and 13, plus the altered ♭9, ♯9, ♯11 and ♭13; m7 takes 9 and 11 (the 13 depends on the degree); m7♭5 takes 11 and ♭13. Tap each degree above and watch the half-step rule at work.',
+    '<b>Chord by chord:</b> maj7 takes 9, ♯11 and 13; 7 (dominant) takes 9 and 13, plus the altered ones (raised or lowered a half step) ♭9, ♯9, ♯11 and ♭13; m7 takes 9 and 11 (the 13 depends on the degree); m7♭5 takes 11 and ♭13. Tap each degree above and watch the half-step rule at work.',
     '<b>In practice:</b> pianists rarely play all seven notes. Usually the 5th is dropped (and sometimes the root, which the bass already plays), keeping the 3rd, the 7th and the tensions, the notes that give the color.',
   ],
 };

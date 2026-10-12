@@ -8,7 +8,7 @@ const pt = {
     teaser: 'Uma nota de piano é um acorde escondido: 8ª, 5ª e a tríade maior saem do próprio som.',
   },
   desc:
-    'Quando você toca uma tecla, a corda não vibra numa frequência só. Ela vibra inteira e, ao mesmo tempo, em metades, terços, quartos… Cada pedaço soa uma nota mais aguda, os harmônicos. O ouvido junta tudo e escuta uma nota com um “colorido”. Esta aula mostra quais notas são essas e por que delas nascem a 8ª, a 5ª e a tríade maior.',
+    'Quando você toca uma tecla, a corda não vibra numa frequência só. Ela vibra inteira e, ao mesmo tempo, em metades, terços, quartos… Cada pedaço soa uma nota mais aguda, os harmônicos. O ouvido junta tudo e escuta uma nota com um “colorido”. Esta aula mostra quais notas são essas e por que delas nascem a 8ª, a 5ª e a tríade maior (três notas tocadas juntas: a tônica, a 3ª e a 5ª).',
 
   stringTitle: '1. A corda vibra em partes',
   stringHint: 'Os pontos parados são os nós. Com 2 partes a frequência dobra, com 3 triplica, com 4 quadruplica. Toque numa linha para ouvir.',
@@ -81,7 +81,7 @@ const en: typeof pt = {
     teaser: 'A piano note is a hidden chord: the octave, the fifth and the major triad come out of the sound itself.',
   },
   desc:
-    'When you play a key, the string does not vibrate at a single frequency. It vibrates as a whole and, at the same time, in halves, thirds, quarters… Each part sounds a higher note, the harmonics. The ear blends them and hears one note with a “color”. This lesson shows which notes those are and why the octave, the fifth and the major triad are born from them.',
+    'When you play a key, the string does not vibrate at a single frequency. It vibrates as a whole and, at the same time, in halves, thirds, quarters… Each part sounds a higher note, the harmonics. The ear blends them and hears one note with a “color”. This lesson shows which notes those are and why the octave, the fifth and the major triad (three notes sounding together: tonic, 3rd and 5th) are born from them.',
 
   stringTitle: '1. The string vibrates in parts',
   stringHint: 'The still points are the nodes. With 2 parts the frequency doubles, with 3 it triples, with 4 it quadruples. Tap a row to hear it.',
