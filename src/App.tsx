@@ -11,6 +11,7 @@ import { HOOKS } from './i18n/hooks';
 import { glossaryEntry } from './lessons/glossaryAll';
 import { lessonMeta } from './lessons/meta';
 import { Piano } from './pages/Piano';
+import { History, periodsForLesson } from './pages/History';
 import { Practice } from './pages/Practice';
 import { href, useRoute, type Route } from './router';
 import { dueReviews, goToKey, markStudied, setLang, setState, streak, today, toggleDone } from './state/store';
@@ -28,13 +29,13 @@ function Flag({ lang }: { lang: 'pt' | 'en' }) {
 function Logo() {
   return (
     <svg className="logo" viewBox="0 0 64 64" aria-hidden="true">
-      <rect width="64" height="64" rx="14" fill="var(--accent)" />
-      <circle cx="32" cy="32" r="19" fill="none" stroke="var(--on-accent)" strokeWidth="2.5" opacity=".55" />
-      {Array.from({ length: 12 }, (_, k) => {
-        const a = ((-90 + 30 * k) * Math.PI) / 180;
-        return <circle key={k} cx={32 + 19 * Math.cos(a)} cy={32 + 19 * Math.sin(a)} r={k === 0 ? 5 : 2.6} fill="var(--on-accent)" />;
-      })}
-      <text x="32" y="38" textAnchor="middle" style={{ font: '400 17px var(--f-music)', fill: 'var(--on-accent)' }}>♪</text>
+      <circle cx="32" cy="32" r="30" fill="var(--on-brand)" stroke="var(--brand)" strokeWidth="2" />
+      <circle cx="32" cy="32" r="25.5" fill="none" stroke="var(--brand)" strokeWidth="1" />
+      <g fill="var(--brand)">
+        {[0, 1, 2, 3, 4].map((k) => <rect key={k} x={15 + k * 7} y="38" width="6" height="12" rx="1" />)}
+      </g>
+      <g fill="var(--on-brand)">{[1, 2, 4].map((k) => <rect key={k} x={13.5 + k * 7} y="38" width="3.5" height="7" />)}</g>
+      <text x="32" y="38" textAnchor="middle" style={{ font: '30px var(--f-music)', fill: 'var(--brand)' }}>𝄞</text>
     </svg>
   );
 }
@@ -181,6 +182,7 @@ function Home() {
         </a>
         <a className="btn" href={href({ page: 'piano' })}>🎹 {t.nav.piano}</a>
         <a className="btn" href={href({ page: 'practice' })}>✓ {t.nav.practice}</a>
+        <a className="btn" href={href({ page: 'history' })}>⌛ {t.history.tab}</a>
       </div>
       <section>
         <h2 className="sec-title">{t.nav.allLessons}</h2>
@@ -252,8 +254,13 @@ function LessonPage({ id }: { id: string }) {
         <p className="eyebrow">{t.nav.lessonN(i + 1)} · {t.tracks[L.track]}</p>
         <h1>{m.title} <span className="sub">· {m.sub}</span></h1>
       </header>
+      {periodsForLesson(L.id).length > 0 && (
+        <p className="born-in">{t.history.bornIn}: {periodsForLesson(L.id).map((pp) => (
+          <a key={pp.id} className="need" href={href({ page: 'history', id: pp.id })}>{pp.name[s.lang]}</a>
+        ))}</p>
+      )}
       {HOOKS[L.id] && (
-        <p className="hook"><span className="rowlab">{t.nav.question}</span>{HOOKS[L.id][s.lang]}</p>
+        <p className="hook"><span className="rowlab">{t.nav.question}</span><span className="hook-q">{HOOKS[L.id][s.lang]}</span></p>
       )}
       {(!!L.needs?.length || !!L.terms?.length) && (
         <aside className="lesson-intro">
@@ -319,17 +326,16 @@ function SimplePage({ title, sub, children }: { title: string; sub: string; chil
   );
 }
 
-const TABS: { r: Route; key: 'home' | 'lessons' | 'piano' | 'practice' | 'glossary'; ic: string }[] = [
+const TABS: { r: Route; key: 'home' | 'lessons' | 'piano' | 'practice' | 'history'; ic: string }[] = [
   { r: { page: 'home' }, key: 'home', ic: '◉' },
   { r: { page: 'lessons' }, key: 'lessons', ic: '☰' },
+  { r: { page: 'history' }, key: 'history', ic: '⌛' },
   { r: { page: 'piano' }, key: 'piano', ic: '🎹' },
   { r: { page: 'practice' }, key: 'practice', ic: '✓' },
-  { r: { page: 'lesson', id: 'gloss' }, key: 'glossary', ic: 'Aa' },
 ];
 
 function isActive(tab: Route, r: Route) {
-  if (tab.page === 'lesson') return r.page === 'lesson' && r.id === 'gloss';
-  if (tab.page === 'lessons') return r.page === 'lessons' || (r.page === 'lesson' && r.id !== 'gloss');
+  if (tab.page === 'lessons') return r.page === 'lessons' || r.page === 'lesson';
   return tab.page === r.page;
 }
 
@@ -346,7 +352,7 @@ export function App() {
     if (s.theme === 'auto') el.removeAttribute('data-theme');
     else el.setAttribute('data-theme', s.theme);
     const dark = s.theme === 'dark' || (s.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#111513' : '#F4F5F2');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#16120E' : '#8A1C2B');
   }, [s.lang, s.theme]);
 
   useEffect(() => {
@@ -359,6 +365,7 @@ export function App() {
   if (route.page === 'lesson') content = <LessonPage id={route.id} />;
   else if (route.page === 'lessons') content = <LessonsPage />;
   else if (route.page === 'piano') content = <SimplePage title={t.piano.title} sub={t.piano.sub}><Piano /></SimplePage>;
+  else if (route.page === 'history') content = <History id={route.id} />;
   else if (route.page === 'practice') content = <SimplePage title={t.practice.title} sub={t.practice.sub}><Practice /></SimplePage>;
   else content = <Home />;
 
@@ -372,6 +379,7 @@ export function App() {
           <a href="#/" aria-current={route.page === 'home' ? 'page' : undefined}>◉ {t.nav.home}</a>
           <a href="#/piano" aria-current={route.page === 'piano' ? 'page' : undefined}>🎹 {t.nav.piano}</a>
           <a href="#/praticar" aria-current={route.page === 'practice' ? 'page' : undefined}>✓ {t.nav.practice}</a>
+          <a href="#/historia" aria-current={route.page === 'history' ? 'page' : undefined}>⌛ {t.history.tab}</a>
           {TRACKS.map((tr) => (
             <div key={tr} className="side-track">
               <p className="rowlab">{t.tracks[tr]}</p>
@@ -411,7 +419,7 @@ export function App() {
         {TABS.map((tab) => (
           <a key={tab.key} href={href(tab.r)} aria-current={isActive(tab.r, route) ? 'page' : undefined}>
             <span className="tab-ic" aria-hidden="true">{tab.ic}</span>
-            <span className="tab-lb">{t.nav[tab.key]}</span>
+            <span className="tab-lb">{tab.key === 'history' ? t.history.tab : t.nav[tab.key]}</span>
           </a>
         ))}
       </nav>

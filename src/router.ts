@@ -5,7 +5,8 @@ export type Route =
   | { page: 'lessons' }
   | { page: 'lesson'; id: string }
   | { page: 'piano' }
-  | { page: 'practice' };
+  | { page: 'practice' }
+  | { page: 'history'; id?: string };
 
 function parse(hash: string): Route {
   const h = hash.replace(/^#\/?/, '');
@@ -14,11 +15,12 @@ function parse(hash: string): Route {
   if (a === 'aulas') return { page: 'lessons' };
   if (a === 'piano') return { page: 'piano' };
   if (a === 'praticar') return { page: 'practice' };
+  if (a === 'historia') return { page: 'history', id: b || undefined };
   return { page: 'home' };
 }
 
 export const href = (r: Route) =>
-  r.page === 'lesson' ? `#/aula/${r.id}` : r.page === 'lessons' ? '#/aulas' : r.page === 'piano' ? '#/piano' : r.page === 'practice' ? '#/praticar' : '#/';
+  r.page === 'history' ? (r.id ? `#/historia/${r.id}` : '#/historia') : r.page === 'lesson' ? `#/aula/${r.id}` : r.page === 'lessons' ? '#/aulas' : r.page === 'piano' ? '#/piano' : r.page === 'practice' ? '#/praticar' : '#/';
 
 let current = typeof window === 'undefined' ? ({ page: 'home' } as Route) : parse(window.location.hash);
 const ls = new Set<() => void>();
